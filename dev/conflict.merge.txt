@@ -4,7 +4,11 @@ from helper import greeting
 
 def main():
     greeting("hello")
+<<<<<<< HEAD
     print("moo")
+=======
+    print("moo)
+>>>>>>> master
     print("hi")
     return 0
 

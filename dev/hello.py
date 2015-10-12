@@ -4,6 +4,7 @@ from helper import greeting
 
 def main():
     greeting("hello")
+    print("moo)
     print("hi")
     return 0
 

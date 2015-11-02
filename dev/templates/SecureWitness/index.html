@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+{% load static %} <!-- New line -->
+
+<html>
+
+    <head>
+        <title>SecureWitness</title>
+    </head>
+
+    <body>
+        <h1>SecureWitness says...</h1>
+        hello world! <strong>{{ boldmessage }}</strong><br />
+        <a href="/SecureWitness/about/">About</a><br />
+        <a href="/SecureWitness/list/">List</a><br />
+        <img src="{% static "meme.jpg" %}" alt="Dank Meme" /> <!-- New line -->
+    </body>
+
+</html>

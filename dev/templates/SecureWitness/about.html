@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+{% load static %} <!-- New line -->
+
+<html>
+
+    <head>
+        <title>SecureWitness</title>
+    </head>
+
+    <body>
+        <h1>SecureWitness Says:...</h1>
+        Here is the about page <strong>{{ boldmessage }}</strong><br />
+        <a href="/SecureWitness/">Index</a><br />
+        <img src="{% static "propane.jpg" %}" alt="Propane Meme" /> <!-- New line -->
+    </body>
+
+</html>

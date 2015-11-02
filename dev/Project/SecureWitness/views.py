@@ -5,9 +5,8 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from Project.SecureWitness.models import Document, Category, Page
-from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm
+from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm
 
-from Project.SecureWitness.forms import UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 
@@ -35,7 +34,6 @@ def category(request, category_name_url):
         pages = Page.objects.filter(category=category)
         context_dict['pages'] = pages
         context_dict['category'] = category
-        context_dict['category_name_url'] = category_name_url
     except Category.DoesNotExist:
         pass
     return render_to_response('SecureWitness/category.html', context_dict, context)
@@ -54,29 +52,7 @@ def add_category(request):
 
     return render_to_response('SecureWitness/add_category.html', {'form': form}, context)
 
-def add_page(request, category_name_url):
-    context = RequestContext(request)
-    category_name = decode_url(category_name_url)
-    if request.method == 'POST':
-        form = PageForm(request.POST)
-        if form.is_valid():
-            page = form.save(commit=False)
-            try:
-                cat = Category.objects.get(name=category_name)
-                page.category = cat
-            except Category.DoesNotExist:
-                return render_to_response('SecureWitness/add_category.html', {}, context)
-            page.views = 0
-            page.save()
-            return category(request,category_name_url)
-        else:
-            print(form.errors)
-    else:
-        form = PageForm()
-    return render_to_response('SecureWitness/add_page.html',
-                              {'category_name_rul': category_name_url,
-                               'category_name': category_name, 'form': form},
-                              context)
+
 def list(request):
     # Handle file upload
     if request.method == 'POST':
@@ -100,26 +76,35 @@ def list(request):
         context_instance=RequestContext(request)
     )
 
-
-
-"""
-def addUser(request):
+def register(request):
     context = RequestContext(request)
-    isRegistered = False
+    registered = False
 
     if request.method == 'POST':
-        form = UserForm(data=request.POST)
-        if form.is_valid():
-            newUser = form.save()
-            newUser.set_password(newUser.password)
-            newUser.save()
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
 
-            login(newUser)
-            isRegistered = True
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+            profile.save()
+
+            registered = True
+
         else:
-            print(form.errors)
+            print(user_form.errors, profile_form.errors)
     else:
-        form = UserForm()
-    return render_to_response('adduser.html', {'form': form, 'isRegistered' : isRegistered},
-                                  context_instance=RequestContext(request))
-"""
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render_to_response(
+        'SecureWitness/register.html',
+        {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
+        context)

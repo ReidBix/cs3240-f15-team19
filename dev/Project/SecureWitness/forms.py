@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
-from Project.SecureWitness.models import Page, Category, Reporter
+from Project.SecureWitness.models import Page, Category, Reporter, UserProfile
 
 class DocumentForm(forms.Form):
     docfile = forms.FileField(
@@ -42,32 +42,15 @@ class PageForm(ModelForm):
         return cleaned_data
 
 #username, email, password
-class UserForm(ModelForm):
+class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
-        model = User
-        fields = ('username','email','password')
+        model = ('username','email','password')
 
-class AltUserForm(ModelForm):
+class UserProfileForm(forms.ModelForm):
     class Meta:
-        model = User
-        exclude = ['email']
-
-class AltUserForm2(ModelForm):
-    class Meta:
-        model = User
-        fields = ('username','email','password')
-        labels = {
-            'username': _('USER')
-        }
-        help_texts = {
-            'username': _('Any user name works!')
-        }
-        error_messages = {
-            'username': {
-                'max_length': _("This user's name is too long."),
-            }
-        }
+        model = UserProfile
+        fields = ('website', 'picture')
 
 class ReporterForm(ModelForm):
     class Meta:

@@ -4,24 +4,40 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from Project.SecureWitness.models import Document
+from Project.SecureWitness.models import Document, Category, Page
 from Project.SecureWitness.forms import DocumentForm
 
 from Project.SecureWitness.forms import UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 
-from django.http import HttpResponse
 
 def index(request):
     context = RequestContext(request)
-    context_dict = {'boldmessage': "I am bold font from the context"}
+    category_list = Category.objects.order_by('-likes')[:5]
+    context_dict = {'categories': category_list}
+    for category in category_list:
+        category.url = category.name.replace(' ', '_')
     return render_to_response('SecureWitness/index.html', context_dict, context)
 
 def about(request):
     context = RequestContext(request)
     context_dict = {'boldmessage': "I am bold font from the context"}
     return render_to_response('SecureWitness/about.html', context_dict, context)
+
+def category(request, category_name_url):
+    context = RequestContext(request)
+    category_name = category_name_url.replace('_', ' ')
+    context_dict = {'category_name': category_name}
+
+    try:
+        category = Category.objects.get(name=category_name)
+        pages = Page.objects.filter(category=category)
+        context_dict['pages'] = pages
+        context_dict['category'] = category
+    except Category.DoesNotExist:
+        pass
+    return render_to_response('SecureWitness/category.html', context_dict, context)
 
 def list(request):
     # Handle file upload
@@ -46,6 +62,9 @@ def list(request):
         context_instance=RequestContext(request)
     )
 
+
+
+"""
 def addUser(request):
     context = RequestContext(request)
     isRegistered = False
@@ -65,3 +84,4 @@ def addUser(request):
         form = UserForm()
     return render_to_response('adduser.html', {'form': form, 'isRegistered' : isRegistered},
                                   context_instance=RequestContext(request))
+"""

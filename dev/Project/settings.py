@@ -123,3 +123,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+DJANGO_SETTINGS_MODULE = os.path.join(BASE_DIR, '')

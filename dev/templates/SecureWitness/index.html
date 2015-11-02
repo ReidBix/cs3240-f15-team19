@@ -9,12 +9,18 @@
     </head>
 
     <body>
-        <h1>SecureWitness says...</h1>
-        hello world! <strong>{{ boldmessage }}</strong><br />
+        {% if user.is_authenticated %}
+            <h1>SecureWitness says hello {{ user.username }}</h1>
+            <a href="/SecureWitness/restricted/">Restricted Page</a><br/>
+            <a href="/SecureWitness/logout/">Logout</a><br/>
+        {% else %}
+            <h1>SecureWitness says hello to someone new</h1><strong>{{ boldmessage }}</strong><br />
+            <a href="/SecureWitness/register/">Register Here</a><br/>
+            <a href="/SecureWitness/login/">Login</a><br/>
+        {% endif %}
         <a href="/SecureWitness/about/">About</a><br />
         <a href="/SecureWitness/list/">List</a><br />
-        <a href="/SecureWitness/add_category/">Add a New Category</a>
-        <a href="/SecureWitness/register/">Register Here</a>
+        <a href="/SecureWitness/add_category/">Add a New Category</a><br/>
         {% if categories %}
             <ul>
                 {%  for category in categories %}

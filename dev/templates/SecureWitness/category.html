@@ -6,11 +6,13 @@
 
     <body>
         <h1>{{ category_name }}</h1>
+        <a href="/SecureWitness/">Index</a><br />
         {% if category %}
             {% if pages %}
             <ul>
                 {% for page in pages %}
                 <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                    <a href="/SecureWitness/category/<category_name_url>/add_page/">Page</a>
                 {% endfor %}
             </ul>
             {% else %}

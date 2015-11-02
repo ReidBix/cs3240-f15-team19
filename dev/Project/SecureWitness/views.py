@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from Project.SecureWitness.models import Document, Category, Page
-from Project.SecureWitness.forms import DocumentForm
+from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm
 
 from Project.SecureWitness.forms import UserForm
 from django.contrib.auth.models import User
@@ -35,10 +35,48 @@ def category(request, category_name_url):
         pages = Page.objects.filter(category=category)
         context_dict['pages'] = pages
         context_dict['category'] = category
+        context_dict['category_name_url'] = category_name_url
     except Category.DoesNotExist:
         pass
     return render_to_response('SecureWitness/category.html', context_dict, context)
 
+def add_category(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return index(request)
+        else:
+            print(form.errors)
+    else:
+        form = CategoryForm()
+
+    return render_to_response('SecureWitness/add_category.html', {'form': form}, context)
+
+def add_page(request, category_name_url):
+    context = RequestContext(request)
+    category_name = decode_url(category_name_url)
+    if request.method == 'POST':
+        form = PageForm(request.POST)
+        if form.is_valid():
+            page = form.save(commit=False)
+            try:
+                cat = Category.objects.get(name=category_name)
+                page.category = cat
+            except Category.DoesNotExist:
+                return render_to_response('SecureWitness/add_category.html', {}, context)
+            page.views = 0
+            page.save()
+            return category(request,category_name_url)
+        else:
+            print(form.errors)
+    else:
+        form = PageForm()
+    return render_to_response('SecureWitness/add_page.html',
+                              {'category_name_rul': category_name_url,
+                               'category_name': category_name, 'form': form},
+                              context)
 def list(request):
     # Handle file upload
     if request.method == 'POST':

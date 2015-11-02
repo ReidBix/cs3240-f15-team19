@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$USER_HOME$/PycharmProjects/CS 4102/.idea/CS 4102.iml" filepath="$USER_HOME$/PycharmProjects/CS 4102/.idea/CS 4102.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/CS 4501/.idea/CS 4501.iml" filepath="$USER_HOME$/PycharmProjects/CS 4501/.idea/CS 4501.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/cs3240-f15-team19.iml" filepath="$PROJECT_DIR$/.idea/cs3240-f15-team19.iml" />
+    </modules>
+  </component>
+</project>

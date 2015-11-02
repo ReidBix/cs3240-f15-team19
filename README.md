@@ -12,3 +12,5 @@ Advanced Software Project Group 19
 5. python3 manage.py migrate
 6. python3 manage.py runserver
 7. Go to server that they give you (i think it's http://127.0.0.1:8000/), should be there
+
+(Superuser ID: admin, Superuser PW: admin)

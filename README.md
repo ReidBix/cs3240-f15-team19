@@ -3,7 +3,7 @@ Advanced Software Project Group 19
 
 #how to see file upload thing
 1. Pull
-2. cd into dev/Project/
+2. cd into dev/
 
 (can use python3 or python dependent on system)
 

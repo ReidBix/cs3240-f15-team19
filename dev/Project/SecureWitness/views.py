@@ -10,7 +10,7 @@ from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, Us
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
-
+import pdb;
 
 def index(request):
     context = RequestContext(request)
@@ -55,13 +55,18 @@ def add_category(request):
 
 
 def list(request):
+   # pdb.set_trace()
     # Handle file upload
     if request.method == 'POST':
+        encrypted2 = False
+        if 'encrypted' in request.POST:
+                encrypted2 = True
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(docfile = request.FILES['docfile'])
-            newdoc.save()
+            newdoc = Document(docfile = request.FILES['docfile'], title = request.POST['title'], description = request.POST['description'], detailed_description = request.POST['detailed_description'], encrypted = encrypted2)
 
+            newdoc.save()
+		#used to be newdoc.save()
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('Project.SecureWitness.views.list'))
     else:

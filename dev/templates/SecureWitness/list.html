@@ -27,7 +27,34 @@
 				{{ form.docfile.errors }}
 				{{ form.docfile }}
 			</p>
+			<p>
+				{{ form.title.label_tag }}
+			</p>
+			<p>
+				{{ form.title }}
+			</p>
+ 			<p>
+                                {{ form.description.label_tag }}
+                        </p>
+			<p>
+				{{ form.description }}
+			</p>
+ 			<p>
+                                {{ form.detailed_description.label_tag }}
+                        </p>
+			<p>
+                                {{ form.detailed_description }}
+                        </p>
+			<p>
+                                {{ form.encrypted.label_tag }}
+                        </p>
+  			<p>
+                                {{ form.encrypted }}
+                        </p>
+ 			
+
 			<p><input type="submit" value="Upload" /></p>
+
 		</form>
 
 	</body>

@@ -10,9 +10,16 @@ from django.utils.translation import ugettext_lazy as _
 from Project.SecureWitness.models import Page, Category, Reporter, UserProfile
 
 class DocumentForm(forms.Form):
-    docfile = forms.FileField(
+     title = forms.CharField(label='Title', help_text='Title', max_length=50)
+     description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100)
+     detailed_description = forms.CharField(label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500)
+     encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
+     #public = forms.CheckboxInput(label='Public/Private', choices=(('Public'), ('Private')))
+     docfile = forms.FileField(
         label='Select a file'
     )
+#     created = forms.DateTimeField(label='Timestamp')
+
 
 class CategoryForm(ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-
+from django.forms import TextInput
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.forms import ModelForm
@@ -12,9 +12,9 @@ from Project.SecureWitness.models import Page, Category, Reporter, UserProfile
 class DocumentForm(forms.Form):
      title = forms.CharField(label='Title', help_text='Title', max_length=50)
      description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100)
-     detailed_description = forms.CharField(label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500)
+     detailed_description = forms.CharField(widget=forms.TextInput, label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500)
      encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
-     #public = forms.CheckboxInput(label='Public/Private', choices=(('Public'), ('Private')))
+     private = forms.BooleanField(label='Private', help_text='Private', initial=False, required=False)
      docfile = forms.FileField(
         label='Select a file'
     )

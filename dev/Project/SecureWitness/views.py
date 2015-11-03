@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
 import pdb;
+from datetime import datetime
 
 def index(request):
     context = RequestContext(request)
@@ -59,11 +60,15 @@ def list(request):
     # Handle file upload
     if request.method == 'POST':
         encrypted2 = False
+        private2 = False
+        timestamp2 = datetime.now()
         if 'encrypted' in request.POST:
                 encrypted2 = True
+        if 'private' in request.POST:
+                private2 = True
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(docfile = request.FILES['docfile'], title = request.POST['title'], description = request.POST['description'], detailed_description = request.POST['detailed_description'], encrypted = encrypted2)
+            newdoc = Document(docfile = request.FILES['docfile'], title = request.POST['title'], description = request.POST['description'], detailed_description = request.POST['detailed_description'], encrypted = encrypted2, private = private2, timestamp = timestamp2)
 
             newdoc.save()
 		#used to be newdoc.save()

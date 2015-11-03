@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import datetime
 
 class Document(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
     detailed_description = models.CharField(max_length=500)
     encrypted = models.BooleanField()
-   # public = forms.CheckboxInput(label="Public/Privatge", choices=(('Public'), ('Private)))
+    private = models.BooleanField()
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')
-#    created = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
 	
 
 """

@@ -17,7 +17,7 @@ Advanced Software Project Group 19
 
 #Update tuesday, November 3:
 1. When you upload a document, all of the standard fields we need are there and are passed when the document is uploaded
-2. timestamp isn't the right timezone, but is still a timestamp, but will be fixed soon
+2. timestamp isn't the right timezone, but is still a timestamp, but will be fixed soon (fixed)
 3. Need to fix size of input boxes (specifically the one for longer description) but it's being annoying (aesthetics not great, but functionality is good)
 4. Files that are uploaded are assigned to the user that is signed in
 5. The admin can see every file that has been uploaded

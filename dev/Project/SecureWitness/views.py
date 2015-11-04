@@ -68,7 +68,7 @@ def list(request):
                 private2 = True
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(docfile = request.FILES['docfile'], title = request.POST['title'], description = request.POST['description'], detailed_description = request.POST['detailed_description'], encrypted = encrypted2, private = private2, timestamp = timestamp2)
+            newdoc = Document(user = request.user, docfile = request.FILES['docfile'], title = request.POST['title'], description = request.POST['description'], detailed_description = request.POST['detailed_description'], encrypted = encrypted2, private = private2, timestamp = timestamp2)
 
             newdoc.save()
 		#used to be newdoc.save()
@@ -76,14 +76,19 @@ def list(request):
             return HttpResponseRedirect(reverse('Project.SecureWitness.views.list'))
     else:
         form = DocumentForm() # A empty, unbound form
-
+    
+    squad = Document.objects.filter(encrypted=True)
     # Load documents for the list page
-    documents = Document.objects.all()
-
-    # Render list page with the documents and the form
+    squad_again = ""
+    user2 = request.user
+    if str(user2) != 'admin':
+    	squad_again = Document.objects.filter(user=user2)
+    else:
+    	squad_again = Document.objects.all()
+# Render list page with the documents and the form
     return render_to_response(
         'SecureWitness/list.html',
-        {'documents': documents, 'form': form},
+        {'documents': squad_again, 'form': form},
         context_instance=RequestContext(request)
     )
 

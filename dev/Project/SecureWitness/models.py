@@ -11,6 +11,7 @@ class Document(models.Model):
     private = models.BooleanField()
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')
     timestamp = models.DateTimeField()
+    user = models.CharField(max_length=25)
 	
 
 """

@@ -6,6 +6,11 @@
 	</head>
 
 	<body>
+	{% if user.is_authenticated %}
+            <h1>SecureWitness says hello {{ user.username }}</h1>
+	{% else %}
+		<h1> you ain't even signed in boy </h1>
+	{% endif %}
         <a href='/SecureWitness/'>Index</a> <br/>
 		<!-- List of uploaded documents -->
 		{% if documents %}

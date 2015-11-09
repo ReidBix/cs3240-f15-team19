@@ -68,7 +68,10 @@ def list(request):
                 private2 = True
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(user = request.user, docfile = request.FILES['docfile'], title = request.POST['title'], description = request.POST['description'], detailed_description = request.POST['detailed_description'], encrypted = encrypted2, private = private2, timestamp = timestamp2)
+            newdoc = Document(user = request.user, docfile = request.FILES['docfile'],
+                              title = request.POST['title'], description = request.POST['description'],
+                              detailed_description = request.POST['detailed_description'],
+                              encrypted = encrypted2, private = private2, timestamp = timestamp2)
 
             newdoc.save()
 		#used to be newdoc.save()

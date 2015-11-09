@@ -10,9 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 from Project.SecureWitness.models import Page, Category, Reporter, UserProfile
 
 class DocumentForm(forms.Form):
-     title = forms.CharField(label='Title', help_text='Title', max_length=50)
-     description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100)
-     detailed_description = forms.CharField(widget=forms.TextInput(), label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500)
+     title = forms.CharField(label='Title', help_text='Title', max_length=50, required=True)
+     description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100, required=True)
+     detailed_description = forms.CharField(widget=forms.TextInput(), label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500, required=True)
      encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
      private = forms.BooleanField(label='Private', help_text='Private', initial=False, required=False)
      docfile = forms.FileField(

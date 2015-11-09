@@ -22,4 +22,13 @@ Advanced Software Project Group 19
 4. Files that are uploaded are assigned to the user that is signed in
 5. The admin can see every file that has been uploaded
 6. User can only see the files they have uploaded themselves
+7. 
+
+#How to Use Stand-Alone App
+
+1. Update the Server
+2. Run StandAloneApp.py
+3. Success
+4. Login with Users that have been created/are in the database
+5. Look at the documents that you as a user created (AND THAT'S IT)
 

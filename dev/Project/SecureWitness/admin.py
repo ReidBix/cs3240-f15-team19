@@ -7,7 +7,11 @@ class PageAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name','views','likes')
 
-admin.site.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = ('title','description','detailed_description','encrypted',
+                    'private','docfile','timestamp','user')
+
+admin.site.register(Document, DocumentAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(UserProfile)

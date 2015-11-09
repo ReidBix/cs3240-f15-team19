@@ -32,3 +32,7 @@ Advanced Software Project Group 19
 4. Login with Users that have been created/are in the database
 5. Look at the documents that you as a user created (AND THAT'S IT)
 
+#Messaging 
+Link to already existing repository for messaging: https://bitbucket.org/psam/django-postman/wiki/Quick_Start_Guide
+
+

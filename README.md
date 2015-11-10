@@ -36,9 +36,9 @@ Advanced Software Project Group 19
 
 Link to already existing repository for messaging: https://bitbucket.org/psam/django-postman/wiki/Quick_Start_Guide
 
-1. messaging works kinda, still needs some tweaks though
-2. i can send messages to users that don't have an email associated with it
-3. go to the server/SecureWitness/messages to see messaging system
-4. have to log in as admin to approve messages being sent before the user actually gets it
+1. messaging works kinda, still needs some tweaks though<br />
+2. i can send messages to users that don't have an email associated with it<br />
+3. go to the server/SecureWitness/messages to see messaging system<br />
+4. have to log in as admin to approve messages being sent before the user actually gets it <br />
 5. need to change #4, and figure out why only emails without email associated to it works
 

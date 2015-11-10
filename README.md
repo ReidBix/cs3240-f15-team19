@@ -33,7 +33,9 @@ Advanced Software Project Group 19
 5. Look at the documents that you as a user created (AND THAT'S IT)
 
 #Messaging 
+
 Link to already existing repository for messaging: https://bitbucket.org/psam/django-postman/wiki/Quick_Start_Guide
+
 1. messaging works kinda, still needs some tweaks though
 2. i can send messages to users that don't have an email associated with it
 3. go to the server/SecureWitness/messages to see messaging system

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from Project.SecureWitness import views
 
 urlpatterns = patterns('',
@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^login/$', views.user_login, name='login'),
     url(r'^restricted/$', views.restricted, name='restricted'),
     url(r'^logout/$', views.user_logout, name='logout'),
+    (r'^messages/', include('postman.urls', namespace='postman', app_name='postman')),
 )

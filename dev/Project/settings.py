@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Project.SecureWitness',
-    'django.contrib.admindocs'
+    'django.contrib.admindocs',
+    'postman'
 )
 
 MIDDLEWARE_CLASSES = (

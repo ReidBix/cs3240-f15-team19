@@ -40,5 +40,5 @@ Link to already existing repository for messaging: https://bitbucket.org/psam/dj
 2. i can send messages to users that don't have an email associated with it<br />
 3. go to the server/SecureWitness/messages to see messaging system<br />
 4. have to log in as admin to approve messages being sent before the user actually gets it <br />
-5. need to change #4, and figure out why only emails without email associated to it works
+5. need to change #4, and figure out why only emails without email associated to it works (fixed)
 

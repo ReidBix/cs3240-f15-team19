@@ -128,3 +128,5 @@ STATICFILES_DIRS = (
 DJANGO_SETTINGS_MODULE = os.path.join(BASE_DIR, '')
 
 LOGIN_URL = '/SecureWitness/login/'
+#Postman messaging system
+POSTMAN_AUTO_MODERATE_AS = True

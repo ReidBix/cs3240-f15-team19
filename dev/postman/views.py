@@ -177,15 +177,20 @@ class ComposeMixin(NamespaceMixin, object):
     max = None
     auto_moderators = []
 
+
     def get_form_kwargs(self):
+        encrypted2 = False
         kwargs = super(ComposeMixin, self).get_form_kwargs()
         if self.request.method == 'POST':
+            if 'encrypted' in self.request:
+                encrypted2 = True
             kwargs.update({
                 'sender': self.request.user,
                 'user_filter': self.user_filter,
                 'exchange_filter': self.exchange_filter,
                 'max': self.max,
                 'site': get_current_site(self.request),
+                'encrypted': encrypted2
             })
         return kwargs
 

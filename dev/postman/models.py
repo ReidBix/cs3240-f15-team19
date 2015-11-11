@@ -267,7 +267,7 @@ class Message(models.Model):
     """
 
     SUBJECT_MAX_LENGTH = 120
-
+    encrypted = models.BooleanField()
     subject = models.CharField(_("subject"), max_length=SUBJECT_MAX_LENGTH)
     body = models.TextField(_("body"), blank=True)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_messages', null=True, blank=True, verbose_name=_("sender"))

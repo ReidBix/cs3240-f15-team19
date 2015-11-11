@@ -25,6 +25,7 @@ class MessageAdminForm(forms.ModelForm):
         sender = cleaned_data.get('sender')
         recipient = cleaned_data.get('recipient')
         email = cleaned_data.get('email')
+        encrypted = cleaned_data.get('encrypted')
         errors = []
         if not sender and not recipient:
             errors.append(ugettext("Sender and Recipient cannot be both undefined."))
@@ -87,12 +88,12 @@ class MessageAdmin(admin.ModelAdmin):
     form = MessageAdminForm
     search_fields = ('subject', 'body')
     date_hierarchy = 'sent_at'
-    list_display = ('subject', 'admin_sender', 'admin_recipient', 'sent_at', 'moderation_status')
+    list_display = ('subject', 'admin_sender', 'admin_recipient', 'sent_at', 'encrypted', 'moderation_status')
     list_filter = ('moderation_status', )
     fieldsets = (
         (None, {'fields': (
             ('sender', 'recipient', 'email'),
-            'sent_at',
+            'sent_at', 'encrypted'
             )}),
         (_('Message'), {'fields': (
             'subject',

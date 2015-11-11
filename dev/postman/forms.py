@@ -32,7 +32,8 @@ class BaseWriteForm(forms.ModelForm):
     """The base class for other forms."""
     class Meta:
         model = Message
-        fields = ('body',)
+        encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
+        fields = ('body', 'encrypted')
         widgets = {
             # for better confort, ensure a 'cols' of at least
             # the 'width' of the body quote formatter.
@@ -49,6 +50,7 @@ class BaseWriteForm(forms.ModelForm):
         max = kwargs.pop('max', None)
         channel = kwargs.pop('channel', None)
         self.site = kwargs.pop('site', None)
+        encrypted = kwargs.pop('encrypted', None)
         super(BaseWriteForm, self).__init__(*args, **kwargs)
 
         self.instance.sender = sender if (sender and sender.is_authenticated()) else None
@@ -158,7 +160,7 @@ class WriteForm(BaseWriteForm):
     recipients = CommaSeparatedUserField(label=(_("Recipients"), _("Recipient")), help_text='')
 
     class Meta(BaseWriteForm.Meta):
-        fields = ('recipients', 'subject', 'body')
+        fields = ('recipients', 'subject', 'body', 'encrypted')
 
 
 class AnonymousWriteForm(BaseWriteForm):
@@ -171,7 +173,7 @@ class AnonymousWriteForm(BaseWriteForm):
     recipients = CommaSeparatedUserField(label=(_("Recipients"), _("Recipient")), help_text='', max=1)  # one recipient is enough
 
     class Meta(BaseWriteForm.Meta):
-        fields = ('email', 'recipients', 'subject', 'body')
+        fields = ('email', 'recipients', 'subject', 'body', 'encrypted')
 
 
 class BaseReplyForm(BaseWriteForm):

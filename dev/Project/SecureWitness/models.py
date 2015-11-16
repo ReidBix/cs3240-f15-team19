@@ -5,15 +5,15 @@ from datetime import datetime
 from django.core.validators import RegexValidator
 
 class Document(models.Model):
-    title = models.CharField(max_length=50)
-    description = models.CharField(max_length=100)
-    detailed_description = models.CharField(max_length=500)
+    title = models.CharField(max_length=50, blank=False)
+    description = models.CharField(max_length=100, blank=False)
+    detailed_description = models.CharField(max_length=500, blank=True)
     encrypted = models.BooleanField()
     private = models.BooleanField()
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')
     timestamp = models.DateTimeField()
     user = models.CharField(max_length=25)
-    key = models.CharField(max_length=2000,blank=True)
+    key = models.CharField(max_length=2000, blank=True)
 
     def __str__(self):
         return self.title

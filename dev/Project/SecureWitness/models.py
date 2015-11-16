@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.core.validators import RegexValidator
 
 class Document(models.Model):
     title = models.CharField(max_length=50)
@@ -12,6 +13,7 @@ class Document(models.Model):
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')
     timestamp = models.DateTimeField()
     user = models.CharField(max_length=25)
+    key = models.CharField(max_length=2000,blank=True)
 
     def __str__(self):
         return self.title
@@ -41,6 +43,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    uKey = models.CharField(validators=[RegexValidator(regex='^.{266}$', message='Length has to be 266', code='nomatch')], max_length=266,blank=True)
+    rKey = models.CharField(validators=[RegexValidator(regex='^.{872}$', message='Length has to be 872', code='nomatch')], max_length=872,blank=True)
 
     def __unicode__(self):
         return self.user.username

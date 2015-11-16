@@ -42,3 +42,10 @@ Link to already existing repository for messaging: https://bitbucket.org/psam/dj
 4. have to log in as admin to approve messages being sent before the user actually gets it <br />
 5. need to change #4, and figure out why only emails without email associated to it works (fixed)
 
+#Encryption
+
+1. Very very very low level stuff
+2. Private and public key pairs assigned to currently existing users, can add new to new ones but not automatically
+3. Can encrypt and decrypt files of any type with seperate key that will be encrypted with public key and attached with document
+4. Obviously won't be able to decrypt without the private key to decrypt the key for the file
+5. Nothing added yet to the stand alone app because I spent far too long ironing out bugs (i.e. F word docs and pdfs)

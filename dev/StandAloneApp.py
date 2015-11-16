@@ -11,7 +11,7 @@ from media.documents import *
 
 import os
 
-from Project.SecureWitness.models import Document
+from Project.SecureWitness.models import Document, UserProfile
 from django.contrib.auth.models import User
 
 
@@ -23,6 +23,17 @@ django.setup()
 
 import tkinter as tk
 
+from dev import encrypt2
+
+from Crypto.Cipher import AES
+from Crypto import Random
+
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
+
+import unittest
+
+block = AES.block_size #16
 
 class App(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -209,6 +220,7 @@ class PageOne(BaseFrame):
               padx=20).grid()
 
         for name, val in dList:
+            print(name.docfile)
             tk.Radiobutton(window,
                         justify = CENTER,
                         text=name,
@@ -379,9 +391,6 @@ def startApp():
     print(d.title)
     d.save()
 
-    d2 = Document.objects.get(id=4)
-    print(d2.title)
-
     print(Document.objects.all())
 
     d3 = Document.objects.filter(user__startswith='admin')
@@ -390,14 +399,81 @@ def startApp():
     d4 = Document.objects.filter(timestamp__day=timezone.now().day)
     print(d4)
 
-    d5 = Document.objects.get(pk=9)
-    print(d5.docfile)
-
-    d5.title = "Change of title"
-    d5.save()
-
     d4.delete()
 
+    aesKey = Random.new().read(AES.block_size)
+    print("Creating new AES Key:")
+    print("\t" + str(aesKey))
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    dLink = var.get().replace('/', '\\')
+    address = BASE_DIR + '\\media\\' + dLink
+    docString = "documents\\2015\\11"
+    doc1 = "\\04\\Guest_speaker_feedback.docx"
+    address = address + docString + doc1
+    #print("Encrypting file at " + address)
+
+    #encrypt2.Encrypt(in_file=address, key=aesKey)
+    #encrypt2.Decrypt(in_file=address+".enc", key=aesKey)
+
+    #print("Complete!")
+
+    """
+    u = UserProfile.objects.all()
+    for i in u:
+        rsaKey = RSA.generate(1024, Random.new().read)
+        rExport = rsaKey.exportKey()
+        uExport = rsaKey.publickey().exportKey()
+        #print(rExport)
+        #print(uExport)
+        i.rKey = rExport
+        i.uKey = uExport
+        i.save()
+    """
+
+    d = Document.objects.all()
+    print(d)
+    for i in d:
+        aesKey = Random.new().read(16)
+        print(aesKey)
+        i.key = str(aesKey)
+        i.save()
+
+    i = UserProfile.objects.filter(user__username='ReidBix')
+    for u2 in i:
+        u2rKey = RSA.importKey(u2.rKey)
+        u2uKey = RSA.importKey(u2.uKey)
+
+        #create new AES
+        aesKey = Random.new().read(16)
+        print("AES Key is: ")
+        print(aesKey)
+
+        #encrypt with the AES key
+        encrypt2.Encrypt(in_file=address, key=aesKey)
+
+        #Encrypt AES key with public key
+        cipher = PKCS1_OAEP.new(u2uKey)
+        aesKeyLockToStore = cipher.encrypt(aesKey)
+        print(aesKeyLockToStore)
+
+        #Release encrypted text along with encrypted key
+        print("encrypted file")
+
+        d6 = Document(title="testdocument.txt", description="Test document for StandAloneApp",
+                     detailed_description="", encrypted=True, private=True,
+                     docfile=dfile+"Guest_speaker_feedback.docx.enc", timestamp=t,
+                     user="ReidBix",key=aesKeyLockToStore.decode("latin1"))
+        d6.save()
+
+        #Unencrypt both and make new file
+        uncipher = PKCS1_OAEP.new(u2rKey)
+        aesKeyLocked = d6.key.encode("latin1")
+        print(aesKeyLocked)
+        aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
+        print(aesKeyUnlocked)
+
+        encrypt2.Decrypt(in_file=address+".enc", out_file="decoded.docx", key=aesKeyUnlocked)
 
     root.mainloop()
 
@@ -406,6 +482,6 @@ def startApp():
 
 
 if __name__ == '__main__':
-    #startApp()
+    startApp()
     app = App()
     app.mainloop()

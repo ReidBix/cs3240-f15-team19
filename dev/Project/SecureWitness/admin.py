@@ -9,10 +9,13 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ('title','description','detailed_description','encrypted',
-                    'private','docfile','timestamp','user')
+                    'private','docfile','timestamp','user', 'key')
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'website', 'picture', 'uKey', 'rKey')
 
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
-admin.site.register(UserProfile)
+admin.site.register(UserProfile, UserProfileAdmin)
 # Register your models here.

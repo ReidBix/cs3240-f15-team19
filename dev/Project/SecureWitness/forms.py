@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
-from Project.SecureWitness.models import Page, Category, Reporter, UserProfile
+from Project.SecureWitness.models import Page, Category, Reporter, UserProfile, Document
 
 class DocumentForm(forms.Form):
      title = forms.CharField(label='Title', help_text='Title', max_length=50, required=True)
@@ -18,6 +18,11 @@ class DocumentForm(forms.Form):
      docfile = forms.FileField(
         label='Select a file'
     )
+
+     class Meta:
+         model = Document
+         fields = ('title', 'description', 'detailed_description', 'encrypted',
+                   'private','docfile','timestamp','user','key')
 #     created = forms.DateTimeField(label='Timestamp')
 #user = forms.CharField(max_length=25)
 
@@ -58,7 +63,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ('website', 'picture', 'uKey', 'rKey')
 
 class ReporterForm(ModelForm):
     class Meta:

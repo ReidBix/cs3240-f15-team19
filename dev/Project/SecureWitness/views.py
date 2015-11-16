@@ -160,6 +160,7 @@ def auth(request):
             return HttpResponseRedirect('/SecureWitness/auth/')
         else:
             return HttpResponseRedirect('/SecureWitness/auth/')
+
     return render_to_response('SecureWitness/auth.html', {}, context)
 
 @login_required

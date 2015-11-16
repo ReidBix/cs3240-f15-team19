@@ -15,3 +15,4 @@ urlpatterns = patterns('',
     url(r'^auth/$',views.auth, name='auth'),
     (r'^messages/', include('postman.urls', namespace='postman', app_name='postman'))
 )
+

@@ -29,7 +29,10 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <strong>There are no categories present.</strong>
+            <strong>There are no categories present.</strong><br/>
+        {% endif %}
+        {% if user.is_staff %}
+            <a href="/SecureWitness/auth/">Authorize User as Admin</a>
         {% endif %}
         <br/>
         <img src="{% static "meme.jpg" %}" alt="Dank Meme" /> <!-- New line -->

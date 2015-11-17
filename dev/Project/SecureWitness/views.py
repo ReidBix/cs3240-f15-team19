@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -10,6 +10,7 @@ from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, Us
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 import pdb;
 from datetime import datetime
 
@@ -146,6 +147,21 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
     else:
         return render_to_response('SecureWitness/user_login.html', {}, context)
+
+@login_required
+def auth(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        usr = request.POST['user']
+        if User.objects.get(username = usr) is not None:
+            user = User.objects.get(username = usr)
+            user.is_staff = True
+            user.save()
+            return HttpResponseRedirect('/SecureWitness/auth/')
+        else:
+            return HttpResponseRedirect('/SecureWitness/auth/')
+
+    return render_to_response('SecureWitness/auth.html', {}, context)
 
 @login_required
 def restricted(request):

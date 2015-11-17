@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %} <!-- New line -->
+<html lang="en">
+<head>
+    <title>User Authorization</title>
+</head>
+<body>
+
+    {% if user.is_staff %}
+        <h1>Authorize User as Admin</h1>
+        <form id="auth_form" method="post" action="/SecureWitness/auth/">
+        {% csrf_token %}
+        <input type="text" name="user" id="usr">
+        <input type="submit" value="Authorize">
+        </form>
+        <href a="/SecureWitness/">Index</href>
+    {% else %}
+        <p>Log in as an admin, fool.</p>
+        <href a="/SecureWitness/">Index</href>
+    {% endif %}
+
+</body>
+</html>

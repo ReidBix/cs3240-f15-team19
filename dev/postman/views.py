@@ -1,3 +1,4 @@
+#hi
 from __future__ import unicode_literals
 
 from django import VERSION
@@ -36,6 +37,9 @@ from .fields import autocompleter_app
 from .forms import WriteForm, AnonymousWriteForm, QuickReplyForm, FullReplyForm
 from .models import Message, get_order_by
 from .utils import format_subject, format_body
+from .testIt import encode, decrypt_string
+from Crypto.PublicKey import RSA
+from Crypto import Random
 
 login_required_m = method_decorator(login_required)
 csrf_protect_m = method_decorator(csrf_protect)
@@ -184,14 +188,33 @@ class ComposeMixin(NamespaceMixin, object):
         if self.request.method == 'POST':
             if 'encrypted' in self.request:
                 encrypted2 = True
+            if 'encrypted' in self.request.POST:
+                if self.request.POST['encrypted'] == 'on':
+                    print('jeremy')
+                    random_generator = Random.new().read
+
+                    key = RSA.generate(1024, random_generator)
+                    public_key = key.publickey()
+                    encoded = encode(self.request.POST['body'], public_key)
+                    mutable = self.request.POST._mutable
+                    self.request.POST._mutable = True
+                    self.request.POST['body'] = str(encoded)
+                    self.request.POST._mutable = mutable
+                    print(str(encoded))
+
+                    print(key.decrypt(encoded))
+
+            #print(jeremy)
             kwargs.update({
                 'sender': self.request.user,
                 'user_filter': self.user_filter,
                 'exchange_filter': self.exchange_filter,
                 'max': self.max,
                 'site': get_current_site(self.request),
-                'encrypted': encrypted2
+                'encrypted': encrypted2,
+                'body': "hello fam",
             })
+            #print(jeremy)
         return kwargs
 
     def get_success_url(self):

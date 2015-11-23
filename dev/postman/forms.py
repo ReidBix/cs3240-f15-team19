@@ -51,6 +51,7 @@ class BaseWriteForm(forms.ModelForm):
         channel = kwargs.pop('channel', None)
         self.site = kwargs.pop('site', None)
         encrypted = kwargs.pop('encrypted', None)
+        body = kwargs.pop('body', None)
         super(BaseWriteForm, self).__init__(*args, **kwargs)
 
         self.instance.sender = sender if (sender and sender.is_authenticated()) else None

@@ -12,7 +12,7 @@ class DocumentAdmin(admin.ModelAdmin):
                     'private','docfile','timestamp','user', 'key')
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'website', 'picture', 'uKey', 'rKey')
+    list_display = ('user', 'website', 'picture', 'uKey', 'rKey', 'publickey', 'tempprivate')
 
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(Category, CategoryAdmin)

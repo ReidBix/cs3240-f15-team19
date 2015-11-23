@@ -40,6 +40,7 @@ from .utils import format_subject, format_body
 from .testIt import encode, decrypt_string
 from Crypto.PublicKey import RSA
 from Crypto import Random
+from Project.SecureWitness.models import Document, UserProfile
 
 login_required_m = method_decorator(login_required)
 csrf_protect_m = method_decorator(csrf_protect)
@@ -183,6 +184,7 @@ class ComposeMixin(NamespaceMixin, object):
 
 
     def get_form_kwargs(self):
+
         encrypted2 = False
         kwargs = super(ComposeMixin, self).get_form_kwargs()
         if self.request.method == 'POST':
@@ -191,18 +193,31 @@ class ComposeMixin(NamespaceMixin, object):
             if 'encrypted' in self.request.POST:
                 if self.request.POST['encrypted'] == 'on':
                     print('jeremy')
-                    random_generator = Random.new().read
 
-                    key = RSA.generate(1024, random_generator)
-                    public_key = key.publickey()
-                    encoded = encode(self.request.POST['body'], public_key)
-                    mutable = self.request.POST._mutable
-                    self.request.POST._mutable = True
-                    self.request.POST['body'] = str(encoded)
-                    self.request.POST._mutable = mutable
-                    print(str(encoded))
 
-                    print(key.decrypt(encoded))
+                    u = UserProfile.objects.all()
+                    for i in u:
+                        print(i.user)
+                        if str(i.user) == str(self.request.POST['recipients']):
+                            print("squaaaaad")
+
+                            public_key = i.publickey.encode('utf-8')
+                            public_key = public_key[:26] + b'\n' + public_key[26:]
+                            for i in range(1, 4):
+                                public_key = public_key[:(26+(65*i))] + b'\n' + public_key[(26+(65*i)):]
+                            public_key = public_key[:246] + b'\n' + public_key[246:]
+                            print(public_key)
+                            key = RSA.importKey(public_key)
+                            public_key = key.publickey()
+                            encoded = encode(self.request.POST['body'], public_key)
+                            mutable = self.request.POST._mutable
+                            self.request.POST._mutable = True
+                            self.request.POST['body'] = str(encoded)
+                            self.request.POST._mutable = mutable
+                            print(str(encoded))
+                            #print(key.decrypt(encoded))
+                            #print(key.exportkey())
+
 
             #print(jeremy)
             kwargs.update({

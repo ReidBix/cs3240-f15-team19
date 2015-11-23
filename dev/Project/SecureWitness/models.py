@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.core.validators import RegexValidator
+from Crypto.PublicKey import RSA
+from Crypto import Random
 
 class Document(models.Model):
     title = models.CharField(max_length=50, blank=False)
@@ -45,6 +47,11 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_images', blank=True)
     uKey = models.CharField(validators=[RegexValidator(regex='^.{266}$', message='Length has to be 266', code='nomatch')], max_length=266,blank=True)
     rKey = models.CharField(validators=[RegexValidator(regex='^.{872}$', message='Length has to be 872', code='nomatch')], max_length=872,blank=True)
-
+    key3 = RSA.generate(1024)
+    publickey = models.CharField(default=key3.publickey().exportKey('PEM'), max_length=2000)
+    tempprivate = models.CharField(default=key3.exportKey('PEM'), max_length=2000)
+    #print(type(publickey))
+    print(key3.exportKey('PEM'))
+    print("uhhh squadron?") 
     def __unicode__(self):
         return self.user.username

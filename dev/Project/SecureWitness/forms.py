@@ -63,7 +63,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture', 'uKey', 'rKey')
+        fields = ('website', 'picture', 'uKey', 'rKey', 'publickey', 'tempprivate')
 
 class ReporterForm(ModelForm):
     class Meta:

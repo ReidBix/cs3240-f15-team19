@@ -225,18 +225,23 @@ class PageOne(BaseFrame):
             address = BASE_DIR + '\\media\\' + dLink
             if var1.get() == 1:
                 print("DECRYPT!!")
-                i = UserProfile.objects.filter(user__username=userIn)
+                print(userIn)
+                i = UserProfile.objects.all().filter(user__username=userIn)
+                print(i)
                 for u2 in i:
                     u2rKey = RSA.importKey(u2.rKey)
                     u2uKey = RSA.importKey(u2.uKey)
+                    print(dLink)
+                    d = Document.objects.filter(docfile=var.get())
+                    print(d)
 
                     # Unencrypt both and make new file
                     uncipher = PKCS1_OAEP.new(u2rKey)
-                    aesKeyLocked = d6.key.encode("latin1")
+                    aesKeyLocked = d.key.encode("latin1")
                     # print(aesKeyLocked)
                     aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
                     # print(aesKeyUnlocked)
-
+                    print("Hi")
                     encrypt2.Decrypt(in_file=address + ".enc", out_file="decoded.docx", key=aesKeyUnlocked)
             if var2.get() == 1:
                 print("Opening file at " + address)
@@ -527,6 +532,7 @@ def startApp():
 
 
 if __name__ == '__main__':
-    startApp()
+    #populateKeys()
+    #startApp()
     app = App()
     app.mainloop()

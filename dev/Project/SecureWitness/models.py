@@ -16,7 +16,7 @@ class Document(models.Model):
     timestamp = models.DateTimeField()
     user = models.CharField(max_length=25)
     key = models.CharField(max_length=2000, blank=True)
-
+    privatekey = models.CharField(max_length=2000, blank=True)
     def __str__(self):
         return self.title
 
@@ -49,7 +49,7 @@ class UserProfile(models.Model):
     rKey = models.CharField(validators=[RegexValidator(regex='^.{872}$', message='Length has to be 872', code='nomatch')], max_length=872,blank=True)
     key3 = RSA.generate(1024)
     publickey = models.CharField(default=key3.publickey().exportKey('PEM'), max_length=2000)
-    tempprivate = models.CharField(default=key3.exportKey('PEM'), max_length=2000)
+    tempprivate = models.CharField(default=key3.exportKey('PEM'), max_length=2000, blank=True)
     #print(type(publickey))
     print(key3.exportKey('PEM'))
     print("uhhh squadron?") 

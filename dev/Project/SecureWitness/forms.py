@@ -32,11 +32,12 @@ class DocumentForm(forms.Form):
      docfile = forms.FileField(
         label='Select a file'
     )
+     privatekey = forms.CharField(label='privatekey', max_length=2000, required=False)
 
      class Meta:
          model = Document
          fields = ('title', 'description', 'detailed_description', 'encrypted',
-                   'private','docfile','timestamp','user','key')
+                   'private','docfile','timestamp','user','key', 'privatekey')
 #     created = forms.DateTimeField(label='Timestamp')
 #user = forms.CharField(max_length=25)
 

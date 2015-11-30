@@ -22,15 +22,35 @@
 <button type="submit" onclick="this.form.action='{% url 'postman:delete' %}?next={{ next_url|urlencode }}'">{% trans "Delete" %}</button>
 {% if not archived %}<button type="submit" onclick="this.form.action='{% url 'postman:archive' %}?next={{ next_url|urlencode }}'">{% trans "Archive" %}</button>{% endif %}
 </span>
-{% if reply_to_pk %}<a href="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}">{% trans "Reply" %}</a>{% endif %}
 </form>
-{% if reply_to_pk %}<hr />
-<h2>{% trans 'Reply' %}</h2>
-<form action="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
-<div id="pm_reply">{{ form.body }}</div>
-<button type="submit">{% trans 'Reply' %}</button>
-</form>{% endif %}
-{% endif %}
+    {% endif %}
 {% endfor %}
+
+
+{# {% if reply_to_pk %}<a href="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}">{% trans "Reply" %}</a>{% endif %} #}
+
+{#{% if reply_to_pk %}<hr /> #}
+{# <h2>{% trans 'Reply' %}</h2> #}
+{# <form action="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %} #}
+{#<div id="pm_reply">{{ form.body }}</div> #}
+{# <button type="submit">{% trans 'Reply' %}</button> #}
+{#</form>{% endif %} #}
+   {#  {% endif %} #}
 </div>
+<br/>
+    <br/>
+    <form id="user_form" method="post" action='{% url 'postman:askdecrypt' %}'
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <!-- Display each form. The as_p method wraps each element in a paragraph
+                 (<p>) element. This ensures each element appears on a new line,
+                 making everything look neater. -->
+            {{ user_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Decrypt" />
+        </form>
+
 {% endblock %}

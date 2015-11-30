@@ -26,14 +26,16 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from .fields import CommaSeparatedUserField
 from .models import Message, get_user_name
 from .utils import WRAP_WIDTH
+from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 
 class BaseWriteForm(forms.ModelForm):
     """The base class for other forms."""
     class Meta:
         model = Message
-        encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
-        fields = ('body', 'encrypted')
+        encrypted = forms.BooleanField(label='Encrypted', initial=False, required=False)
+        fields = ('body', 'encrypted',)
         widgets = {
             # for better confort, ensure a 'cols' of at least
             # the 'width' of the body quote formatter.
@@ -226,3 +228,9 @@ class FullReplyForm(BaseReplyForm):
 
     class Meta(BaseReplyForm.Meta):
         fields = (['recipients'] if allow_copies else []) + ['subject', 'body']
+
+class enterPrivateKeyform(forms.ModelForm):
+    tempprivate = forms.CharField(widget=forms.PasswordInput())
+    class Meta:
+        model = User
+        fields = ('tempprivate',)

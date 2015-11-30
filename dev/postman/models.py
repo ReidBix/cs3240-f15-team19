@@ -4,6 +4,7 @@ try:
     from importlib import import_module
 except ImportError:
     from django.utils.importlib import import_module  # Django 1.6 / py2.6
+from django.contrib.auth.models import User
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -296,6 +297,10 @@ class Message(models.Model):
         verbose_name_plural = _("messages")
         ordering = ['-sent_at', '-id']
 
+    def updateDecrypt(self):
+        print("hi there")
+        print(self.body)
+
     def __str__(self):
         return "{0}>{1}:{2}".format(self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))
 
@@ -564,3 +569,6 @@ class PendingMessage(Message):
     def set_rejected(self):
         """Set the message as rejected."""
         self.moderation_status = STATUS_REJECTED
+
+
+

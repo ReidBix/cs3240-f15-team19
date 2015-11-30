@@ -98,6 +98,7 @@ from . import OPTIONS
 from .views import (InboxView, SentView, ArchivesView, TrashView,
         WriteView, ReplyView, MessageView, ConversationView,
         ArchiveView, DeleteView, UndeleteView)
+from postman import views
 
 
 urlpatterns = patterns('',
@@ -111,6 +112,10 @@ urlpatterns = patterns('',
     url(r'^view/t/(?P<thread_id>[\d]+)/$', ConversationView.as_view(), name='view_conversation'),
     url(r'^archive/$', ArchiveView.as_view(), name='archive'),
     url(r'^delete/$', DeleteView.as_view(), name='delete'),
+    url(r'^decrypt/$', MessageView.as_view(), name='view'),
     url(r'^undelete/$', UndeleteView.as_view(), name='undelete'),
+    url(r'^askDecryption/$', views.enterPrivateKey, name='askdecrypt'),
+    url(r'^viewDecrypted/$', views.enterPrivateKey, name='viewDecrypted'),
+
     (r'^$', RedirectView.as_view(url='inbox/', permanent=True)),
 )

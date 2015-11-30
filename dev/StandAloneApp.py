@@ -193,7 +193,6 @@ class PageOne(BaseFrame):
         #button.pack()
 
         print(userIn)
-        var = StringVar()
 
         if(userIn == "NotAUser"):
             d = Document.objects.all()
@@ -208,19 +207,71 @@ class PageOne(BaseFrame):
             num += 1
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+        v = IntVar()
+        v.set(0)
+
+        var = StringVar()
+
+        selections = [
+            ("Decrypt", 1),
+            ("Download", 2)
+        ]
+
+        decryptTrue = False
+        downloadTrue = False
+
         def getDocfile():
             dLink = var.get().replace('/', '\\')
             address = BASE_DIR + '\\media\\' + dLink
-            print("Opening file at " + address)
-            os.system("start " + address)
+            if var1.get() == 1:
+                print("DECRYPT!!")
+                print(userIn)
+                i = UserProfile.objects.all().filter(user__username=userIn)
+                print(i)
+                for u2 in i:
+                    u2rKey = RSA.importKey(u2.rKey)
+                    u2uKey = RSA.importKey(u2.uKey)
+                    print(dLink)
+                    d = Document.objects.filter(docfile=var.get())
+                    print(d)
+
+                    # Unencrypt both and make new file
+                    uncipher = PKCS1_OAEP.new(u2rKey)
+                    aesKeyLocked = d.key.encode("latin1")
+                    # print(aesKeyLocked)
+                    aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
+                    # print(aesKeyUnlocked)
+                    print("Hi")
+                    encrypt2.Decrypt(in_file=address + ".enc", out_file="decoded.docx", key=aesKeyUnlocked)
+            if var2.get() == 1:
+                print("Opening file at " + address)
+                os.system("start " + address)
+
+        def decryptFile():
+            print("decrypt: %d, \ndownload: %d"%(var1.get(), var2.get()))
 
         label2 = tk.Label(window,
               text="""Choose a file:""",
               justify=LEFT,
               padx=20).grid()
 
+        var1 = IntVar()
+        Checkbutton(window,
+                    justify = CENTER,
+                    text="decrypt",
+                    width = 20,
+                    padx = 50,
+                    variable = var1).grid()
+        var2 = IntVar()
+        Checkbutton(window,
+                    justify = CENTER,
+                    text="download",
+                    width = 20,
+                    padx = 50,
+                    variable=var2).grid()
+
         for name, val in dList:
-            print(name.docfile)
+            #print(name.docfile)
             tk.Radiobutton(window,
                         justify = CENTER,
                         text=name,
@@ -231,6 +282,25 @@ class PageOne(BaseFrame):
                         command=getDocfile,
                         value=name.docfile).grid()
 
+        Button(window, text="Quit", command=window.quit).grid()
+        Button(window, text="Show", command=decryptFile).grid()
+
+def populateKeys():
+    u = UserProfile.objects.all()
+    for i in u:
+        rsaKey = RSA.generate(1024, Random.new().read)
+        rExport = rsaKey.exportKey()
+        uExport = rsaKey.publickey().exportKey()
+        # print(rExport)
+        # print(uExport)
+        i.rKey = rExport
+        i.uKey = uExport
+        i.save()
+    d = Document.objects.all()
+    for i in d:
+        aesKey = Random.new().read(16)
+        i.key = str(aesKey)
+        i.save()
 
 def startApp():
     root = Tk()
@@ -418,26 +488,6 @@ def startApp():
 
     #print("Complete!")
 
-    """
-    u = UserProfile.objects.all()
-    for i in u:
-        rsaKey = RSA.generate(1024, Random.new().read)
-        rExport = rsaKey.exportKey()
-        uExport = rsaKey.publickey().exportKey()
-        #print(rExport)
-        #print(uExport)
-        i.rKey = rExport
-        i.uKey = uExport
-        i.save()
-    """
-
-    d = Document.objects.all()
-    print(d)
-    for i in d:
-        aesKey = Random.new().read(16)
-        print(aesKey)
-        i.key = str(aesKey)
-        i.save()
 
     i = UserProfile.objects.filter(user__username='ReidBix')
     for u2 in i:
@@ -455,7 +505,7 @@ def startApp():
         #Encrypt AES key with public key
         cipher = PKCS1_OAEP.new(u2uKey)
         aesKeyLockToStore = cipher.encrypt(aesKey)
-        print(aesKeyLockToStore)
+        #print(aesKeyLockToStore)
 
         #Release encrypted text along with encrypted key
         print("encrypted file")
@@ -469,9 +519,9 @@ def startApp():
         #Unencrypt both and make new file
         uncipher = PKCS1_OAEP.new(u2rKey)
         aesKeyLocked = d6.key.encode("latin1")
-        print(aesKeyLocked)
+        #print(aesKeyLocked)
         aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
-        print(aesKeyUnlocked)
+        #print(aesKeyUnlocked)
 
         encrypt2.Decrypt(in_file=address+".enc", out_file="decoded.docx", key=aesKeyUnlocked)
 
@@ -482,6 +532,7 @@ def startApp():
 
 
 if __name__ == '__main__':
-    startApp()
+    #populateKeys()
+    #startApp()
     app = App()
     app.mainloop()

@@ -1,7 +1,9 @@
 #hi
 from __future__ import unicode_literals
-
+from django.template import RequestContext
+from django.http import HttpResponseRedirect, HttpResponse
 from django import VERSION
+from tkinter import *
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -34,16 +36,20 @@ from django.views.generic import FormView, TemplateView, View
 
 from . import OPTION_MESSAGES
 from .fields import autocompleter_app
-from .forms import WriteForm, AnonymousWriteForm, QuickReplyForm, FullReplyForm
+from .forms import WriteForm, AnonymousWriteForm, QuickReplyForm, FullReplyForm, enterPrivateKeyform
 from .models import Message, get_order_by
 from .utils import format_subject, format_body
 from .testIt import encode, decrypt_string
 from Crypto.PublicKey import RSA
 from Crypto import Random
+from Project.SecureWitness.models import Document, UserProfile
+import ast
+from django.forms import ModelForm
+from django.shortcuts import render_to_response
 
 login_required_m = method_decorator(login_required)
 csrf_protect_m = method_decorator(csrf_protect)
-
+theBody = ""
 
 ##########
 # Helpers
@@ -54,13 +60,33 @@ def _get_referer(request):
         sr = urlsplit(request.META['HTTP_REFERER'])
         return urlunsplit(('', '', sr.path, sr.query, sr.fragment))
 
+class MyDialog:
+    def __init__(self, parent):
+
+        top = self.top = Toplevel(parent)
+
+        Label(top, text="Value").pack()
+
+        self.e = Entry(top)
+        self.e.pack(padx=5)
+
+        b = Button(top, text="OK", command=self.ok)
+        b.pack(pady=5)
+
+    def ok(self):
+
+        print("value is", self.e.get())
+
+        self.top.destroy()
+
+
 
 ########
 # Views
 ########
 class NamespaceMixin(object):
     """Common code to manage the namespace."""
-
+    print("hi there")
     def render_to_response(self, context, **response_kwargs):
         if VERSION >= (1, 8):
             self.request.current_app = self.request.resolver_match.namespace
@@ -183,6 +209,7 @@ class ComposeMixin(NamespaceMixin, object):
 
 
     def get_form_kwargs(self):
+
         encrypted2 = False
         kwargs = super(ComposeMixin, self).get_form_kwargs()
         if self.request.method == 'POST':
@@ -191,18 +218,33 @@ class ComposeMixin(NamespaceMixin, object):
             if 'encrypted' in self.request.POST:
                 if self.request.POST['encrypted'] == 'on':
                     print('jeremy')
-                    random_generator = Random.new().read
 
-                    key = RSA.generate(1024, random_generator)
-                    public_key = key.publickey()
-                    encoded = encode(self.request.POST['body'], public_key)
-                    mutable = self.request.POST._mutable
-                    self.request.POST._mutable = True
-                    self.request.POST['body'] = str(encoded)
-                    self.request.POST._mutable = mutable
-                    print(str(encoded))
 
-                    print(key.decrypt(encoded))
+                    u = UserProfile.objects.all()
+                    for i in u:
+                        print(i.user)
+                        if str(i.user) == str(self.request.POST['recipients']):
+                            print("squaaaaad")
+
+                            public_key = i.publickey.encode('utf-8')
+                            public_key = public_key[:26] + b'\n' + public_key[26:]
+                            for i in range(1, 4):
+                                public_key = public_key[:(26+(65*i))] + b'\n' + public_key[(26+(65*i)):]
+                            public_key = public_key[:246] + b'\n' + public_key[246:]
+                            print(public_key)
+                            key = RSA.importKey(public_key)
+                            public_key = key.publickey()
+                            encoded = encode(self.request.POST['body'], public_key)
+                            #print(encoded.decode('utf-8'))
+                            mutable = self.request.POST._mutable
+                            self.request.POST._mutable = True
+                            print(type(encoded))
+                            self.request.POST['body'] = str(encoded)
+                            self.request.POST._mutable = mutable
+                            print(str(encoded))
+                            #print(key.decrypt(encoded))
+                            #print(key.exportkey())
+
 
             #print(jeremy)
             kwargs.update({
@@ -351,10 +393,11 @@ class DisplayMixin(NamespaceMixin, object):
         ``template_name``: the name of the template to use
 
     """
+    print("hello fam")
     http_method_names = ['get']
     form_class = QuickReplyForm
     formatters = (format_subject, format_body if getattr(settings, 'POSTMAN_QUICKREPLY_QUOTE_BODY', False) else None)
-    template_name = 'postman/view.html'
+    template_name = 'postman/view.html' or 'postman/askDecryption.html'
 
     @login_required_m
     def dispatch(self, *args, **kwargs):
@@ -369,10 +412,90 @@ class DisplayMixin(NamespaceMixin, object):
         return super(DisplayMixin, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        global theBody
         context = super(DisplayMixin, self).get_context_data(**kwargs)
         user = self.request.user
+        u = UserProfile.objects.all()
+
+                    #return context
         # are all messages archived ?
+        print('why am i doing this?')
         for m in self.msgs:
+            print(m.encrypted)
+            if m.encrypted == True:
+                #ask user if they want to decrypt
+                #m.body = "hi"
+                private = ""
+                print(type(m.body))
+                jeremy = ast.literal_eval(m.body)
+                print(type(jeremy))
+                print(jeremy)
+                for i in u:
+                    if str(user) == str(i.user):
+                        theBody = m.body
+                        print("setting the body")
+                        print(theBody)
+                        if i.tempprivate == "":
+                            print("hello, it's me")
+                            theBody = m.body
+                            #self.request['msg'] = m.body
+                #hi = "window do you want to decrypt"
+                #root = Tk()
+                #d = MyDialog(root)
+
+#                root.wait_window(d.top)
+                #instead of input we need another way
+                user_form = enterPrivateKeyform()
+                entered = False
+                print(self.request.resolver_match.namespace)
+                #return redirect(self.request.resolver_match.namespace + '/askDecryption.html')
+                #decryptOrNah = input("Do you want to decrypt? (y/n)")
+                #if decryptOrNah == "y" or decryptOrNah == "Y":
+                 #   private = input("Enter private key")
+                  #  private = (private).encode('utf-8')
+                  #  print(private)
+
+                    #private = private[:31] + b'\n' + private[31:]
+                    #for i in range(1, 13):
+                     #   private = private[:(31+(65*i))] + b'\n' + private[(31+(65*i)):]
+
+              #      private = private[:860] + b'\n' + private[860:]
+               #     print(private)
+
+
+                 #   u2rKey = RSA.importKey(private)
+                    #print(str(m.body[3:]))
+                    #m.body = m.body[3:]
+                    #m.body = m.body[:-1]
+                    #print(m.body)
+                    #jeremy = m.body
+                    #jeremiah = b''
+                #    i = 0
+                    #jonny = len(jeremy)
+                    #jonny = range(0, len(jeremy))
+                    #for i in range(0, jonny):
+                     #  if i < len(jeremy):
+                      #     print(jeremy[i])
+                       #    if jeremy[i] == '\\':
+                               #print(chr(jeremy[i]))
+                        #       jeremy = jeremy[:i] + jeremy[i+1:]
+                         #      i = 0
+                         #      jonny = len(jeremy) - 1
+                          #     print(jeremy)
+                    #jonny = '' + str(m.body)
+                    #print(jonny)
+                    #jeremiah = ("x= %s" % '\x7f9\xc1\xb0\x90\x10I@\x8b\xe6\xd2\xc51\x91T\xd2\x8b\xfc\xe1b\xbf\xa6\xed\xd6\x07\xe6\x88\x0f\xa3`\'\xbf\xb0l\xd1n\x11\xe8\xf4f\xcfa\x86m\xe9$c\x8d\xe56\xbboD\x04~\xc2\xbf\xa4\x91\x9f&b\xf0\x19\xa6v\x97\xdb\xac\xb8\xf00q\xd2\'\xfc3Z\xcd\xfd6\x12\x1c\xf4%e\x07\xfa\x96e\x13\x8a!\xb8\x19FCr\xa2\xd2\x08J\xfb\xf7KI#\xfa\x11\xf2\x1d\xa4!\xfd\x8f\xe6\xfd\xf5\xbf4\x9c\x9b<s\x9c\x009').encode("utf-8")
+                    #print(type(jeremiah))
+                    #jonny = jeremy.encode('utf-8')
+                    #jeremiah = jonny.decode('utf-8')
+                    #print(jeremiah)
+
+
+                #    decoded = u2rKey.decrypt(jeremy)
+                 #   m.body = str(decoded)
+                  #  print(str(decoded))
+
+                    #decrypt with that privatekey
             if not getattr(m, ('sender' if m.sender == user else 'recipient') + '_archived'):
                 archived = False
                 break
@@ -391,15 +514,19 @@ class DisplayMixin(NamespaceMixin, object):
             'reply_to_pk': received.pk if received else None,
             'form': self.form_class(initial=received.quote(*self.formatters)) if received else None,
             'next_url': self.request.GET.get('next') or reverse('postman:inbox', current_app=self.request.resolver_match.namespace),
+            'user_form': enterPrivateKey(self.request),
+
         })
+        #print(jeremy)
         return context
 
 
 class MessageView(DisplayMixin, TemplateView):
     """Display one specific message."""
-
+    print("fam we out here")
     def get(self, request, message_id, *args, **kwargs):
         self.filter = Q(pk=message_id)
+        #print(jeremy)
         return super(MessageView, self).get(request, *args, **kwargs)
 
 
@@ -426,6 +553,7 @@ class UpdateMessageMixin(object):
     http_method_names = ['post']
     field_value = None
     success_url = None
+    print("come on fam")
 
     @csrf_protect_m
     @login_required_m
@@ -438,6 +566,9 @@ class UpdateMessageMixin(object):
         tpks = request.POST.getlist('tpks')
         if pks or tpks:
             user = request.user
+            print(_get_referer(request))
+            #print(self.parent.updateDecrypt())
+            #print(Message.objects.as_recipient(user, filter).update(**{'recipient_{0}'.format(self.field_bit): self.field_value}))
             filter = Q(pk__in=pks) | Q(thread__in=tpks)
             recipient_rows = Message.objects.as_recipient(user, filter).update(**{'recipient_{0}'.format(self.field_bit): self.field_value})
             sender_rows = Message.objects.as_sender(user, filter).update(**{'sender_{0}'.format(self.field_bit): self.field_value})
@@ -464,7 +595,62 @@ class DeleteView(UpdateMessageMixin, View):
     field_value = now()
 
 
+
+
+
 class UndeleteView(UpdateMessageMixin, View):
     """Revert messages/conversations from marked as deleted."""
     field_bit = 'deleted_at'
     success_msg = ugettext_lazy("Messages or conversations successfully recovered.")
+
+
+def enterPrivateKey(request):
+    global theBody
+    context = RequestContext(request)
+    entered = False
+    print("hello???")
+    if request.method == 'POST':
+        user_form = enterPrivateKeyform(data=request.POST)
+        entered = True
+        #print(jeremy)
+        print(context)
+        print(theBody)
+        print(request.POST['tempprivate'])
+        jeremy = ast.literal_eval(theBody)
+
+        private = request.POST['tempprivate']
+        private = (private).encode('utf-8')
+        print(private)
+
+        private = private[:31] + b'\n' + private[31:]
+        for i in range(1, 13):
+            private = private[:(31+(65*i))] + b'\n' + private[(31+(65*i)):]
+
+        private = private[:860] + b'\n' + private[860:]
+        print(private)
+
+
+        try:
+            u2rKey = RSA.importKey(private)
+            decoded = u2rKey.decrypt(jeremy)
+
+        except ValueError:
+            decoded = "please enter a valid RSA key next time"
+
+        #m.body = str(decoded)
+        print(str(decoded))
+
+
+    else:
+        user_form = enterPrivateKeyform()
+        return user_form
+    #return redirect('postman/askDecryption.html')
+    #return user_form
+    return render_to_response(
+        'postman/askDecryption.html',
+        {'user_form': user_form, 'entered': entered, 'decoded': decoded},
+        context)
+
+
+
+

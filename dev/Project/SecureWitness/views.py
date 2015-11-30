@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
 from Project.SecureWitness.models import Document, Category, Page
-from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm
+from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -147,6 +147,26 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
     else:
         return render_to_response('SecureWitness/user_login.html', {}, context)
+
+def search(request):
+
+    if request.GET:
+        form = DocumentSearchForm(request.GET)
+        if form.is_valid():
+            results = form.get_result_queryset()
+        else:
+            results = []
+    else:
+        form = DocumentSearchForm()
+        results = []
+
+    return render_to_response(
+        'SecureWitness/search.html',
+        RequestContext(request, {
+            'form': form,
+            'results': results,
+        })
+    )
 
 @login_required
 def auth(request):

@@ -433,6 +433,8 @@ class DisplayMixin(NamespaceMixin, object):
                 for i in u:
                     if str(user) == str(i.user):
                         theBody = m.body
+                        print("setting the body")
+                        print(theBody)
                         if i.tempprivate == "":
                             print("hello, it's me")
                             theBody = m.body
@@ -447,28 +449,28 @@ class DisplayMixin(NamespaceMixin, object):
                 entered = False
                 print(self.request.resolver_match.namespace)
                 #return redirect(self.request.resolver_match.namespace + '/askDecryption.html')
-                decryptOrNah = input("Do you want to decrypt? (y/n)")
-                if decryptOrNah == "y" or decryptOrNah == "Y":
-                    private = input("Enter private key")
-                    private = (private).encode('utf-8')
-                    print(private)
+                #decryptOrNah = input("Do you want to decrypt? (y/n)")
+                #if decryptOrNah == "y" or decryptOrNah == "Y":
+                 #   private = input("Enter private key")
+                  #  private = (private).encode('utf-8')
+                  #  print(private)
 
-                    private = private[:31] + b'\n' + private[31:]
-                    for i in range(1, 13):
-                        private = private[:(31+(65*i))] + b'\n' + private[(31+(65*i)):]
+                    #private = private[:31] + b'\n' + private[31:]
+                    #for i in range(1, 13):
+                     #   private = private[:(31+(65*i))] + b'\n' + private[(31+(65*i)):]
 
-                    private = private[:860] + b'\n' + private[860:]
-                    print(private)
+              #      private = private[:860] + b'\n' + private[860:]
+               #     print(private)
 
 
-                    u2rKey = RSA.importKey(private)
+                 #   u2rKey = RSA.importKey(private)
                     #print(str(m.body[3:]))
                     #m.body = m.body[3:]
                     #m.body = m.body[:-1]
                     #print(m.body)
                     #jeremy = m.body
                     #jeremiah = b''
-                    i = 0
+                #    i = 0
                     #jonny = len(jeremy)
                     #jonny = range(0, len(jeremy))
                     #for i in range(0, jonny):
@@ -489,9 +491,9 @@ class DisplayMixin(NamespaceMixin, object):
                     #print(jeremiah)
 
 
-                    decoded = u2rKey.decrypt(jeremy)
-                    m.body = str(decoded)
-                    print(str(decoded))
+                #    decoded = u2rKey.decrypt(jeremy)
+                 #   m.body = str(decoded)
+                  #  print(str(decoded))
 
                     #decrypt with that privatekey
             if not getattr(m, ('sender' if m.sender == user else 'recipient') + '_archived'):
@@ -628,10 +630,13 @@ def enterPrivateKey(request):
         print(private)
 
 
+        try:
+            u2rKey = RSA.importKey(private)
+            decoded = u2rKey.decrypt(jeremy)
 
+        except ValueError:
+            decoded = "please enter a valid RSA key next time"
 
-        u2rKey = RSA.importKey(private)
-        decoded = u2rKey.decrypt(jeremy)
         #m.body = str(decoded)
         print(str(decoded))
 

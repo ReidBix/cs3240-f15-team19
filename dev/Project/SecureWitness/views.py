@@ -101,6 +101,10 @@ def register(request):
     registered = False
 
     if request.method == 'POST':
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['tempprivate'] = ''
+        request.POST._mutable = mutable
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
 

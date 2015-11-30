@@ -2,14 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Minimal Django File Upload Example</title>	
+		<title>Report file upload</title>
 	</head>
 
 	<body>
 	{% if user.is_authenticated %}
             <h1>SecureWitness says hello {{ user.username }}</h1>
 	{% else %}
-		<h1> you ain't even signed in boy </h1>
+		<h1>Please <a href="user_login.html">login here</a> </h1>
+        <h1>Not registered? <a href="register.html">Register here</a> </h1>
 	{% endif %}
         <a href='/SecureWitness/'>Index</a> <br/>
 		<!-- List of uploaded documents -->

@@ -11,7 +11,6 @@ from django.conf import settings
 from django.core.exceptions import FieldError
 from django.utils.text import smart_split
 
-
 from Project.SecureWitness.models import Page, Category, Reporter, UserProfile, Document, Group
 
 

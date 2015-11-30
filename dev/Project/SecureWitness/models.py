@@ -56,7 +56,3 @@ class UserProfile(models.Model):
     print("uhhh squadron?") 
     def __unicode__(self):
         return self.user.username
-
-class Group(models.Model):
-    name = models.CharField(max_length=30, unique=True)
-    users = models.ManyToManyField(to=User)

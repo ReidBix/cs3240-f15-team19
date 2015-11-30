@@ -67,11 +67,4 @@ class Migration(migrations.Migration):
                 ('tempprivate', models.CharField(max_length=2000, blank=True))
             ],
         ),
-        migrations.CreateModel(
-            name='Group',
-            fields=[
-                ('name', models.CharField(max_length=30, unique=True)),
-                ('users', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
     ]

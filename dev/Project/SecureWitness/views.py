@@ -4,13 +4,13 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-from Project.SecureWitness.models import Document, Category, Page, Group
-from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm, GroupForm
+from Project.SecureWitness.models import Document, Category, Page
+from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm
 
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 import pdb;
 from datetime import datetime
 
@@ -198,7 +198,7 @@ def auth(request):
 @login_required
 def group(request):
     context = RequestContext(request)
-    grps = Group.objects.filter(users__username=request.user.username)
+    grps = User.objects.get("groups")
     usrs = User.objects.all()
     grps = grps.values_list('name', flat=True)
     usrs = usrs.values_list('username', flat=True)
@@ -211,16 +211,16 @@ def group(request):
     if(request.method == 'POST'):
         if request.POST['action'] == 'newg' and request.POST['name'] is not None:
             dat = {'name' : request.POST['name'], 'users' : request.POST['user']}
-            group_form = GroupForm(data=dat)
-            if group_form.is_valid():
-                new = group_form.save()
-                new.save()
+            group = Group(name=dat['name'])
+            group.save()
+            glist.append(group.name)
         elif request.POST['action'] == 'newu' and request.POST['grp'] is not None and request.POST['nusr'] is not None:
             group = Group.objects.get(name=request.POST['grp'])
             nuser = User.objects.get(username=request.POST['nusr'])
             if group is not None and nuser is not None:
-                group.users.add(nuser)
-                group.save()
+                nuser.add(group)
+                nuser.save()
+                glist.append(group.name)
     return render_to_response('SecureWitness/group.html',{'users' : ulist, 'groups' : glist}, context)
 
 @login_required

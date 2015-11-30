@@ -7,10 +7,11 @@ from django.contrib.auth import authenticate, login
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
+from django.db.models.query import QuerySet
 from django.conf import settings
 from django.core.exceptions import FieldError
 from django.utils.text import smart_split
-
+import functools
 
 from Project.SecureWitness.models import Page, Category, Reporter, UserProfile, Document
 
@@ -148,11 +149,11 @@ class BaseSearchForm(forms.Form):
 
         for bit in self.get_text_query_bits(query_string):
             or_queries = [Q(**{self.construct_search(str(field_name), first): bit}) for field_name in self.Meta.search_fields]
-            filters.append(reduce(Q.__or__, or_queries))
+            filters.append(functools.reduce(Q.__or__, or_queries))
             first = False
 
         if len(filters):
-            return reduce(self.DEFAULT_OPERATOR, filters)
+            return functools.reduce(self.DEFAULT_OPERATOR, filters)
         else:
             return False
 
@@ -226,13 +227,13 @@ class BaseSearchForm(forms.Form):
 class DocumentSearchForm(BaseSearchForm):
     class Meta:
         base_qs = Document.objects
-        search_fields = ('^name', 'description', 'specifications', '=id')
+        search_fields = ('^title', 'description', 'user', '=id')
 
                 # assumes a fulltext index has been defined on the fields
                 # 'name,description,specifications,id'
         fulltext_indexes = (
-                    ('name', 2),  # name matches are weighted higher
-                    ('name,description,specifications,id', 1),
+                    ('title', 2),  # name matches are weighted higher
+                    ('title,description,user,id', 1),
         )
 
 

@@ -26,6 +26,15 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
                 ('docfile', models.FileField(upload_to='documents/%Y/%m/%d')),
+                ('description', models.CharField(max_length=100, blank=False)),
+                ('detailed_description', models.CharField(max_length=500, blank=True)),
+                ('encrypted', models.BooleanField()),
+                ('private', models.BooleanField()),
+                ('user', models.CharField(max_length=25)),
+                ('timestamp', models.DateTimeField()),
+                ('groups', models.ForeignKey(to='SecureWitness.Group')),
+                ('key', models.CharField(max_length=2000, blank=True)),
+                ('privatekey', models.CharField(max_length=2000, blank=True)),
             ],
         ),
         migrations.CreateModel(
@@ -54,6 +63,15 @@ class Migration(migrations.Migration):
                 ('website', models.URLField(blank=True)),
                 ('picture', models.ImageField(blank=True, upload_to='profile_images')),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+                ('publickey', models.CharField(max_length=2000)),
+                ('tempprivate', models.CharField(max_length=2000, blank=True))
+            ],
+        ),
+        migrations.CreateModel(
+            name='Group',
+            fields=[
+                ('name', models.CharField(max_length=30, unique=True)),
+                ('users', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

@@ -12,8 +12,12 @@
         {% if user.is_authenticated %}
             <h1>SecureWitness says hello {{ user.username }}</h1>
             <a href="/SecureWitness/restricted/">Restricted Page</a><br/>
+            <a href="/SecureWitness/group/">Manage Groups</a>
             <a href="/SecureWitness/logout/">Logout</a><br/>
             <a href="/SecureWitness/messages/">Mail</a><br>
+        {% elif not user.is_active %}
+            <h1>{{ user.username }}, your account has been suspended.</h1>
+            <a href="/SecureWitness/logout/">Logout</a>
         {% else %}
             <h1>SecureWitness says hello to someone new</h1><strong>{{ boldmessage }}</strong><br />
             <a href="/SecureWitness/register/">Register Here</a><br/>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Witness</title>
+</head>
+<body>
+    <h1>Group Management</h1>
+    <button name="toggle" onclick="swap()" id="butt">Manage Groups</button><br>
+    <select form="mform" id="gs" name="grp" size="4" hidden>
+        {% for group in groups %}
+            <option name="{{ group }}">{{ group }}</option>
+        {% endfor %}
+    </select>
+    <select form="mform" id="us" name="nusr" size="4" hidden>
+        {% for user in users %}
+            <option name="{{ user }}">{{ user }}</option>
+        {% endfor %}
+    </select>
+    <h3>Create Group</h3>
+    <form id="mform" method="post" action="/SecureWitness/group/">
+        <p>Group name:</p>
+        <input type="text" name="name" id="txt">
+        <input type="hidden" name="user" value="{{ user }}">
+        <input type="submit" value="Add">
+    </form>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript">
+        function swap(){
+            var mode = $("#butt");
+            var txt = mode.val();
+            if(txt == 'Manage Groups'){
+                mode.val('Create Group');
+                $("#gs").hidden = false;
+                $("#us").hidden = false;
+                $("#mform").hidden = true;
+            }
+            else if(txt == 'Create Group'){
+                mode.val('Manage Groups');
+                $("#gs").hidden = true;
+                $("#us").hidden = true;
+                $("#mform").hidden = false;
+            }
+        }
+    </script>
+    <br>
+    <href a="/SecureWitness/">Index</href>
+</body>
+</html>

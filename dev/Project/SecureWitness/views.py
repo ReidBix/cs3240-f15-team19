@@ -4,8 +4,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-from Project.SecureWitness.models import Document, Category, Page
-from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm
+from Project.SecureWitness.models import Document, Category, Page, Group
+from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm, GroupForm
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -148,20 +148,80 @@ def user_login(request):
     else:
         return render_to_response('SecureWitness/user_login.html', {}, context)
 
+def search(request):
+
+    if request.GET:
+        form = DocumentSearchForm(request.GET)
+        if form.is_valid():
+            results = form.get_result_queryset()
+        else:
+            results = []
+    else:
+        form = DocumentSearchForm()
+        results = []
+
+    return render_to_response(
+        'SecureWitness/search.html',
+        RequestContext(request, {
+            'form': form,
+            'results': results,
+        })
+    )
+
 @login_required
 def auth(request):
     context = RequestContext(request)
+    usrs = User.objects.all()
+    usrs = usrs.values_list('username', flat=True)
+    list = []
+    for usr in usrs:
+        list.append(usr)
     if request.method == 'POST':
         usr = request.POST['user']
         if User.objects.get(username = usr) is not None:
             user = User.objects.get(username = usr)
-            user.is_staff = True
-            user.save()
-            return HttpResponseRedirect('/SecureWitness/auth/')
+            if request.POST['action'] == 'auth':
+                user.is_staff = True
+                user.save()
+            elif request.POST['action'] == 'susp':
+                user.is_active = False
+                user.save()
+            elif request.POST['action'] == 'act':
+                user.is_active = True
+                user.save()
+            return render_to_response('SecureWitness/auth.html',{'users' : list}, context)
         else:
-            return HttpResponseRedirect('/SecureWitness/auth/')
+            return render_to_response('SecureWitness/auth.html',{'users' : list}, context)
 
-    return render_to_response('SecureWitness/auth.html', {}, context)
+    return render_to_response('SecureWitness/auth.html',{'users' : list}, context)
+
+@login_required
+def group(request):
+    context = RequestContext(request)
+    grps = Group.objects.filter(users__username=request.user.username)
+    usrs = User.objects.all()
+    grps = grps.values_list('name', flat=True)
+    usrs = usrs.values_list('username', flat=True)
+    glist = []
+    ulist = []#comment so the damn thing knows its changed
+    for grp in grps:
+        glist.append(grp)
+    for usr in usrs:
+        ulist.append(usr)
+    if(request.method == 'POST'):
+        if request.POST['action'] == 'newg' and request.POST['name'] is not None:
+            dat = {'name' : request.POST['name'], 'users' : request.POST['user']}
+            group_form = GroupForm(data=dat)
+            if group_form.is_valid():
+                new = group_form.save()
+                new.save()
+        elif request.POST['action'] == 'newu' and request.POST['grp'] is not None and request.POST['nusr'] is not None:
+            group = Group.objects.get(name=request.POST['grp'])
+            nuser = User.objects.get(username=request.POST['nusr'])
+            if group is not None and nuser is not None:
+                group.users.add(nuser)
+                group.save()
+    return render_to_response('SecureWitness/group.html',{'users' : ulist, 'groups' : glist}, context)
 
 @login_required
 def restricted(request):

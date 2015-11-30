@@ -7,12 +7,21 @@
 <body>
 
     {% if user.is_staff %}
-        <h1>Authorize User as Admin</h1>
+        <h1>Manage Users</h1>
+        <select form="auth_form" name="user" size="5">
+        {% for usr in users %}
+        <option name="{{ usr }}">{{ usr }}</option>
+        {% endfor %}
+        </select>
         <form id="auth_form" method="post" action="/SecureWitness/auth/">
         {% csrf_token %}
-        <input type="text" name="user" id="usr">
-        <input type="submit" value="Authorize">
+            <input type="radio" name="action" value="auth">Authorize User<br>
+            <input type="radio" name="action" value="act">Activate User<br>
+            <input type="radio" name="action" value="susp">Suspend User<br>
+        <!--<input type="text" name="user" id="usr">-->
+        <input type="submit" value="Go">
         </form>
+        <br>
         <href a="/SecureWitness/">Index</href>
     {% else %}
         <p>Log in as an admin, fool.</p>

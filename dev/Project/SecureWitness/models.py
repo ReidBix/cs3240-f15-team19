@@ -15,6 +15,7 @@ class Document(models.Model):
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')
     timestamp = models.DateTimeField()
     user = models.CharField(max_length=25)
+    groups = models.ForeignKey(to='SecureWitness.Group', blank=True)
     key = models.CharField(max_length=2000, blank=True)
     privatekey = models.CharField(max_length=2000, blank=True)
     def __str__(self):
@@ -55,3 +56,7 @@ class UserProfile(models.Model):
     print("uhhh squadron?") 
     def __unicode__(self):
         return self.user.username
+
+class Group(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    users = models.ManyToManyField(to=User)

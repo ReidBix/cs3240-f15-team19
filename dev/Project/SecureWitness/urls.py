@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^restricted/$', views.restricted, name='restricted'),
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^auth/$',views.auth, name='auth'),
+    url(r'^group/$',views.group,name='group'),
     (r'^messages/', include('postman.urls', namespace='postman', app_name='postman'))
 )
 

@@ -49,3 +49,7 @@ Link to already existing repository for messaging: https://bitbucket.org/psam/dj
 3. Can encrypt and decrypt files of any type with seperate key that will be encrypted with public key and attached with document
 4. Obviously won't be able to decrypt without the private key to decrypt the key for the file
 5. Nothing added yet to the stand alone app because I spent far too long ironing out bugs (i.e. F word docs and pdfs)
+
+#File Upload Attempts
+1. Created separate models for report and uploads (currently document) and linked with ForeignKey('report')
+2. Tried and failed a lot to update views,forms, and template list.html correctly...(help)

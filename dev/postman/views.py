@@ -406,9 +406,7 @@ class DisplayMixin(NamespaceMixin, object):
         for m in self.msgs:
             print(m.encrypted)
             if m.encrypted == True:
-                #ask user if they want to decrypt
-                #m.body = "hi"
-                private = ""
+
                 print(type(m.body))
                 jeremy = ast.literal_eval(m.body)
                 print(type(jeremy))
@@ -421,64 +419,14 @@ class DisplayMixin(NamespaceMixin, object):
                         if i.tempprivate == "":
                             print("hello, it's me")
                             theBody = m.body
-                            #self.request['msg'] = m.body
-                #hi = "window do you want to decrypt"
-                #root = Tk()
-                #d = MyDialog(root)
 
-#                root.wait_window(d.top)
-                #instead of input we need another way
                 user_form = enterPrivateKeyform()
                 entered = False
                 print(self.request.resolver_match.namespace)
-                #return redirect(self.request.resolver_match.namespace + '/askDecryption.html')
-                #decryptOrNah = input("Do you want to decrypt? (y/n)")
-                #if decryptOrNah == "y" or decryptOrNah == "Y":
-                 #   private = input("Enter private key")
-                  #  private = (private).encode('utf-8')
-                  #  print(private)
+            else:
+                theBody = "notEncrypted"
+                print("message isn't encrypted, body set tho")
 
-                    #private = private[:31] + b'\n' + private[31:]
-                    #for i in range(1, 13):
-                     #   private = private[:(31+(65*i))] + b'\n' + private[(31+(65*i)):]
-
-              #      private = private[:860] + b'\n' + private[860:]
-               #     print(private)
-
-
-                 #   u2rKey = RSA.importKey(private)
-                    #print(str(m.body[3:]))
-                    #m.body = m.body[3:]
-                    #m.body = m.body[:-1]
-                    #print(m.body)
-                    #jeremy = m.body
-                    #jeremiah = b''
-                #    i = 0
-                    #jonny = len(jeremy)
-                    #jonny = range(0, len(jeremy))
-                    #for i in range(0, jonny):
-                     #  if i < len(jeremy):
-                      #     print(jeremy[i])
-                       #    if jeremy[i] == '\\':
-                               #print(chr(jeremy[i]))
-                        #       jeremy = jeremy[:i] + jeremy[i+1:]
-                         #      i = 0
-                         #      jonny = len(jeremy) - 1
-                          #     print(jeremy)
-                    #jonny = '' + str(m.body)
-                    #print(jonny)
-                    #jeremiah = ("x= %s" % '\x7f9\xc1\xb0\x90\x10I@\x8b\xe6\xd2\xc51\x91T\xd2\x8b\xfc\xe1b\xbf\xa6\xed\xd6\x07\xe6\x88\x0f\xa3`\'\xbf\xb0l\xd1n\x11\xe8\xf4f\xcfa\x86m\xe9$c\x8d\xe56\xbboD\x04~\xc2\xbf\xa4\x91\x9f&b\xf0\x19\xa6v\x97\xdb\xac\xb8\xf00q\xd2\'\xfc3Z\xcd\xfd6\x12\x1c\xf4%e\x07\xfa\x96e\x13\x8a!\xb8\x19FCr\xa2\xd2\x08J\xfb\xf7KI#\xfa\x11\xf2\x1d\xa4!\xfd\x8f\xe6\xfd\xf5\xbf4\x9c\x9b<s\x9c\x009').encode("utf-8")
-                    #print(type(jeremiah))
-                    #jonny = jeremy.encode('utf-8')
-                    #jeremiah = jonny.decode('utf-8')
-                    #print(jeremiah)
-
-
-                #    decoded = u2rKey.decrypt(jeremy)
-                 #   m.body = str(decoded)
-                  #  print(str(decoded))
-
-                    #decrypt with that privatekey
             if not getattr(m, ('sender' if m.sender == user else 'recipient') + '_archived'):
                 archived = False
                 break
@@ -595,31 +543,33 @@ def enterPrivateKey(request):
     if request.method == 'POST':
         user_form = enterPrivateKeyform(data=request.POST)
         entered = True
-
+        if theBody == "notEncrypted":
+            decoded = "***hey pal: This message is not encrypted****"
+        else:
         #print(jeremy)
-        print(context)
-        print(theBody)
-        print(request.POST['tempprivate'])
-        jeremy = ast.literal_eval(theBody)
+            print(context)
+            print(theBody)
+            print(request.POST['tempprivate'])
+            jeremy = ast.literal_eval(theBody)
 
-        private = request.POST['tempprivate']
-        private = (private).encode('utf-8')
-        print(private)
+            private = request.POST['tempprivate']
+            private = (private).encode('utf-8')
+            print(private)
 
-        private = private[:31] + b'\n' + private[31:]
-        for i in range(1, 13):
-            private = private[:(31+(65*i))] + b'\n' + private[(31+(65*i)):]
+            private = private[:31] + b'\n' + private[31:]
+            for i in range(1, 13):
+                private = private[:(31+(65*i))] + b'\n' + private[(31+(65*i)):]
 
-        private = private[:860] + b'\n' + private[860:]
-        print(private)
+            private = private[:860] + b'\n' + private[860:]
+            print(private)
 
 
-        try:
-            u2rKey = RSA.importKey(private)
-            decoded = u2rKey.decrypt(jeremy)
+            try:
+                u2rKey = RSA.importKey(private)
+                decoded = u2rKey.decrypt(jeremy)
 
-        except ValueError:
-            decoded = "please enter a valid RSA key next time"
+            except ValueError:
+                decoded = "please enter a valid RSA key next time"
 
         #m.body = str(decoded)
         print(str(decoded))

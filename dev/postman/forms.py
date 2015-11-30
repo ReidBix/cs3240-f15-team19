@@ -34,8 +34,8 @@ class BaseWriteForm(forms.ModelForm):
     """The base class for other forms."""
     class Meta:
         model = Message
-        encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
-        fields = ('body', 'encrypted')
+        encrypted = forms.BooleanField(label='Encrypted', initial=False, required=False)
+        fields = ('body', 'encrypted',)
         widgets = {
             # for better confort, ensure a 'cols' of at least
             # the 'width' of the body quote formatter.

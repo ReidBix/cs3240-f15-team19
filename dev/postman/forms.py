@@ -26,6 +26,8 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from .fields import CommaSeparatedUserField
 from .models import Message, get_user_name
 from .utils import WRAP_WIDTH
+from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 
 class BaseWriteForm(forms.ModelForm):
@@ -226,3 +228,9 @@ class FullReplyForm(BaseReplyForm):
 
     class Meta(BaseReplyForm.Meta):
         fields = (['recipients'] if allow_copies else []) + ['subject', 'body']
+
+class enterPrivateKeyform(forms.ModelForm):
+    tempprivate = forms.CharField(widget=forms.PasswordInput())
+    class Meta:
+        model = User
+        fields = ('tempprivate',)

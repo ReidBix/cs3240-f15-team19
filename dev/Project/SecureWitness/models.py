@@ -6,24 +6,33 @@ from django.core.validators import RegexValidator
 from Crypto.PublicKey import RSA
 from Crypto import Random
 
-class Document(models.Model):
+class Reporter(models.Model):
+    username = models.CharField(max_length=20)
+    email = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
+
+
+class Report(models.Model):
     title = models.CharField(max_length=50, blank=False)
     description = models.CharField(max_length=100, blank=False)
     detailed_description = models.CharField(max_length=500, blank=True)
     encrypted = models.BooleanField()
     private = models.BooleanField()
-    docfile = models.FileField(upload_to='documents/%Y/%m/%d')
-    timestamp = models.DateTimeField()
-    user = models.CharField(max_length=25)
+    #files = models.FileField(upload_to='documents/%Y/%m/%d')
+    timestamp = models.DateTimeField(blank=True)
+    reporter = models.ForeignKey(Reporter, blank=True)
     key = models.CharField(max_length=2000, blank=True)
     privatekey = models.CharField(max_length=2000, blank=True)
     def __str__(self):
         return self.title
 
-class Reporter(models.Model):
-    username = models.CharField(max_length=20)
-    email = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+class Upload(models.Model):
+    file = models.FileField(upload_to='files/%Y/%m/%d', blank=True, default="testfile")
+    report = models.ForeignKey(Report, blank=True)
+
+
+
+
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)

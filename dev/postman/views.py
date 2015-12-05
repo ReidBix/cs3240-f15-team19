@@ -42,7 +42,7 @@ from .utils import format_subject, format_body
 from .testIt import encode, decrypt_string
 from Crypto.PublicKey import RSA
 from Crypto import Random
-from Project.SecureWitness.models import Document, UserProfile
+from Project.SecureWitness.models import Report, UserProfile
 import ast
 from django.forms import ModelForm
 from django.shortcuts import render_to_response

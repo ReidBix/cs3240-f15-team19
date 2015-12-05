@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a new Report</title>
+</head>
+<body>
+
+    <form action="{% url "reports" %}" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+        <input type="file" name="files" multiple />
+        <p><input type="submit" value="Upload" /></p>
+
+    </form>
+</body>
+</html>

@@ -4,8 +4,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-from Project.SecureWitness.models import Document, Category, Page
-from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm
+from Project.SecureWitness.models import *
+from Project.SecureWitness.forms import *
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -67,9 +67,9 @@ def list(request):
                 encrypted2 = True
         if 'private' in request.POST:
                 private2 = True
-        form = DocumentForm(request.POST, request.FILES)
+        form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(user = request.user, docfile = request.FILES['docfile'],
+            newdoc = Report(user = request.user, docfile = request.FILES['docfile'],
                               title = request.POST['title'], description = request.POST['description'],
                               detailed_description = request.POST['detailed_description'],
                               encrypted = encrypted2, private = private2, timestamp = timestamp2)
@@ -79,22 +79,54 @@ def list(request):
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('Project.SecureWitness.views.list'))
     else:
-        form = DocumentForm() # A empty, unbound form
+        form = ReportForm() # A empty, unbound form
     
-    squad = Document.objects.filter(encrypted=True)
+    squad = Report.objects.filter(encrypted=True)
     # Load documents for the list page
     squad_again = ""
     user2 = request.user
     if str(user2) != 'admin':
-    	squad_again = Document.objects.filter(user=user2)
+    	squad_again = Report.objects.filter(user=user2)
     else:
-    	squad_again = Document.objects.all()
+    	squad_again = Report.objects.all()
 # Render list page with the documents and the form
     return render_to_response(
         'SecureWitness/list.html',
         {'documents': squad_again, 'form': form},
         context_instance=RequestContext(request)
     )
+
+
+def reports(request):
+    report_list = Report.objects.order_by('timestamp')[:5]
+    return render_to_response('SecureWitness/reports.html', {'reports': report_list}, context_instance=RequestContext(request))
+
+
+def add_report(request):
+    print("Anything")
+    if request.method == 'POST':
+        print("Post or anything else why isn't this showing up")
+        report_form = ReportForm(request.POST, request.FILES)
+        upload_form = UploadForm(request.POST, request.FILES)
+
+        if report_form.is_valid() and upload_form.is_valid():
+            # file is saved
+            for f in request.FILES.getlist("files"):
+                upload = Upload(file=f, report=request.POST['title'])
+                upload.save()
+            print("Inside the if statement")
+            report = Report(user = request.user, docfile = request.FILES['docfile'],
+                              title = request.POST['title'], description = request.POST['description'],
+                              detailed_description = request.POST['detailed_description'],
+                              encrypted = False, private = False, timestamp = datetime.now())
+            report.save()
+        else:
+            print(report_form.errors, upload_form.errors)
+    else:
+        report_form = ReportForm()
+        upload_form = UploadForm()
+    return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
+
 
 def register(request):
     context = RequestContext(request)

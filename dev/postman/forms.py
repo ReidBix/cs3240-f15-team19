@@ -11,6 +11,13 @@ Examples of customization:
     can_overwrite_limits = False
     exchange_filter = staticmethod(my_exchange_filter)
 
+    extra features that we could do:
+
+    1. nothin
+    2. location from messages
+    3. friends?
+    4. 
+
 """
 from __future__ import unicode_literals
 

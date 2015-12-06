@@ -71,7 +71,7 @@ class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('username','email','password')
+        fields = ('username','password')
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -81,7 +81,7 @@ class UserProfileForm(forms.ModelForm):
 class ReporterForm(ModelForm):
     class Meta:
         model = Reporter
-        fields = ['username','email','password']
+        fields = ['username','password']
 
 class BaseSearchForm(forms.Form):
     STOPWORD_LIST = DEFAULT_STOPWORDS.split(',')

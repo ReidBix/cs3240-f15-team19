@@ -22,7 +22,7 @@ class Document(models.Model):
 
 class Reporter(models.Model):
     username = models.CharField(max_length=20)
-    email = models.CharField(max_length=50)
+    #email = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
 
 class Category(models.Model):

@@ -59,7 +59,9 @@ def add_category(request):
 def list(request):
    # pdb.set_trace()
     # Handle file upload
+    
     if request.method == 'POST':
+        print(len(request.FILES.getlist('img')))
         encrypted2 = False
         private2 = False
         timestamp2 = datetime.now()

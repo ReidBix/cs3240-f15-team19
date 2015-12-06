@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 
 from Project.SecureWitness.models import *
 from Project.SecureWitness.forms import *
+from django.shortcuts import redirect, get_object_or_404
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -98,28 +99,59 @@ def list(request):
 
 
 def reports(request):
-    report_list = Report.objects.order_by('timestamp')[:5]
-    return render_to_response('SecureWitness/reports.html', {'reports': report_list}, context_instance=RequestContext(request))
+    reporter_name = Reporter.objects.filter(username=request.user)
+    report_list = Report.objects.filter(reporter = reporter_name).order_by('timestamp')
+    return render(request, 'SecureWitness/reports.html', {'reports': report_list})
+
+
+def disp_report(request, rep_id):
+    report = get_object_or_404(Report, pk=rep_id)
+    files = Upload.objects.filter(report=report)
+    return render_to_response('SecureWitness/disp_report.html',{'report': report, 'files':files}, context_instance=RequestContext(request))
+
+def edit_report(request, id):
+    old_report = get_object_or_404(Report, pk=id)
+    if request.method == 'POST':
+
+        report_form = ReportForm(request.POST, request.FILES,instance=old_report)
+        upload_form = UploadForm(request.POST, request.FILES)
+        if report_form.is_valid and upload_form.is_valid():
+            old_report.title=request.POST['title']
+            old_report.description = request.POST['description']
+            old_report.detailed_description = request.POST['detailed_description']
+            old_report.save()
+            upload = Upload(file=request.FILES, report = old_report, name = request.FILES)
+            upload.save()
+
+    else:
+        report_form = ReportForm(instance=old_report)
+        upload_form = UploadForm()
+    context = {'report_form': report_form, 'upload_form': upload_form}
+    return render(request, 'SecureWitness/edit_report.html', context)
 
 
 def add_report(request):
-    print("Anything")
+
     if request.method == 'POST':
-        print("Post or anything else why isn't this showing up")
+
         report_form = ReportForm(request.POST, request.FILES)
         upload_form = UploadForm(request.POST, request.FILES)
 
         if report_form.is_valid() and upload_form.is_valid():
             # file is saved
-            for f in request.FILES.getlist("files"):
-                upload = Upload(file=f, report=request.POST['title'])
-                upload.save()
-            print("Inside the if statement")
-            report = Report(user = request.user, docfile = request.FILES['docfile'],
+            reporter = get_object_or_404(Reporter,name=request.user)
+            reporter.save()
+            nreport = Report(reporter = reporter,
                               title = request.POST['title'], description = request.POST['description'],
                               detailed_description = request.POST['detailed_description'],
                               encrypted = False, private = False, timestamp = datetime.now())
-            report.save()
+            nreport.save()
+            for f in request.FILES.getlist("files"):
+                upload = Upload(file=f, report=nreport, name=f)
+                upload.save()
+
+
+            return redirect('/SecureWitness/reports/')
         else:
             print(report_form.errors, upload_form.errors)
     else:

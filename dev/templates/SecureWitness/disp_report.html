@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ report.title }}</title>
+</head>
+<body>
+    <h1>{{ report.title }}</h1>
+    <p>{{ report.description }}</p>
+    {% if files %}
+        {% for upload in files %}
+            <p><a href="{{ upload.file.url }}">{{ file.name }}Uploaded file</a></p>
+        {% endfor %}
+    {% endif %}
+    <p><a href="{% url edit_report report.id %}"</p>
+</body>
+</html>

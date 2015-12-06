@@ -23,10 +23,12 @@ class Report(models.Model):
     reporter = models.ForeignKey(Reporter, blank=True)
     key = models.CharField(max_length=2000, blank=True)
     privatekey = models.CharField(max_length=2000, blank=True)
+
     def __str__(self):
         return self.title
 
 class Upload(models.Model):
+    name = models.CharField(max_length=50, blank=True)
     file = models.FileField(upload_to='files/%Y/%m/%d', blank=True, default="testfile")
     report = models.ForeignKey(Report, blank=True)
 
@@ -51,7 +53,7 @@ class Page(models.Model):
         return self.title
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(Reporter)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     uKey = models.CharField(validators=[RegexValidator(regex='^.{266}$', message='Length has to be 266', code='nomatch')], max_length=266,blank=True)

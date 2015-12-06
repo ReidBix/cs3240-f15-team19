@@ -23,27 +23,30 @@ else:
     DATABASE_ENGINE =  settings.DATABASE_ENGINE
 
 
-class ReportForm(forms.Form):
-     title = forms.CharField(label='Title', help_text='Title', max_length=50, required=True)
-     description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100, required=True)
-     detailed_description = forms.CharField(widget=forms.TextInput(), label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500, required=True)
-     encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
-     private = forms.BooleanField(label='Private', help_text='Private', initial=False, required=False)
-     privatekey = forms.CharField(label='privatekey', max_length=2000, required=False)
+class ReportForm(forms.ModelForm):
+     # title = forms.CharField(label='Title', help_text='Title', max_length=50, required=True)
+     # description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100, required=True)
+     # detailed_description = forms.CharField(widget=forms.TextInput(), label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500, required=True)
+     # encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
+     # private = forms.BooleanField(label='Private', help_text='Private', initial=False, required=False)
+     # privatekey = forms.CharField(label='privatekey', max_length=2000, required=False)
      #files = forms.FileField(upload_to='reports')
      class Meta:
          model = Report
          fields = ('title', 'description', 'detailed_description', 'encrypted',
-                   'private','timestamp', 'user','key', 'privatekey')
+                   'private','timestamp','reporter','key', 'privatekey')
 #     created = forms.DateTimeField(label='Timestamp')
 #user = forms.CharField(max_length=25)
 
 
-class UploadForm(forms.Form):
-    files = forms.FileField()
+class UploadForm(forms.ModelForm):
+    # files = forms.FileField()
     class Meta:
         model = Upload
         fields = ('file', 'report')
+
+
+
 
 class CategoryForm(ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")

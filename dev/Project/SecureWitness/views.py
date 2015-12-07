@@ -281,7 +281,12 @@ def add_report(request):
     report_form = ReportForm()
     upload_form = UploadForm()
     print(request.user)
-    report_form.updateFolders()
+    report_form  = report_form.updateFolders()
+    print('in views: ')
+    print(report_form.folderOptions.choices)
+    #print(report_form)
+    report_form.folderOptions.choices = (('hi', 'hey'), ('hey', 'hey'))
+    #print(request.report_form)
     return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
 
 

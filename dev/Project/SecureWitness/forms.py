@@ -268,5 +268,5 @@ class ReportSearchForm(BaseSearchForm):
             return ""
 
 
-class GroupForm(forms.Form):
+class UserListForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all(),required=False)

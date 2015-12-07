@@ -5,18 +5,34 @@
     <title>User Authorization</title>
 </head>
 <body>
+<a href="/SecureWitness/">Index</a>
 
     {% if user.is_staff %}
-        <h1>Authorize User as Admin</h1>
+        <h1>Admin</h1>
         <form id="auth_form" method="post" action="/SecureWitness/auth/">
         {% csrf_token %}
-        <input type="text" name="user" id="usr">
-        <input type="submit" value="Authorize">
+
+        {% for u in userlist %}
+            &emsp; {{ u }} <br/>
+            &emsp; &emsp; IsStaff: {{u.is_staff}} <br/>
+            &emsp; &emsp; IsActive: {{u.is_active}} <br/>
+            <br/>
+         {% endfor %}
+
+
+        {{ form }}
+        <br/>
+        Make User a Site Manager (SM) <input type="submit" value="Authorize" name="_auth">
+                *Users may not have SM status revoked once given
+
+            <br/>
+            Suspend/Restore User <input type="submit" value="Authorize" name="_sus">
+                    *Cannot suspend/restore other SM users
+            <br/>
+
         </form>
-        <a href="/SecureWitness/">Index</a>
     {% else %}
         <p>Log in as an admin, fool.</p>
-        <a href="/SecureWitness/">Index</a>
 
     {% endif %}
 

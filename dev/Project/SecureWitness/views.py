@@ -288,25 +288,43 @@ def search(request):
 
 @login_required
 def auth(request):
-    context = RequestContext(request)
+    userlist = User.objects.all()
+    form = UserListForm(request.POST)
     if request.method == 'POST':
-        usr = request.POST['user']
-        if User.objects.get(username = usr) is not None:
-            user = User.objects.get(username = usr)
-            user.is_staff = True
-            user.save()
-            return HttpResponseRedirect('/SecureWitness/auth/')
+        form = UserListForm(request.POST)
+        if form.is_valid():
+            if '_auth' in request.POST:
+                SMAuth = form.cleaned_data['user']
+                if (User.objects.filter(username=SMAuth).exists()):
+                    user = User.objects.get(username = SMAuth)
+                    user.is_staff = True
+                    user.save()
+                    return HttpResponseRedirect('/SecureWitness/auth/')
+            if '_sus' in request.POST:
+                SusAuth = form.cleaned_data['user']
+                if (User.objects.filter(username=SusAuth).exists()):
+                    user = User.objects.get(username = SusAuth)
+                    if (not user.is_staff):
+                        user.is_active = not user.is_active
+                        user.save()
+                        return HttpResponseRedirect('/SecureWitness/auth/')
         else:
+            form = UserListForm()
+            userlist = User.objects.all()
             return HttpResponseRedirect('/SecureWitness/auth/')
 
-    return render_to_response('SecureWitness/auth.html', {}, context)
+    return render_to_response('SecureWitness/auth.html',
+                              RequestContext(request, {
+                                  'form': form,
+                                  'userlist':userlist,
+                              }))
 
 @login_required
 def groups(request):
     if request.method == 'POST':
         current_user = request.user
         groupname = request.POST['groupname']
-        form = GroupForm(request.POST)
+        form = UserListForm(request.POST)
         #Check if exists
         group = Group.objects.get_or_create(name=groupname)
         # Already exists
@@ -349,14 +367,13 @@ def groups(request):
             #If user add is blank
             return HttpResponseRedirect('/SecureWitness/groups/')
     else:
-        form = GroupForm()
+        form = UserListForm()
         grouplist = Group.objects.all()
     return render_to_response('SecureWitness/groups.html',
                                   RequestContext(request, {
                                       'form': form,
                                       'grouplist': grouplist,
                                   }))
-
 
 @login_required
 def restricted(request):

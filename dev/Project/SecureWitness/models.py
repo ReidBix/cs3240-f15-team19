@@ -26,6 +26,11 @@ class Report(models.Model):
 
     def __str__(self):
         return self.title
+class Folder(models.Model):
+	title = models.CharField(max_length=50, blank=False)
+	#files = models.MultipleChoiceField(widget=models.CheckboxSelectMultiple)
+	def __str__(self):
+		return self.title
 
 
 class Upload(models.Model):

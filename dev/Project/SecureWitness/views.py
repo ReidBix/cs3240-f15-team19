@@ -4,9 +4,14 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+<<<<<<< HEAD
+from Project.SecureWitness.models import Document, Category, Page, Folder
+from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm, folderForm
+=======
 from Project.SecureWitness.models import *
 from Project.SecureWitness.forms import *
 from django.shortcuts import redirect, get_object_or_404
+>>>>>>> 10c931cef977b3ba52cbebcda0fa1c63dd72fe10
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -55,6 +60,28 @@ def add_category(request):
         form = CategoryForm()
 
     return render_to_response('SecureWitness/add_category.html', {'form': form}, context)
+
+def add_folder(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = folderForm(request.POST)
+        print(request.POST['title'])
+        if form.is_valid():
+            form.save()
+            the_folders = Folder.objects.all()
+            print(len(the_folders))
+            return index(request)
+        else:
+            print(form.errors)
+    else:
+        form = folderForm()
+
+    the_folders = Folder.objects.all()
+    if(len(the_folders) == 0):
+    	print(len(the_folders))
+
+    return render_to_response('SecureWitness/addFolder.html', {'folders': the_folders, 'form': form}, context)
+
 
 
 # def list(request):
@@ -166,11 +193,22 @@ def add_report(request):
         else:
             print(report_form.errors, upload_form.errors)
     else:
+<<<<<<< HEAD
+    	squad_again = Document.objects.all()
+# Render list page with the documents and the form
+    the_folders = Folder.objects.all()
+    return render_to_response(
+        'SecureWitness/list.html',
+        {'folders': the_folders, 'documents': squad_again, 'form': form},
+        context_instance=RequestContext(request)
+    )
+=======
         report_form = ReportForm()
         upload_form = UploadForm()
         print(request.user)
     return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
 
+>>>>>>> 10c931cef977b3ba52cbebcda0fa1c63dd72fe10
 
 def register(request):
     context = RequestContext(request)
@@ -203,10 +241,10 @@ def register(request):
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-
+    the_folders = Folder.objects.all()
     return render_to_response(
         'SecureWitness/register.html',
-        {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
+        {'folders': the_folders, 'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
         context)
 
 def user_login(request):

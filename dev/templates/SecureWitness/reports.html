@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Reports</title>
 
-
 </head>
 <body>
 
@@ -12,7 +11,14 @@
         <ul>
             {% for old_reports in reports %}
 
-            <li><a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }} Created on: {{ old_reports.timestamp }}</a></li>
+                <li>
+                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }} Created on: {{ old_reports.timestamp }}</a>
+                    <form action="{% url "reports" old_reports.id%}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="(delete)">
+                    </form>
+                </li>
+
             {% endfor %}
         </ul>
 

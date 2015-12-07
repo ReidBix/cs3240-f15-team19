@@ -128,7 +128,7 @@ def reports(request):
     the_folders = Folder.objects.all()
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
-    return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
+    return render(request, 'SecureWitness/reports.html', {'reports': report_list})
 
 
 def disp_report(request, rep_id):
@@ -198,7 +198,7 @@ def add_report(request):
     report_form = ReportForm()
     upload_form = UploadForm()
     print(request.user)
-    return render_to_response('SecureWitness/add_report.html', {'folders': the_folders, 'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
+    return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
 
 
 def register(request):

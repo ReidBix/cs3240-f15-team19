@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     url(r'^auth/$',views.auth, name='auth'),
     url(r'^messages/', include('postman.urls', namespace='postman', app_name='postman')),
     url(r'^search/', views.search, name='search'),
+    url(r'^addFolder/$', views.add_folder, name='addFolder'),
 )
 

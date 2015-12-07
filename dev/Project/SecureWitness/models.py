@@ -19,6 +19,11 @@ class Document(models.Model):
     privatekey = models.CharField(max_length=2000, blank=True)
     def __str__(self):
         return self.title
+class Folder(models.Model):
+	title = models.CharField(max_length=50, blank=False)
+	#files = models.MultipleChoiceField(widget=models.CheckboxSelectMultiple)
+	def __str__(self):
+		return self.title
 
 class Reporter(models.Model):
     username = models.CharField(max_length=20)

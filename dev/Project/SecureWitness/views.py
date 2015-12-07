@@ -4,8 +4,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-from Project.SecureWitness.models import Document, Category, Page
-from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm
+from Project.SecureWitness.models import Document, Category, Page, Folder
+from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm, folderForm
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -55,6 +55,28 @@ def add_category(request):
 
     return render_to_response('SecureWitness/add_category.html', {'form': form}, context)
 
+def add_folder(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = folderForm(request.POST)
+        print(request.POST['title'])
+        if form.is_valid():
+            form.save()
+            the_folders = Folder.objects.all()
+            print(len(the_folders))
+            return index(request)
+        else:
+            print(form.errors)
+    else:
+        form = folderForm()
+
+    the_folders = Folder.objects.all()
+    if(len(the_folders) == 0):
+    	print(len(the_folders))
+
+    return render_to_response('SecureWitness/addFolder.html', {'folders': the_folders, 'form': form}, context)
+
+
 
 def list(request):
    # pdb.set_trace()
@@ -92,9 +114,10 @@ def list(request):
     else:
     	squad_again = Document.objects.all()
 # Render list page with the documents and the form
+    the_folders = Folder.objects.all()
     return render_to_response(
         'SecureWitness/list.html',
-        {'documents': squad_again, 'form': form},
+        {'folders': the_folders, 'documents': squad_again, 'form': form},
         context_instance=RequestContext(request)
     )
 
@@ -129,10 +152,10 @@ def register(request):
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-
+    the_folders = Folder.objects.all()
     return render_to_response(
         'SecureWitness/register.html',
-        {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
+        {'folders': the_folders, 'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
         context)
 
 def user_login(request):

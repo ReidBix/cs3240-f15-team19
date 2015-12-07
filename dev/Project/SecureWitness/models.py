@@ -24,8 +24,11 @@ class Report(models.Model):
     user = models.ForeignKey(User, null=True)
     key = models.CharField(max_length=2000, blank=True)
     #privatekey = models.CharField(max_length=2000, blank=True)
+    #group = models.ForeignKey(Group, null=True,blank=True)
+    folder = models.CharField(max_length=2000, blank=True) 
     group = models.ManyToManyField(Group, blank=True)
     sharedusers = models.ManyToManyField(User, null=True, blank=True, related_name="shared")
+
 
     def __str__(self):
         return self.title

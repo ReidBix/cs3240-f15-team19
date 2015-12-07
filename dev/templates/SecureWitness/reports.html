@@ -110,13 +110,13 @@
 </body>
 </html>
 
-<!--
+
 {% if folders %}
     <ul>
     {%for folder in folders %}
-    <li><a href="{{ folder.title }}"> {{ folder.title }} </a></li>
+    <li><a href="{% url 'view_folder' folder.title %}"> {{ folder.title }} </a></li>
     {% endfor %}
     </ul>
     {% else %}
     <p> No folders.</p>
-    {% endif %} //-->
+    {% endif %} 

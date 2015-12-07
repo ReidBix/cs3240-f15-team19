@@ -83,6 +83,32 @@ def add_folder(request):
     return render_to_response('SecureWitness/addFolder.html', {'folders': the_folders, 'form': form}, context)
 
 
+def view_folder(request, rep_id):
+    context = RequestContext(request)
+    #folder = get_object_or_404(Folder, pk=rep_id)
+    print(rep_id)
+    if request.method == 'POST':
+        #form = folderForm(request.POST)
+        print(request.POST['title'])
+        if form.is_valid():
+            #form.save()
+            the_folders = Folder.objects.all()
+            print(len(the_folders))
+            return index(request)
+        else:
+            print(form.errors)
+    else:
+        form = folderForm()
+
+    the_folders = Folder.objects.all()
+    if(len(the_folders) == 0):
+        print(len(the_folders))
+    
+    reports = Report.objects.filter(folder=rep_id)
+    print(reports)
+    allReports = Report.objects.all()
+    print(allReports)
+    return render_to_response('SecureWitness/view_folder.html', {'folders': the_folders, 'form': form, 'reports': reports}, context)
 
 # def list(request):
 #    # pdb.set_trace()
@@ -139,6 +165,15 @@ def reports(request, rep_id):
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
 
+#    if(username.is_staff):
+ #       report_list = Report.objects.all()
+ #   the_folders = Folder.objects.all()
+ #   for g in request.user.groups.all():
+ #       #Get reports attributed to groups
+ #       pass
+ #   return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
+
+
     g_list = []
     for g in request.user.groups.all():
         g_list.append(g)
@@ -154,8 +189,8 @@ def reports(request, rep_id):
     public_report_list = Report.objects.filter(private=False).exclude(user=reporter_name)
     admin_report_list = Report.objects.exclude(user = reporter_name).exclude(group__in=g_list).exclude(sharedusers=request.user).exclude(private=False).order_by('timestamp')
 
-
-    return render(request, 'SecureWitness/reports.html', {'report_list': report_list,
+    the_folders = Folder.objects.all()
+    return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'report_list': report_list,
                   'group_report_list': group_report_list, 'shared_report_list':shared_report_list, 'public_report_list':public_report_list,
                                                           'admin_report_list':admin_report_list})
 
@@ -165,7 +200,8 @@ def disp_report(request, rep_id):
     files = Upload.objects.filter(report=report)
     matches = [val for val in Group.objects.all() if val in report.group.all()]
     matchesU = [val for val in User.objects.all() if val in report.sharedusers.all()]
-    return render_to_response('SecureWitness/disp_report.html',{'report': report, 'files':files,
+    the_folders = Folder.objects.all()
+    return render_to_response('SecureWitness/disp_report.html',{'folders': the_folders, 'report': report, 'files':files,
                                                                 'matches': matches, 'matchesU': matchesU}, context_instance=RequestContext(request))
 
 @login_required
@@ -206,6 +242,13 @@ def add_report(request):
             reporter = get_object_or_404(User, username = request.user)
             nreport = report_form.save(commit=False)
             nreport.user = reporter
+            #nreport.folder = 'hi'
+            print(report_form.cleaned_data['folderOptions'])
+            folderStrings = ''
+            #for i in report_form.cleaned_data['folderOptions']:
+                # folderStrings =  i + ', ' + folderStrings
+            nreport.folder = ','.join(report_form.cleaned_data['folderOptions'])
+            print(nreport.folder)
             nreport.timestamp = datetime.now()
 
             nreport.save()
@@ -228,6 +271,7 @@ def add_report(request):
     	squad_again = Report.objects.all()
 # Render list page with the documents and the form
     the_folders = Folder.objects.all()
+    
     #return render_to_response(
     #    'SecureWitness/list.html',
     #    {'folders': the_folders, 'documents': squad_again, 'form': form},
@@ -237,6 +281,12 @@ def add_report(request):
     report_form = ReportForm()
     upload_form = UploadForm()
     print(request.user)
+    report_form  = report_form.updateFolders()
+    print('in views: ')
+    print(report_form.folderOptions.choices)
+    #print(report_form)
+    report_form.folderOptions.choices = (('hi', 'hey'), ('hey', 'hey'))
+    #print(request.report_form)
     return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
 
 

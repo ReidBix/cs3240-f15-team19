@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a new Report</title>
+</head>
+<body>
+<a href="/SecureWitness/">Index</a> <br/>
+
+    <a href="/SecureWitness/reports/">Reports</a><br />
+    {% if reports %}
+        <ul>
+            {% for old_reports in reports %}
+
+                <li>
+                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }} Created on: {{ old_reports.timestamp }}</a> {{ old_reports.user }}
+                    <form action="{% url "reports" old_reports.id%}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="delete">
+                    </form>
+                </li>
+
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+</body>
+</html>

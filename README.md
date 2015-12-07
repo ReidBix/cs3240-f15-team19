@@ -26,7 +26,7 @@ Advanced Software Project Group 19
 
 #TODO
 1. Groups -> Integrate Groups into Reports
-2. Site Manager Roles -> (suspend user's access, access any user's reports)
+2. Site Manager Roles -> (access any user's reports)
 3. Reports -> Deleteable by SM user
 4. Owners of Reports/Folders ->  rename, delete, edit existing report NOT SM user
 5. Search -> Fix the shit out of it (Big)

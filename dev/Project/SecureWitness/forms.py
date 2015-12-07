@@ -38,11 +38,23 @@ class ReportForm(forms.ModelForm):
      # private = forms.BooleanField(label='Private', help_text='Private', initial=False, required=False)
      # privatekey = forms.CharField(label='privatekey', max_length=2000, required=False)
      #files = forms.FileField(upload_to='reports')
-     class Meta:
+      the_folders = (('hi', 'hi'), ('hey', 'hey'), ('test', 'test'))
+      the_foldersObjects = (Folder.objects.all())
+      the_folders = ( (x.title, x.title) for x in the_foldersObjects )
+      print('hello: ' + str(len(the_foldersObjects)))
+     
+      folderOptions = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=the_folders, required=False)
+      def updateFolders(self):
+           the_foldersObjects = (Folder.objects.all())
+           the_folders = ( (x.title, x.title) for x in the_foldersObjects )
+           print('hello: ' + str(len(the_foldersObjects)))
+           folderOptions2 = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=the_folders, required=False)
+           self.folderOptions = folderOptions2
+      class Meta:
          model = Report
          fields = ('title', 'description', 'detailed_description',
-                   'private','key',)
-
+                   'private','key', 'folderOptions',)
+ 
 class UploadForm(forms.ModelForm):
     # files = forms.FileField()
     class Meta:

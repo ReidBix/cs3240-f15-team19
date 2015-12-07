@@ -25,7 +25,7 @@ class Report(models.Model):
     key = models.CharField(max_length=2000, blank=True)
     #privatekey = models.CharField(max_length=2000, blank=True)
     group = models.ForeignKey(Group, null=True,blank=True)
-
+    folder = models.CharField(max_length=2000, blank=True) 
     def __str__(self):
         return self.title
 

@@ -10,6 +10,9 @@ class CategoryAdmin(admin.ModelAdmin):
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('title','description','detailed_description','private','timestamp','user', 'key')
 
+class FolderAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'picture', 'publickey', 'tempprivate')
 
@@ -21,3 +24,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Upload, UploadAdmin)
+admin.site.register(Folder, FolderAdmin)

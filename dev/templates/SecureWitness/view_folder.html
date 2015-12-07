@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reports</title>
-
+    <title>Add a new Report</title>
 </head>
 <body>
-    <a href="/SecureWitness/">Index</a>
+<a href="/SecureWitness/">Index</a> <br/>
 
+    <a href="/SecureWitness/reports/">Reports</a><br />
     {% if reports %}
         <ul>
             {% for old_reports in reports %}
@@ -24,21 +24,5 @@
         </ul>
 
     {% endif %}
-
-
-<p><a href="/SecureWitness/addFolder"</a>Add a folder</p>
-	
-    <p><a href="{% url 'add_report' %}">Make a new report</a></p>
 </body>
 </html>
-
-
-{% if folders %}
-    <ul>
-    {%for folder in folders %}
-    <li><a href="{% url 'view_folder' folder.title %}"> {{ folder.title }} </a></li>
-    {% endfor %}
-    </ul>
-    {% else %}
-    <p> No folders.</p>
-    {% endif %} 

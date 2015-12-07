@@ -38,8 +38,6 @@ class ReportForm(forms.ModelForm):
          model = Report
          fields = ('title', 'description', 'detailed_description', 'encrypted',
                    'private','key', 'privatekey',)
-#     created = forms.DateTimeField(label='Timestamp')
-#user = forms.CharField(max_length=25)
 
 """
 class folderForm(forms.ModelForm):
@@ -249,8 +247,8 @@ class ReportSearchForm(BaseSearchForm):
         search_fields = ('^title', 'description', 'user', '=id')
 
 
-                # assumes a fulltext index has been defined on the fields
-                # 'name,description,specifications,id'
+       # assumes a fulltext index has been defined on the fields
+         # 'name,description,specifications,id'
         fulltext_indexes = (
                     ('title', 2),  # name matches are weighted higher
                     ('title,description,user,id', 1),

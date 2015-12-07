@@ -122,10 +122,15 @@ def add_folder(request):
 #     )
 
 
-def reports(request):
+def reports(request, rep_id):
+    if request.method == 'POST':
+        report = get_object_or_404(Report, pk=rep_id)
+        report.delete()
+
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
     return render(request, 'SecureWitness/reports.html', {'reports': report_list})
+
 
 
 def disp_report(request, rep_id):
@@ -135,6 +140,7 @@ def disp_report(request, rep_id):
 
 def edit_report(request, id):
     old_report = get_object_or_404(Report, pk=id)
+
 
     if request.method == 'POST':
 

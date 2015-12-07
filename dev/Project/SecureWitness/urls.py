@@ -5,7 +5,7 @@ from Project.SecureWitness import views
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^about/$', views.about, name='about'),
-    url(r'^reports/$', views.reports, name='reports'),
+    url(r'^reports/([0-9]*)\/*$', views.reports, name='reports'),
     #url(r'^list/$', views.list, name='list'),                               #need to get rid of later
     url(r'^add_report/$', views.add_report, name='add_report'),
     url(r'^add_category/$', views.add_category, name='add_category'),
@@ -17,7 +17,11 @@ urlpatterns = patterns('',
     url(r'^auth/$',views.auth, name='auth'),
     url(r'^messages/', include('postman.urls', namespace='postman', app_name='postman')),
     url(r'^search/', views.search, name='search'),
+
+    url(r'^addFolder/$', views.add_folder, name='addFolder'),
+
     url(r'^disp_report/([0-9]+)/$', views.disp_report, name="disp_report"),
     url(r'^edit_report/([0-9]+)/$', views.edit_report, name="edit_report"),
+
 )
 

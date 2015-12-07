@@ -25,7 +25,8 @@ Advanced Software Project Group 19
 7. 
 
 #TODO
-4. Owners of Folders ->  rename, delete, edit existing report NOT SM user
+1. Public/Private Key Encryption Checks
+4. Owners of Folders ->  rename, delete NOT SM user
 5. Search -> Fix the shit out of it (Big)
 6. FDA -> Fix to new report style
 7. Security -> Hash for verifying integrity of report

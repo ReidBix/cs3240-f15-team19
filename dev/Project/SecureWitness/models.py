@@ -27,7 +27,7 @@ class Report(models.Model):
     #group = models.ForeignKey(Group, null=True,blank=True)
     folder = models.CharField(max_length=2000, blank=True) 
     group = models.ManyToManyField(Group, blank=True)
-    sharedusers = models.ManyToManyField(User, null=True, blank=True, related_name="shared")
+    sharedusers = models.ManyToManyField(User, blank=True, related_name="shared")
 
 
     def __str__(self):

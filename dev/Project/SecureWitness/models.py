@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
@@ -10,6 +9,7 @@ class Reporter(models.Model):
      username = models.CharField(max_length=20)
      email = models.CharField(max_length=50)
      password = models.CharField(max_length=50)
+
 
 
 class Report(models.Model):
@@ -26,6 +26,7 @@ class Report(models.Model):
 
     def __str__(self):
         return self.title
+
 class Folder(models.Model):
 	title = models.CharField(max_length=50, blank=False)
 	#files = models.MultipleChoiceField(widget=models.CheckboxSelectMultiple)
@@ -37,9 +38,6 @@ class Upload(models.Model):
     name = models.CharField(max_length=50, blank=True)
     file = models.FileField(upload_to='files/%Y/%m/%d', blank=True, default="testfile")
     report = models.ForeignKey(Report)
-
-
-
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)

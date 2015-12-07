@@ -1,0 +1,16 @@
+
+
+<a href="/SecureWitness/about/">About</a><br />
+
+<a href="/SecureWitness/restricted/">Restricted Page</a><br/>
+
+<a href="/SecureWitness/add_category/">Add a New Category</a><br/>
+ {% if categories %}
+            <ul>
+                {%  for category in categories %}
+                <li><a href="/SecureWitness/category/{{ category.url }}">{{ category.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no categories present.</strong><br/>
+        {% endif %}

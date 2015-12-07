@@ -10,33 +10,20 @@
 
     <body>
         {% if user.is_authenticated %}
-            <h1>SecureWitness says hello {{ user.username }}</h1>
-            <a href="/SecureWitness/restricted/">Restricted Page</a><br/>
+            <h1>Hello, {{ user.username }}!</h1>
             <a href="/SecureWitness/logout/">Logout</a><br/>
-            <a href="/SecureWitness/messages/">Mail</a><br>
+            <a href="/SecureWitness/messages/">Messages</a><br>
+            <a href="/SecureWitness/reports/">Reports</a><br />
+            <a href="/SecureWitness/search/">Search</a><br/>
         {% else %}
-            <h1>SecureWitness says hello to someone new</h1><strong>{{ boldmessage }}</strong><br />
+            <h1>Hello! Please login or register as a new user!</h1><strong>{{ boldmessage }}</strong><br />
             <a href="/SecureWitness/register/">Register Here</a><br/>
             <a href="/SecureWitness/login/">Login</a><br/>
-        {% endif %}
-        <a href="/SecureWitness/about/">About</a><br />
-        <a href="/SecureWitness/reports/">Reports</a><br />
-        <a href="/SecureWitness/add_category/">Add a New Category</a><br/>
-        <a href="/SecureWitness/search/">Search!</a><br/>
-        {% if categories %}
-            <ul>
-                {%  for category in categories %}
-                <li><a href="/SecureWitness/category/{{ category.url }}">{{ category.name }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no categories present.</strong><br/>
         {% endif %}
         {% if user.is_staff %}
             <a href="/SecureWitness/auth/">Authorize User as Admin</a>
         {% endif %}
         <br/>
-        <img src="{% static "meme.jpg" %}" alt="Dank Meme" /> <!-- New line -->
     </body>
 
 </html>

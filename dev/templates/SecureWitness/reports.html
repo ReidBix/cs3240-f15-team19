@@ -8,8 +8,9 @@
 <body>
     <a href="/SecureWitness/">Index</a>
 <br/><br/>
-    Owner of:
     {% if report_list %}
+            Owner of:
+
         <ul>
             {% for old_reports in report_list %}
 
@@ -26,8 +27,9 @@
 
     {% endif %}
     <br/>
-    Shared through your groups:
     {% if group_report_list %}
+            Shared through your groups:
+
         <ul>
             {% for old_reports in group_report_list %}
 
@@ -41,10 +43,12 @@
             {% endfor %}
         </ul>
 
-        <br/>
-    Shared to you by owner:
     {% endif %}
+            <br/>
+
       {% if shared_report_list %}
+              Shared to you by owner:
+
         <ul>
             {% for old_reports in shared_report_list %}
 
@@ -59,6 +63,45 @@
         </ul>
 
     {% endif %}
+    <br/>
+    {% if public_report_list %}
+              Available to the public:
+
+        <ul>
+            {% for old_reports in public_report_list %}
+
+
+                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
+                    <form action="{% url "reports" old_reports.id%}" method="POST">
+                        {% csrf_token %}
+                    </form>
+
+
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+                <br/>
+
+    {% if user.is_staff %}
+          {% if admin_report_list %}
+                      Visible due to SM access:
+
+            <ul>
+                {% for old_reports in admin_report_list %}
+
+
+                        <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
+                        <form action="{% url "reports" old_reports.id%}" method="POST">
+                            {% csrf_token %}
+                        </form>
+
+
+                {% endfor %}
+            </ul>
+
+        {% endif %}
+        {% endif %}
 
 
 <p><a href="/SecureWitness/addFolder"</a>Add a folder</p>

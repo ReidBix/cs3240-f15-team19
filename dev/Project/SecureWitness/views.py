@@ -131,44 +131,33 @@ def reports(request, rep_id):
     folders = Folder.objects.all()
     group_report_list = []
     shared_report_list = []
+    public_report_list = []
     if request.method == 'POST':
         report = get_object_or_404(Report, pk=rep_id)
         report.delete()
     username = request.user
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
-    if(username.is_staff):
-        report_list = Report.objects.all()
 
-    """
-    #Get all groups attributed to user
+    g_list = []
     for g in request.user.groups.all():
-        print(g)
-        #Get all reports
-        for r in Report.objects.all():
-            #Get all groups available in each report
-            matches = [val for val in Group.objects.all() if val in r.group.all()]
-            print(r.group)
-            for m in matches:
-                print(m)
-                #If one of the groups in a report is the same as one user is in
-                if (g == m):
-                    #add user to report viewer list
-                    group_report_list = Report.objects.filter(group = g)
-    """
+        g_list.append(g)
+    g_report_list = Report.objects.filter(group__in=g_list).exclude(user=reporter_name).exclude(sharedusers=request.user).exclude(private=False).order_by('timestamp')
 
+    for i in g_report_list:
+        if i not in group_report_list:
+            group_report_list.append(i)
 
-    for g in request.user.groups.all():
-        group_report_list = Report.objects.filter(group=g)
-    shared_report_list = Report.objects.filter(sharedusers=request.user)
+    #INTENTIONALLY DOESN'T EXCLUDE GROUPS, JUST LEAVE IT
+    shared_report_list = Report.objects.filter(sharedusers=request.user).exclude(user=reporter_name).exclude(private=False).order_by('timestamp')
 
-    #result_list = sorted(chain(report_list,group_report_list),key=lambda instance: instance.timestamp)
-
-    #new_list = enumerate(result_list)
+    public_report_list = Report.objects.filter(private=False).exclude(user=reporter_name)
+    admin_report_list = Report.objects.exclude(user = reporter_name).exclude(group__in=g_list).exclude(sharedusers=request.user).exclude(private=False).order_by('timestamp')
 
 
     return render(request, 'SecureWitness/reports.html', {'report_list': report_list,
-                  'group_report_list': group_report_list, 'shared_report_list':shared_report_list,})
+                  'group_report_list': group_report_list, 'shared_report_list':shared_report_list, 'public_report_list':public_report_list,
+                                                          'admin_report_list':admin_report_list})
 
 @login_required
 def disp_report(request, rep_id):

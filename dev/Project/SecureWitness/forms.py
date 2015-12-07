@@ -7,20 +7,25 @@ from django.contrib.auth import authenticate, login
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
+from django.db.models.query import QuerySet
 from django.conf import settings
 from django.core.exceptions import FieldError
 from django.utils.text import smart_split
-
+import functools
 
 from Project.SecureWitness.models import *
 
 
 DEFAULT_STOPWORDS = 'a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your'
 
+<<<<<<< HEAD
 if hasattr(settings, 'DATABASES'):
     DATABASE_ENGINE =  settings.DATABASES[list(settings.DATABASES.keys())[0]]['ENGINE'].split('.')[-1]
 else:
     DATABASE_ENGINE =  settings.DATABASE_ENGINE
+=======
+DATABASE_ENGINE =  settings.DATABASES['default']['ENGINE']
+>>>>>>> 5e9f38e2f029990d895a18771d5967a708fd4eb3
 
 
 class ReportForm(forms.ModelForm):
@@ -80,13 +85,12 @@ class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('username','email','password')
+        fields = ('username','password')
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture', 'uKey', 'rKey', 'publickey', 'tempprivate')
-
 
 
 class BaseSearchForm(forms.Form):
@@ -155,11 +159,11 @@ class BaseSearchForm(forms.Form):
 
         for bit in self.get_text_query_bits(query_string):
             or_queries = [Q(**{self.construct_search(str(field_name), first): bit}) for field_name in self.Meta.search_fields]
-            filters.append(reduce(Q.__or__, or_queries))
+            filters.append(functools.reduce(Q.__or__, or_queries))
             first = False
 
         if len(filters):
-            return reduce(self.DEFAULT_OPERATOR, filters)
+            return functools.reduce(self.DEFAULT_OPERATOR, filters)
         else:
             return False
 
@@ -232,14 +236,16 @@ class BaseSearchForm(forms.Form):
 
 class ReportSearchForm(BaseSearchForm):
     class Meta:
-        base_qs = Report.objects
-        search_fields = ('^name', 'description', 'specifications', '=id')
+
+        base_qs = Document.objects
+        search_fields = ('^title', 'description', 'user', '=id')
+
 
                 # assumes a fulltext index has been defined on the fields
                 # 'name,description,specifications,id'
         fulltext_indexes = (
-                    ('name', 2),  # name matches are weighted higher
-                    ('name,description,specifications,id', 1),
+                    ('title', 2),  # name matches are weighted higher
+                    ('title,description,user,id', 1),
         )
 
 

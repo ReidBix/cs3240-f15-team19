@@ -27,11 +27,11 @@ class Report(models.Model):
     def __str__(self):
         return self.title
 
+
 class Upload(models.Model):
     name = models.CharField(max_length=50, blank=True)
     file = models.FileField(upload_to='files/%Y/%m/%d', blank=True, default="testfile")
     report = models.ForeignKey(Report)
-
 
 
 

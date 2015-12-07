@@ -60,7 +60,9 @@ def add_category(request):
 def list(request):
    # pdb.set_trace()
     # Handle file upload
+    
     if request.method == 'POST':
+        print(len(request.FILES.getlist('img')))
         encrypted2 = False
         private2 = False
         timestamp2 = datetime.now()
@@ -169,6 +171,10 @@ def register(request):
     registered = False
 
     if request.method == 'POST':
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['tempprivate'] = ''
+        request.POST._mutable = mutable
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
 

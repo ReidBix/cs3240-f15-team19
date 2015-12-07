@@ -16,6 +16,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 import pdb
 from datetime import datetime
+from itertools import chain
+
 
 def index(request):
     context = RequestContext(request)
@@ -153,25 +155,54 @@ def view_folder(request, rep_id):
 @login_required
 def reports(request, rep_id):
     folders = Folder.objects.all()
+    group_report_list = []
+    shared_report_list = []
+    public_report_list = []
     if request.method == 'POST':
         report = get_object_or_404(Report, pk=rep_id)
         report.delete()
     username = request.user
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
-    if(username.is_staff):
-        report_list = Report.objects.all()
-    the_folders = Folder.objects.all()
+
+#    if(username.is_staff):
+ #       report_list = Report.objects.all()
+ #   the_folders = Folder.objects.all()
+ #   for g in request.user.groups.all():
+ #       #Get reports attributed to groups
+ #       pass
+ #   return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
+
+
+    g_list = []
     for g in request.user.groups.all():
-        #Get reports attributed to groups
-        pass
-    return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
+        g_list.append(g)
+    g_report_list = Report.objects.filter(group__in=g_list).exclude(user=reporter_name).exclude(sharedusers=request.user).exclude(private=False).order_by('timestamp')
+
+    for i in g_report_list:
+        if i not in group_report_list:
+            group_report_list.append(i)
+
+    #INTENTIONALLY DOESN'T EXCLUDE GROUPS, JUST LEAVE IT
+    shared_report_list = Report.objects.filter(sharedusers=request.user).exclude(user=reporter_name).exclude(private=False).order_by('timestamp')
+
+    public_report_list = Report.objects.filter(private=False).exclude(user=reporter_name)
+    admin_report_list = Report.objects.exclude(user = reporter_name).exclude(group__in=g_list).exclude(sharedusers=request.user).exclude(private=False).order_by('timestamp')
+
+    the_folders = Folder.objects.all()
+    return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'report_list': report_list,
+                  'group_report_list': group_report_list, 'shared_report_list':shared_report_list, 'public_report_list':public_report_list,
+                                                          'admin_report_list':admin_report_list})
 
 @login_required
 def disp_report(request, rep_id):
     report = get_object_or_404(Report, pk=rep_id)
     files = Upload.objects.filter(report=report)
-    return render_to_response('SecureWitness/disp_report.html',{'report': report, 'files':files}, context_instance=RequestContext(request))
+    matches = [val for val in Group.objects.all() if val in report.group.all()]
+    matchesU = [val for val in User.objects.all() if val in report.sharedusers.all()]
+    the_folders = Folder.objects.all()
+    return render_to_response('SecureWitness/disp_report.html',{'folders': the_folders, 'report': report, 'files':files,
+                                                                'matches': matches, 'matchesU': matchesU}, context_instance=RequestContext(request))
 
 @login_required
 def edit_report(request, id):
@@ -186,7 +217,6 @@ def edit_report(request, id):
             upload = upload_form.save(commit=False)
             upload.name = request.FILES
             upload.report = nrep
-            upload.encrypted = request.POST
             upload.save()
 
             return redirect('/SecureWitness/reports/')
@@ -220,7 +250,10 @@ def add_report(request):
             nreport.folder = ','.join(report_form.cleaned_data['folderOptions'])
             print(nreport.folder)
             nreport.timestamp = datetime.now()
+
             nreport.save()
+            report_form.save_m2m()
+
 
             upload = upload_form.save(commit=False)
             if 'file' in request.FILES:
@@ -229,7 +262,6 @@ def add_report(request):
                 upload.name = None
             upload.report = nreport
             upload.save()
-
 
             return redirect('/SecureWitness/reports/')
         else:
@@ -427,3 +459,4 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/SecureWitness/')
+

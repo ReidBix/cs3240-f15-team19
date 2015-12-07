@@ -53,8 +53,10 @@ class ReportForm(forms.ModelForm):
       class Meta:
          model = Report
          fields = ('title', 'description', 'detailed_description',
-                   'private','key', 'folderOptions',)
- 
+ #                  'private','key', 'folderOptions',)
+                    'private','key','group','sharedusers', 'folderOptions')
+
+
 class UploadForm(forms.ModelForm):
     # files = forms.FileField()
     class Meta:

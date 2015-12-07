@@ -3,15 +3,11 @@ __author__ = 'Reid'
 import os
 import sys
 from tkinter import *
-
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Project.settings')
-
 from media.documents import *
 
 import os
 
-from Project.SecureWitness.models import Document, UserProfile
+from Project.SecureWitness.models import Report, UserProfile
 from django.contrib.auth.models import User
 
 
@@ -19,7 +15,6 @@ from datetime import datetime
 from django.utils import timezone
 
 import django
-django.setup()
 
 import tkinter as tk
 
@@ -30,8 +25,12 @@ from Crypto import Random
 
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
+from base64 import *
 
 import unittest
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Project.settings')
+django.setup()
 
 block = AES.block_size #16
 
@@ -55,15 +54,6 @@ class App(tk.Tk):
         self.frames[c].tkraise()
         print(self.frames)
 
-    """
-    def __init__(self):
-        tk.Tk.__init__(self)
-        userIn = "NotAUser"
-        self.title("Title")
-        self.create_widgets(userIn)
-        self.resizable(0,0)
-    """
-
     def create_frame(self, c, u):
         t = tk.Toplevel(self)
         container = tk.Frame(self)
@@ -71,28 +61,6 @@ class App(tk.Tk):
         self.frames[c] = frame
         frame.grid(row=0,column=0,sticky="nsew")
         self.show_frame(c)
-
-        """
-        container = tk.Frame(self)
-        frame = c(self, container, self, u)
-        self.frames[c] = frame
-        frame.grid(row=0,column=0,sticky="nsew")
-        self.show_frame(c)
-        """
-
-    """
-    def create_widgets(self, userIn):
-        self.container = tk.Frame(self)
-        self.container.grid(row=0,column=0,sticky=tk.W+tk.E)
-
-        self.frames = {}
-        for f in (StartPage, ):
-            frame = f(self, self.container, self, userIn)
-            frame.grid(row=2, column=2, stick= tk.NW+tk.SE)
-            self.frames[f] = frame
-        self.show_frame(StartPage)
-    """
-
 
 class BaseFrame(tk.Frame):
     def __init__(self, window, parent, controller, userIn):
@@ -104,28 +72,6 @@ class BaseFrame(tk.Frame):
     def create_widgets(self):
         raise NotImplementedError
 
-"""
-
-class ExecuteFrame(BaseFrame):
-    def create_widgets(self):
-        self.new_button = tk.Button(self,
-                                    anchor=tk.W,
-                                    command=lambda: self.controller.show_frame(StartPage),
-                                    padx=5,
-                                    pady=5,
-                                    text="Home")
-        self.new_button.grid(padx=5,pady=5,sticky=tk.W+tk.E)
-
-class HomeFrame(BaseFrame):
-    def create_widgets(self):
-        self.new_button = tk.Button(self,
-                                    anchor=tk.W,
-                                    command=lambda: self.controller.show_frame(ExecuteFrame),
-                                    padx=5,
-                                    pady=5,
-                                    text="Execute")
-        self.new_button.grid(padx=5,pady=5,sticky=tk.W+tk.E)
-"""
 
 class StartPage(BaseFrame):
     def create_widgets(self):
@@ -133,15 +79,8 @@ class StartPage(BaseFrame):
         label = tk.Label(self, text ="This is the start page")
         label.grid(row=0)
 
-        """
-        button1 = tk.Button(self, text="Go to Page One",
-                            command=lambda: controller.show_frame(PageOne))
-        N+=1
-        button1.grid(row=N)
-        """
 
         e1 = Entry(self)
-        e2 = Entry(self)
         e3 = Entry(self)
 
         N+=1
@@ -149,30 +88,22 @@ class StartPage(BaseFrame):
         e1.grid(row=N, column=1)
 
         N+=1
-        tk.Label(self, text="Email Address").grid(row=N)
-        e2.grid(row=N, column=1)
-
-        N+=1
         tk.Label(self, text="Password").grid(row=N)
         e3.grid(row=N, column=1)
 
         def login():
             uTry = e1.get()
-            eTry = e2.get()
             pTry = e3.get()
             userList = User.objects.all()
             for u in userList:
                 if (uTry == u.username):
                     print("Username is valid")
-                    if(eTry == u.email):
-                        print("Email is valid")
-                        if(u.check_password(pTry)):
-                            print("Password is valid")
-                            userIn = uTry
-                            self.controller.create_frame(PageOne, userIn)
-                            break
+                    if(u.check_password(pTry)):
+                        print("Password is valid")
+                        userIn = uTry
+                        self.controller.create_frame(PageOne, userIn)
+                        break
             e1.delete(0, END)
-            e2.delete(0, END)
             e3.delete(0, END)
 
 
@@ -186,19 +117,15 @@ class StartPage(BaseFrame):
 class PageOne(BaseFrame):
     def __init__(self, window, parent, controller, userIn):
         tk.Frame.__init__(self,parent)
-        #label = tk.Label(window, text = "Page 1")
-        #label.pack(side="top",fill="x",pady=10)
-        #button = tk.Button(window,text = "Go to start page",
-        #                   command=lambda: controller.show_frame(StartPage))
-        #button.pack()
+
 
         print(userIn)
 
         if(userIn == "NotAUser"):
-            d = Document.objects.all()
+            d = Report.objects.all()
         else:
             print("hi")
-            d = Document.objects.filter(user=userIn)
+            d = Report.objects.filter(user=userIn)
         dList = []
         num = 1
         for name in d:
@@ -232,7 +159,7 @@ class PageOne(BaseFrame):
                     u2rKey = RSA.importKey(u2.rKey)
                     u2uKey = RSA.importKey(u2.uKey)
                     print(dLink)
-                    d = Document.objects.filter(docfile=var.get())
+                    d = Report.objects.filter(docfile=var.get())
                     print(d)
 
                     # Unencrypt both and make new file
@@ -245,7 +172,7 @@ class PageOne(BaseFrame):
                     encrypt.Decrypt(in_file=address + ".enc", out_file="nothere.docx", key=aesKeyUnlocked)
             if var2.get() == 1:
                 print("Opening file at " + address)
-                os.system("start " + address)
+                #os.system("start " + address)
 
         def decryptFile():
             print("decrypt: %d, \ndownload: %d"%(var1.get(), var2.get()))
@@ -287,20 +214,42 @@ class PageOne(BaseFrame):
 
 def populateKeys():
     u = UserProfile.objects.all()
-    for i in u:
+    for user in u:
         rsaKey = RSA.generate(1024, Random.new().read)
-        rExport = rsaKey.exportKey()
-        uExport = rsaKey.publickey().exportKey()
-        # print(rExport)
-        # print(uExport)
-        i.rKey = rExport
-        i.uKey = uExport
-        i.save()
-    d = Document.objects.all()
-    for i in d:
-        aesKey = Random.new().read(16)
-        i.key = str(aesKey)
-        i.save()
+        rExport = rsaKey.exportKey('PEM')
+        uExport = rsaKey.publickey().exportKey('PEM')
+        user.publickey = uExport
+        user.tempprivate = rExport
+        user.save()
+
+def encryptFile(fileIn, publickey):
+    aesKey = Random.new().read(16)
+    encrypt.Encrypt(fileIn, aesKey)
+
+    pKey = (publickey).encode('utf-8')
+    public_key = pKey[:26] + b'\n' + pKey[26:]
+    for i in range(1, 4):
+        public_key = public_key[:(26 + (65 * i))] + b'\n' + public_key[(26 + (65 * i)):]
+    public_key = public_key[:246] + b'\n' + public_key[246:]
+    pubKey = RSA.importKey(public_key)
+
+    cipher = PKCS1_OAEP.new(pubKey)
+    aesKeyLocked = cipher.encrypt(aesKey)
+    return aesKeyLocked
+
+def decryptFile(fileIn, privkey, aesKeyLocked):
+    private = (privkey).encode('utf-8')
+    private = private[:31] + b'\n' + private[31:]
+    for i in range(1, 13):
+        private = private[:(31 + (65 * i))] + b'\n' + private[(31 + (65 * i)):]
+    private = private[:860] + b'\n' + private[860:]
+    priKey = RSA.importKey(private)
+
+    uncipher = PKCS1_OAEP.new(priKey)
+    aesKeyLEncode = aesKeyLocked.encode("latin1")
+    aesKeyUnlocked = uncipher.decrypt(aesKeyLEncode)
+
+    encrypt.Decrypt(in_file=fileIn, key=aesKeyUnlocked)
 
 def startApp():
     root = Tk()
@@ -325,11 +274,6 @@ def startApp():
                 pady = 0,
              text=explanation).pack(side="left")
 
-
-    #compound = image drawn corresponding to text (BOTTOM, LEFT, RIGHT, TOP, CENTER)
-    #justify = justify a text on the LEFT, RIGHT, or CENTER
-    #padx = add additional horizontal padding around a text label
-    #pady = add additional vertical padding around a text label
 
 
     Label(root,
@@ -392,7 +336,7 @@ def startApp():
 
     var = StringVar()
 
-    d = Document.objects.all()
+    d = Report.objects.all()
     dList = []
     num = 1
     for name in d:
@@ -411,15 +355,6 @@ def startApp():
           justify = LEFT,
           padx = 20).pack()
 
-    for name,val in dList:
-        Radiobutton(root,
-                    text=name,
-                    indicatoron=0,
-                    width=20,
-                    padx=20,
-                    variable=var,
-                    command=getDocfile,
-                    value=name.docfile).pack(anchor=W)
 
 
     frame = Frame(root)
@@ -446,84 +381,15 @@ def startApp():
     #root.geometry("600x400+200+200")
     root.title("StandAloneApp Test")
 
-    t = datetime.now()
-    print(t)
-    y = t.strftime("%Y")
-    m = t.strftime("%m")
-    d = t.strftime("%d")
-    dfile = 'documents/' + str(y) + '/' + str(m) + '/' + str(d) + '/'
 
-    d = Document(title="testdocument.txt", description="Test document for StandAloneApp",
-                 detailed_description="", encrypted=True, private=True,
-                 docfile=dfile,timestamp=t,
-                 user="admin")
-    print(d.description)
-    print(d.title)
-    d.save()
-
-    print(Document.objects.all())
-
-    d3 = Document.objects.filter(user__startswith='admin')
-    print(d3)
-
-    d4 = Document.objects.filter(timestamp__day=timezone.now().day)
-    print(d4)
-
-    d4.delete()
-
-    aesKey = Random.new().read(AES.block_size)
-    print("Creating new AES Key:")
-    print("\t" + str(aesKey))
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     dLink = var.get().replace('/', '\\')
-    address = BASE_DIR + '\\media\\' + dLink
-    docString = "documents\\2015\\11"
-    doc1 = "\\04\\Guest_speaker_feedback.docx"
-    address = address + docString + doc1
-    #print("Encrypting file at " + address)
-
-    #encrypt2.Encrypt(in_file=address, key=aesKey)
-    #encrypt2.Decrypt(in_file=address+".enc", key=aesKey)
-
-    #print("Complete!")
+    address = BASE_DIR + "\media\\files\\2015\\12\\06"
 
 
-    i = UserProfile.objects.filter(user__username='ReidBix')
-    for u2 in i:
-        u2rKey = RSA.importKey(u2.rKey)
-        u2uKey = RSA.importKey(u2.uKey)
+    user = UserProfile.objects.get(user__username='Reid')
 
-        #create new AES
-        aesKey = Random.new().read(16)
-        print("AES Key is: ")
-        print(aesKey)
-
-        #encrypt with the AES key
-        encrypt.Encrypt(in_file=address, key=aesKey)
-
-        #Encrypt AES key with public key
-        cipher = PKCS1_OAEP.new(u2uKey)
-        aesKeyLockToStore = cipher.encrypt(aesKey)
-        #print(aesKeyLockToStore)
-
-        #Release encrypted text along with encrypted key
-        print("encrypted file")
-
-        d6 = Document(title="testdocument.txt", description="Test document for StandAloneApp",
-                     detailed_description="", encrypted=True, private=True,
-                     docfile=dfile+"Guest_speaker_feedback.docx.enc", timestamp=t,
-                     user="ReidBix",key=aesKeyLockToStore.decode("latin1"))
-        d6.save()
-
-        #Unencrypt both and make new file
-        uncipher = PKCS1_OAEP.new(u2rKey)
-        aesKeyLocked = d6.key.encode("latin1")
-        #print(aesKeyLocked)
-        aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
-        #print(aesKeyUnlocked)
-
-        encrypt.Decrypt(in_file=address+".enc", out_file="nothere.docx", key=aesKeyUnlocked)
 
     root.mainloop()
 
@@ -533,6 +399,6 @@ def startApp():
 
 if __name__ == '__main__':
     #populateKeys()
-    #startApp()
+    startApp()
     app = App()
     app.mainloop()

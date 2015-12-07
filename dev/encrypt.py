@@ -12,6 +12,7 @@ from Crypto.PublicKey import RSA
 
 block = AES.block_size #16
 
+
 # Encryption
 def Encrypt(in_file, key, out_file=None, chunksize=8192):
     if not out_file:

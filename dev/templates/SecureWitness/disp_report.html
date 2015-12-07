@@ -4,15 +4,59 @@
     <meta charset="UTF-8">
     <title>{{ report.title }}</title>
 </head>
+<style>
+    h1 {
+        display: inline;
+        font-size: 180%;
+                font-weight: normal;
+
+    }
+    h2 {
+        display: inline;
+        font-size: 140%;
+                font-weight: normal;
+
+    }
+    h3 {
+        font-size:160%;
+                font-weight: normal;
+
+    }
+    h4 {
+        display: inline;
+        font-size:110%;
+        font-weight: normal;
+    }
+</style>
 <body>
-    <h1>{{ report.title }}</h1>
-    <p>{{ report.description }}</p>
+     <a href="/SecureWitness/">Index</a> <br/>
+
+    <a href="/SecureWitness/reports/">Reports</a><br /> <br/>
+
+    <h1> {{ report.title }} </h1> <h2>by</h2> <h1>{{ report.user }}</h1><h2> at </h2> <h1> {{ report.timestamp }}</h1>
+    <h3>{{ report.description }}</h3>
+     <h2>{{ report.detailed_description }}</h2> <br/><br/>
+     {% if report.private %}
+     This report is <h4> private </h4> <br/>
+     {% else %}
+         This report is <h4> public</h4> <br/>
+     {% endif %}
+     <br/>
+     <h4>Shared with users: </h4> <br/>
+     <h4>Shared with groups: </h4>
+     <h3>Files:</h3>
     {% if files %}
         {% for upload in files %}
-            <p><a href="{{ upload.file.url }}">{{ upload.file.name }}</a></p>
+            {% if upload.file %}
+            &emsp;<a href="{{ upload.file.url}}">{{ upload.file.name }}</a>
+                {% if upload.encrypted %}
+                    <h4>(Encrypted)</h4> <br/>
+                    {% else %}
+                    <h4>(Not Encrypted)</h4> <br/>
+                    {% endif %}
+            {% endif %}
         {% endfor %}
     {% endif %}
-    <p><a href="{% url 'index' %}">Index</a></p>
     <p><a href="{% url 'edit_report' report.id %}">Edit Report</a></p>
 </body>
 </html>

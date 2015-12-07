@@ -9,10 +9,10 @@
             <a href="/SecureWitness/">Index</a><br />
 
         {% if registered %}
-        SecureWitness says: <strong>Thank you for registering!</strong>
+        <strong>Thank you for registering!</strong>
         <a href="/SecureWitness/">Return to home.</a><br />
         {% else %}
-        SecureWitness says: <strong>register here!</strong><br />
+        <strong>Register Here!</strong><br />
 
         <form id="user_form" method="post" action="/SecureWitness/register/"
                 enctype="multipart/form-data">
@@ -26,6 +26,7 @@
             {{ profile_form.as_p }}
 		***Cut private key and save, leave empty***
             <!-- Provide a button to click to submit the form. -->
+            <br/>
             <input type="submit" name="submit" value="Register" />
         </form>
         {% endif %}

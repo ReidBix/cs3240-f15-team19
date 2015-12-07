@@ -40,8 +40,14 @@ class ReportForm(forms.ModelForm):
      #files = forms.FileField(upload_to='reports')
      class Meta:
          model = Report
-         fields = ('title', 'description', 'detailed_description', 'encrypted',
-                   'private','key', 'privatekey',)
+         fields = ('title', 'description', 'detailed_description',
+                   'private','key',)
+
+class UploadForm(forms.ModelForm):
+    # files = forms.FileField()
+    class Meta:
+        model = Upload
+        fields = ('file', 'encrypted' )
 
 class folderForm(forms.ModelForm):
 	title = forms.CharField(label='Title', max_length=50)
@@ -51,11 +57,6 @@ class folderForm(forms.ModelForm):
         	model = Folder
         	fields = ('title',)
 
-class UploadForm(forms.ModelForm):
-    # files = forms.FileField()
-    class Meta:
-        model = Upload
-        fields = ('file', )
 
 class CategoryForm(ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")
@@ -92,7 +93,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture', 'uKey', 'rKey', 'publickey', 'tempprivate')
+        fields = ('picture', 'publickey', 'tempprivate')
 
 
 class BaseSearchForm(forms.Form):

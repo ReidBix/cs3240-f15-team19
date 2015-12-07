@@ -5,11 +5,15 @@
     <title></title>
 </head>
 <body>
+    <a href="/SecureWitness/">Index</a><br/>
+
+    <a href="/SecureWitness/reports/">Reports</a><br />
+
     <form action="{% url "edit_report" report.id %}" method="POST" enctype="multipart/form-data">
 			{% csrf_token %}
-        <p>{{ report_form }}</p>
-        <p>{{ upload_form }}</p>
-        <p><input type="submit" value="Edit Report" /></p>
+        {{ report_form.as_p }}
+        {{ upload_form.as_p}}
+        <p><input type="submit" value="Save" /></p>
     </form>
 </body>
 </html>

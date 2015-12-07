@@ -6,16 +6,17 @@
 
 </head>
 <body>
+    <a href="/SecureWitness/">Index</a>
 
     {% if reports %}
         <ul>
             {% for old_reports in reports %}
 
                 <li>
-                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }} Created on: {{ old_reports.timestamp }}</a>
+                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }} Created on: {{ old_reports.timestamp }}</a> {{ old_reports.user }}
                     <form action="{% url "reports" old_reports.id%}" method="POST">
                         {% csrf_token %}
-                        <input type="submit" value="(delete)">
+                        <input type="submit" value="delete">
                     </form>
                 </li>
 
@@ -24,18 +25,20 @@
 
     {% endif %}
 
-{% if folders %}
-<ul>
-{%for folder in folders %}
-<li><a href="{{ folder.title }}"> {{ folder.title }} </a></li>
-{% endfor %}
-</ul>
-{% else %}
-<p> No folders.</p>
-{% endif %}
+
 <p><a href="/SecureWitness/addFolder"</a>Add a folder</p>
 	
     <p><a href="{% url 'add_report' %}">Make a new report</a></p>
-    <p><a href="{% url 'index' %}">Index</a></p>
 </body>
 </html>
+
+<!--
+{% if folders %}
+    <ul>
+    {%for folder in folders %}
+    <li><a href="{{ folder.title }}"> {{ folder.title }} </a></li>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <p> No folders.</p>
+    {% endif %} //-->

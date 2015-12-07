@@ -126,17 +126,21 @@ def add_folder(request):
 
 @login_required
 def reports(request, rep_id):
-    the_folders = Folder.objects.all()
+    folders = Folder.objects.all()
     if request.method == 'POST':
         report = get_object_or_404(Report, pk=rep_id)
         report.delete()
-    
+    username = request.user
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
-    return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
+    if(username.is_staff):
+        report_list = Report.objects.all()
+    for g in request.user.groups.all():
+        #Get reports attributed to groups
+        pass
+    return render(request, 'SecureWitness/reports.html', {'reports': report_list})
 
 @login_required
-
 def disp_report(request, rep_id):
     report = get_object_or_404(Report, pk=rep_id)
     files = Upload.objects.filter(report=report)
@@ -155,6 +159,7 @@ def edit_report(request, id):
             upload = upload_form.save(commit=False)
             upload.name = request.FILES
             upload.report = nrep
+            upload.encrypted = request.POST
             upload.save()
 
             return redirect('/SecureWitness/reports/')
@@ -184,7 +189,10 @@ def add_report(request):
             nreport.save()
 
             upload = upload_form.save(commit=False)
-            upload.name = request.FILES['file']
+            if 'file' in request.FILES:
+                upload.name = request.FILES['file']
+            else:
+                upload.name = None
             upload.report = nreport
             upload.save()
 

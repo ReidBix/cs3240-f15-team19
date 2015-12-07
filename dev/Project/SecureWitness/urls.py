@@ -22,5 +22,6 @@ urlpatterns = patterns('',
     url(r'^edit_report/([0-9]+)/$', views.edit_report, name="edit_report"),
     url(r'^groups/$', views.groups, name='groups'),
     url(r'^viewFolder/([a-zA-Z0-9]+)/$', views.view_folder, name="view_folder"),
+    url(r'^selectable/', include('selectable.urls')),
 )
 

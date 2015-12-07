@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f78b6a1-a679-4def-9000-d7342df95fcd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/SecureWitness.db" afterPath="$PROJECT_DIR$/dev/SecureWitness.db" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/Project/SecureWitness/forms.py" afterPath="$PROJECT_DIR$/dev/Project/SecureWitness/forms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" afterPath="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/templates/SecureWitness/reports.html" afterPath="$PROJECT_DIR$/dev/templates/SecureWitness/reports.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/templates/SecureWitness/search.html" afterPath="$PROJECT_DIR$/dev/templates/SecureWitness/search.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/Project/SecureWitness/urls.py" afterPath="$PROJECT_DIR$/dev/Project/SecureWitness/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/Project/SecureWitness/views.py" afterPath="$PROJECT_DIR$/dev/Project/SecureWitness/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -33,13 +36,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.8266897">
-              <caret line="41" column="10" selection-start-line="41" selection-start-column="10" selection-end-line="41" selection-end-column="10" />
+            <state vertical-scroll-proportion="-6.5384617">
+              <caret line="126" column="48" selection-start-line="126" selection-start-column="48" selection-end-line="126" selection-end-column="48" />
               <folding>
                 <element signature="e#25#49#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="simple_search.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/simple_search.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-59.5">
+              <caret line="93" column="126" selection-start-line="93" selection-start-column="126" selection-end-line="93" selection-end-column="126" />
+              <folding>
+                <element signature="e#118#127#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -65,11 +80,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reports.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="reports.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/reports.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="57.48">
-              <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
+            <state vertical-scroll-proportion="0.615942">
+              <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -79,20 +94,10 @@
         <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="201" column="93" selection-start-line="201" selection-start-column="93" selection-end-line="201" selection-end-column="93" />
+              <caret line="184" column="4" selection-start-line="184" selection-start-column="4" selection-end-line="184" selection-end-column="4" />
               <folding>
                 <element signature="e#24#79#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit_report.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/edit_report.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="44" selection-start-line="7" selection-start-column="44" selection-end-line="7" selection-end-column="44" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -111,10 +116,30 @@
         <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
+              <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
               <folding>
                 <element signature="e#24#75#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.04">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="search.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/search.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.4">
+              <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -125,6 +150,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Html5" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -142,7 +168,6 @@
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/encrypt.py" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/auth.html" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/list.html" />
-        <option value="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" />
         <option value="$PROJECT_DIR$/dev/postman/views.py" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/migrations/0037_auto_20151201_1806.py" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/migrations/0033_auto_20151201_1813.py" />
@@ -150,11 +175,16 @@
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/admin.py" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/edit_report.html" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/disp_report.html" />
-        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/forms.py" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/del_report.html" />
-        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/urls.py" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/models.py" />
+        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/urls.py" />
+        <option value="$PROJECT_DIR$/dev/templates/SecureWitness/base.html" />
+        <option value="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" />
+        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/lookups.py" />
+        <option value="$PROJECT_DIR$/dev/templates/SecureWitness/search.html" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/views.py" />
+        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/simple_search.py" />
+        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/forms.py" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/reports.html" />
       </list>
     </option>
@@ -281,6 +311,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="media" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cs3240-f15-team19" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cs3240-f15-team19" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="Project" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -320,6 +368,11 @@
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Mike\Documents\UVA 2015-2016\CS 3240 Project\cs3240-f15-team19\dev\Project\SecureWitness" />
+    </key>
   </component>
   <component name="RunManager" selected="Django server.Tst">
     <configuration default="false" name="Test: " type="DjangoTestsConfigurationType" factoryName="Django tests" temporary="true">
@@ -604,26 +657,26 @@
     <frame x="-7" y="0" width="1370" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20198171" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294271" sideWeight="0.5025" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32843137" sideWeight="0.495" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294271" sideWeight="0.4975" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32843137" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20198171" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3997396" sideWeight="0.495" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294271" sideWeight="0.4975" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="manage.py@cs3240-f15-team19" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294271" sideWeight="0.4975" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3997396" sideWeight="0.495" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -915,14 +968,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.24">
-          <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dev/Project/postman/postman/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.8076925">
@@ -982,21 +1027,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
-          <folding>
-            <element signature="e#24#75#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../django-trunk/django/db/models/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18544194">
           <caret line="457" column="23" selection-start-line="457" selection-start-column="23" selection-end-line="457" selection-end-column="23" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.04">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.4">
+          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+          <folding>
+            <element signature="e#24#75#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1019,18 +1080,10 @@
     <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="201" column="93" selection-start-line="201" selection-start-column="93" selection-end-line="201" selection-end-column="93" />
+          <caret line="184" column="4" selection-start-line="184" selection-start-column="4" selection-end-line="184" selection-end-column="4" />
           <folding>
             <element signature="e#24#79#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/reports.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="57.48">
-          <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1044,11 +1097,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.8266897">
-          <caret line="41" column="10" selection-start-line="41" selection-start-column="10" selection-end-line="41" selection-end-column="10" />
+        <state vertical-scroll-proportion="-6.5384617">
+          <caret line="126" column="48" selection-start-line="126" selection-start-column="48" selection-end-line="126" selection-end-column="48" />
           <folding>
             <element signature="e#25#49#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/simple_search.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-59.5">
+          <caret line="93" column="126" selection-start-line="93" selection-start-column="126" selection-end-line="93" selection-end-column="126" />
+          <folding>
+            <element signature="e#118#127#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/reports.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.615942">
+          <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>

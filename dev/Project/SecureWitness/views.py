@@ -163,7 +163,7 @@ def view_folder(request, rep_id):
 
 @login_required
 def reports(request, rep_id):
-    folders = Folder.objects.all()
+    the_folders = Folder.objects.all()
     group_report_list = []
     shared_report_list = []
     public_report_list = []
@@ -171,16 +171,26 @@ def reports(request, rep_id):
         report = get_object_or_404(Report, pk=rep_id)
         report.delete()
     username = request.user
+
+    if request.GET:
+        search_form = SearchForm(request.GET)
+        if search_form.is_valid():
+            results = search_form.get_result_queryset()
+        else:
+            results = []
+    else:
+        search_form = SearchForm()
+        results = []
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
 
-#    if(username.is_staff):
- #       report_list = Report.objects.all()
- #   the_folders = Folder.objects.all()
- #   for g in request.user.groups.all():
- #       #Get reports attributed to groups
- #       pass
- #   return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
+    #    if(username.is_staff):
+     #       report_list = Report.objects.all()
+     #   the_folders = Folder.objects.all()
+     #   for g in request.user.groups.all():
+     #       #Get reports attributed to groups
+     #       pass
+     #   return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
 
 
     g_list = []
@@ -192,16 +202,16 @@ def reports(request, rep_id):
         if i not in group_report_list:
             group_report_list.append(i)
 
-    #INTENTIONALLY DOESN'T EXCLUDE GROUPS, JUST LEAVE IT
+        #INTENTIONALLY DOESN'T EXCLUDE GROUPS, JUST LEAVE IT
     shared_report_list = Report.objects.filter(sharedusers=request.user).exclude(user=reporter_name).exclude(private=False).order_by('timestamp')
 
     public_report_list = Report.objects.filter(private=False).exclude(user=reporter_name)
     admin_report_list = Report.objects.exclude(user = reporter_name).exclude(group__in=g_list).exclude(sharedusers=request.user).exclude(private=False).order_by('timestamp')
 
-    the_folders = Folder.objects.all()
-    context = {'folders': the_folders, 'report_list': report_list, 'reporter': reporter_name,
-                  'group_report_list': group_report_list, 'shared_report_list':shared_report_list, 'public_report_list':public_report_list,
-                                                          'admin_report_list':admin_report_list}
+
+    context = {'folders': the_folders, 'report_list': report_list, 'reporter': reporter_name, 'search': search_form,
+               'results': results, 'group_report_list': group_report_list, 'shared_report_list': shared_report_list,
+               'public_report_list': public_report_list, 'admin_report_list': admin_report_list}
     return render(request, 'SecureWitness/reports.html', context)
 
 @login_required

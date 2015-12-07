@@ -11,6 +11,7 @@ from django.db.models.query import QuerySet
 from django.conf import settings
 from django.core.exceptions import FieldError
 from django.utils.text import smart_split
+from Project.SecureWitness.simple_search import BaseSearchForm
 import functools
 
 
@@ -110,6 +111,51 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('picture', 'publickey', 'tempprivate')
+
+
+SEARCH_FIELDS = (
+    ('USERS', 'users'),
+    ('REPORTS', 'reports'),
+    ('FILES', 'files'))
+class SearchForm(BaseSearchForm):
+    # search = forms.CharField(max_length=128, required=False, label='Search')
+    # fields = forms.MultipleChoiceField(label='By', required=False,
+    #                                    widget=forms.CheckboxSelectMultiple, choices=SEARCH_FIELDS)
+
+    class Meta:
+        base_qs = Report.objects
+        search_fields = ('^title', 'description', '=id')
+
+        # assumes a fulltext index has been defined on the fields
+        # 'name,description,specifications,id'
+        fulltext_indexes = (
+            ('title', 2), # name matches are weighted higher
+            ('title,description,id', 1),
+        )
+
+    """
+    A custom addition - the absence of a prepare_category method means
+    the query will search for an exact match on this field.
+    """
+    # category = forms.ModelChoiceField(
+    #     queryset = .objects.all(),
+    #     required = False
+    # )
+
+    """
+    This field creates a custom query addition via the prepare_start_date
+    method.
+    """
+    start_date = forms.DateField(
+        required = False,
+        input_formats = ('%Y-%m-%d',),
+    )
+    def prepare_start_date(self):
+        if self.cleaned_data['start_date']:
+            return Q(creation_date__gte=self.cleaned_data['start_date'])
+        else:
+            return ""
+
 
 
 class BaseSearchForm(forms.Form):

@@ -8,18 +8,23 @@
 <body>
     <a href="/SecureWitness/">Index</a>
 <br/><br/>
+    <form action="{% url 'reports' 0%}" methods="GET">
+        <p>{{ search }}</p>
+        <input type="submit" value="Search">
+    </form>
     {% if report_list %}
             Reports owned by {{ reporter }}:
 
         <ul>
             {% for old_reports in report_list %}
-
+                {% if old_reports in results %}
 
                     <form action="{% url "reports" old_reports.id%}" method="POST">
                         {% csrf_token %}
                                             <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
 <input type="submit" value="delete">
                     </form>
+                {% endif %}
 
 
             {% endfor %}

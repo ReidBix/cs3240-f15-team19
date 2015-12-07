@@ -86,7 +86,9 @@ def add_folder(request):
 def view_folder(request, rep_id):
     context = RequestContext(request)
     #folder = get_object_or_404(Folder, pk=rep_id)
-    print(rep_id)
+    print('the rep_id: ' + rep_id)
+    #if ',' in rep_id:
+         #thy_folders=rep_id.split(',')
     if request.method == 'POST':
         #form = folderForm(request.POST)
         print(request.POST['title'])
@@ -103,8 +105,15 @@ def view_folder(request, rep_id):
     the_folders = Folder.objects.all()
     if(len(the_folders) == 0):
         print(len(the_folders))
-    
+    #if ',' in rep_id:
     reports = Report.objects.filter(folder=rep_id)
+    #else:
+    #reports = Report.objects.all()
+    for report in reports:
+         print('squad: ' + report.folder)
+              #if ',' in report.folder:
+                   #splitIt = report.folder.split(',')
+                   #if 
     print(reports)
     allReports = Report.objects.all()
     print(allReports)
@@ -242,13 +251,13 @@ def add_report(request):
             reporter = get_object_or_404(User, username = request.user)
             nreport = report_form.save(commit=False)
             nreport.user = reporter
-            #nreport.folder = 'hi'
-            print(report_form.cleaned_data['folderOptions'])
+            nreport.folder = report_form.cleaned_data['folderOptions']
+            #print(report_form.cleaned_data['folderOptions'])
             folderStrings = ''
             #for i in report_form.cleaned_data['folderOptions']:
                 # folderStrings =  i + ', ' + folderStrings
-            nreport.folder = ','.join(report_form.cleaned_data['folderOptions'])
-            print(nreport.folder)
+            #nreport.folder = ','.join(report_form.cleaned_data['folderOptions'])
+            print('the folder(s): ' + nreport.folder)
             nreport.timestamp = datetime.now()
 
             nreport.save()
@@ -265,6 +274,7 @@ def add_report(request):
 
             return redirect('/SecureWitness/reports/')
         else:
+            print(request.POST['folderOptions'])
             print(report_form.errors, upload_form.errors)
     else:
 
@@ -281,11 +291,11 @@ def add_report(request):
     report_form = ReportForm()
     upload_form = UploadForm()
     print(request.user)
-    report_form  = report_form.updateFolders()
+ #   report_form  = report_form.updateFolders()
     print('in views: ')
-    print(report_form.folderOptions.choices)
+#    print(report_form.folderOptions.choices)
     #print(report_form)
-    report_form.folderOptions.choices = (('hi', 'hey'), ('hey', 'hey'))
+ #   report_form.folderOptions.choices = (('hi', 'hey'), ('hey', 'hey'))
     #print(request.report_form)
     return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
 

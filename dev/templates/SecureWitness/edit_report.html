@@ -5,7 +5,11 @@
     <title></title>
 </head>
 <body>
-    <p>{{ report_form }}</p>
-    <p>{{ upload_form }}</p>
+    <form action="{% url "edit_report" report.id %}" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+        <p>{{ report_form }}</p>
+        <p>{{ upload_form }}</p>
+        <p><input type="submit" value="Edit Report" /></p>
+    </form>
 </body>
 </html>

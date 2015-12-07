@@ -9,7 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('title','description','detailed_description','encrypted',
-                    'private','timestamp','reporter', 'key')
+                    'private','timestamp','user', 'key')
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'website', 'picture', 'uKey', 'rKey', 'publickey', 'tempprivate')

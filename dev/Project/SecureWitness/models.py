@@ -6,10 +6,10 @@ from django.core.validators import RegexValidator
 from Crypto.PublicKey import RSA
 from Crypto import Random
 
-class Reporter(models.Model):
-    username = models.CharField(max_length=20)
-    email = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+# class Reporter(models.Model):
+#     username = models.CharField(max_length=20)
+#     email = models.CharField(max_length=50)
+#     password = models.CharField(max_length=50)
 
 
 class Report(models.Model):
@@ -20,7 +20,7 @@ class Report(models.Model):
     private = models.BooleanField()
     #files = models.FileField(upload_to='documents/%Y/%m/%d')
     timestamp = models.DateTimeField(blank=True)
-    reporter = models.ForeignKey(Reporter, blank=True)
+    user = models.ForeignKey(User, null=True)
     key = models.CharField(max_length=2000, blank=True)
     privatekey = models.CharField(max_length=2000, blank=True)
 
@@ -30,7 +30,7 @@ class Report(models.Model):
 class Upload(models.Model):
     name = models.CharField(max_length=50, blank=True)
     file = models.FileField(upload_to='files/%Y/%m/%d', blank=True, default="testfile")
-    report = models.ForeignKey(Report, blank=True)
+    report = models.ForeignKey(Report)
 
 
 
@@ -53,7 +53,7 @@ class Page(models.Model):
         return self.title
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(Reporter)
+    user = models.OneToOneField(User)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     uKey = models.CharField(validators=[RegexValidator(regex='^.{266}$', message='Length has to be 266', code='nomatch')], max_length=266,blank=True)

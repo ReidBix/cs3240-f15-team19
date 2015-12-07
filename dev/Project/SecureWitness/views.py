@@ -99,8 +99,8 @@ def list(request):
 
 
 def reports(request):
-    reporter_name = Reporter.objects.filter(username=request.user)
-    report_list = Report.objects.filter(reporter = reporter_name).order_by('timestamp')
+    reporter_name = get_object_or_404(User, username = request.user)
+    report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
     return render(request, 'SecureWitness/reports.html', {'reports': report_list})
 
 
@@ -111,22 +111,25 @@ def disp_report(request, rep_id):
 
 def edit_report(request, id):
     old_report = get_object_or_404(Report, pk=id)
+
     if request.method == 'POST':
 
         report_form = ReportForm(request.POST, request.FILES,instance=old_report)
         upload_form = UploadForm(request.POST, request.FILES)
         if report_form.is_valid and upload_form.is_valid():
-            old_report.title=request.POST['title']
-            old_report.description = request.POST['description']
-            old_report.detailed_description = request.POST['detailed_description']
-            old_report.save()
-            upload = Upload(file=request.FILES, report = old_report, name = request.FILES)
+            nrep = report_form.save()
+            upload = upload_form.save(commit=False)
+            upload.name = request.FILES
+            upload.report = nrep
             upload.save()
+
+            return redirect('/SecureWitness/reports/')
 
     else:
         report_form = ReportForm(instance=old_report)
         upload_form = UploadForm()
-    context = {'report_form': report_form, 'upload_form': upload_form}
+
+    context = {'report_form': report_form, 'upload_form': upload_form, 'report': old_report}
     return render(request, 'SecureWitness/edit_report.html', context)
 
 
@@ -139,16 +142,15 @@ def add_report(request):
 
         if report_form.is_valid() and upload_form.is_valid():
             # file is saved
-            reporter = get_object_or_404(Reporter,name=request.user)
-            reporter.save()
-            nreport = Report(reporter = reporter,
-                              title = request.POST['title'], description = request.POST['description'],
-                              detailed_description = request.POST['detailed_description'],
-                              encrypted = False, private = False, timestamp = datetime.now())
+            reporter = get_object_or_404(User, username = request.user)
+            nreport = report_form.save(commit=False)
+            nreport.user = reporter
             nreport.save()
-            for f in request.FILES.getlist("files"):
-                upload = Upload(file=f, report=nreport, name=f)
-                upload.save()
+
+            upload = upload_form.save(commit=False)
+            upload.name = request.FILES['file']
+            upload.report = nreport
+            upload.save()
 
 
             return redirect('/SecureWitness/reports/')
@@ -157,6 +159,7 @@ def add_report(request):
     else:
         report_form = ReportForm()
         upload_form = UploadForm()
+        print(request.user)
     return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
 
 

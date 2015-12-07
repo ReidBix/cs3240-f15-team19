@@ -34,7 +34,7 @@ class ReportForm(forms.ModelForm):
      class Meta:
          model = Report
          fields = ('title', 'description', 'detailed_description', 'encrypted',
-                   'private','timestamp','reporter','key', 'privatekey')
+                   'private','key', 'privatekey',)
 #     created = forms.DateTimeField(label='Timestamp')
 #user = forms.CharField(max_length=25)
 
@@ -43,7 +43,7 @@ class UploadForm(forms.ModelForm):
     # files = forms.FileField()
     class Meta:
         model = Upload
-        fields = ('file', 'report')
+        fields = ('file', )
 
 
 
@@ -87,10 +87,7 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('website', 'picture', 'uKey', 'rKey', 'publickey', 'tempprivate')
 
-class ReporterForm(ModelForm):
-    class Meta:
-        model = Reporter
-        fields = ['username','email','password']
+
 
 class BaseSearchForm(forms.Form):
     STOPWORD_LIST = DEFAULT_STOPWORDS.split(',')

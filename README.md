@@ -64,4 +64,8 @@ Link to already existing repository for messaging: https://bitbucket.org/psam/dj
 2. Can also change other fields of hte report or delete it entirely. 
 3. If you want to make some fields of a report unwrittable, just go to forms.py and remove it from the fields of ReportForm 
 (ignore the block of comments)
-2. Have to work on folders and search functionality 
+2. Have to work on folders and search functionality
+
+#UserList (username - password - privatekey)
+1. admin - admin - -----BEGIN RSA PRIVATE KEY-----MIICXQIBAAKBgQDHmyx3ygL9vFkEAaVE8p7ksm/nUJGaED+zHo2mzRzxg5c9kUXDNHQLqGRhJdU4i6ouCr48XhSHq5TvovX5TlKvSMVQgfi/GR9pfDCXzQVwbVLSi1kDgEJoK9KKpvmgHQBfRFqR4c5Vwp5xU8/HqTJRspqfCLWXjaOxvNrroOoxCQIDAQABAoGAOW08eu5EtAmHNq7ehJqk+jkYFt3INiHsobTtngqvBBEO5yivgHzL0jrNPmHrGUydVofCuY17rJjBzbv9to9BHCgiJ5s4gi3KiCmpt2qESuNWJdxLUm51bcuV8RSUCPw5t6TK3hFpQpzKPspmxxiufoxITThOijhv+BPTKf8+loECQQDKmGhIH/qruLuaQoAcZbrS3AQ4VYno14YGwpSKvgqkVfeQ8rG2x+xQTfTzDw059xzAuF7+ifv5rxTYl3/pkEi5AkEA/DkMfF+72yMCtftiNmslauAKerKSUZdi5er7OMw+Cye5r+xMBblHaFZGhYaqOwS+werPhDFbetW+olCstIhi0QJBAJwWJ+HJoZtDzGXg7krypalnEWlFnebihcQXjdIG8LQD96SZFwo3pX2JUjshUZNjK6ffZHC/Zn7LwUfOESKloyECQQCcKq6Ca7wi6MCK8QVUcG8Qh3u1kM9r2XIQrbey6TMZMRWVyZcgjCGchp7PmhvYww1hgAPQ88aSfbm1QoJMnY2hAkA7xp6bDxMFfQt/T9fIq4Hbt0ByjRyUL5x8VzdxGrVXzcsk9NqAbKAQAf7NNTDdBXEJGMqUyfONw5J2vQUoHJls-----END RSA PRIVATE KEY-----
+2. 

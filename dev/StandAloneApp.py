@@ -23,7 +23,7 @@ django.setup()
 
 import tkinter as tk
 
-from dev import encrypt2
+from dev import encrypt
 
 from Crypto.Cipher import AES
 from Crypto import Random
@@ -242,7 +242,7 @@ class PageOne(BaseFrame):
                     aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
                     # print(aesKeyUnlocked)
                     print("Hi")
-                    encrypt2.Decrypt(in_file=address + ".enc", out_file="decoded.docx", key=aesKeyUnlocked)
+                    encrypt.Decrypt(in_file=address + ".enc", out_file="nothere.docx", key=aesKeyUnlocked)
             if var2.get() == 1:
                 print("Opening file at " + address)
                 os.system("start " + address)
@@ -500,7 +500,7 @@ def startApp():
         print(aesKey)
 
         #encrypt with the AES key
-        encrypt2.Encrypt(in_file=address, key=aesKey)
+        encrypt.Encrypt(in_file=address, key=aesKey)
 
         #Encrypt AES key with public key
         cipher = PKCS1_OAEP.new(u2uKey)
@@ -523,7 +523,7 @@ def startApp():
         aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
         #print(aesKeyUnlocked)
 
-        encrypt2.Decrypt(in_file=address+".enc", out_file="decoded.docx", key=aesKeyUnlocked)
+        encrypt.Decrypt(in_file=address+".enc", out_file="nothere.docx", key=aesKeyUnlocked)
 
     root.mainloop()
 

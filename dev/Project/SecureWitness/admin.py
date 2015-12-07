@@ -18,4 +18,3 @@ admin.site.register(Report, ReportAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
-# Register your models here.

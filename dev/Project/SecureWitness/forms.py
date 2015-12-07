@@ -56,14 +56,10 @@ class UploadForm(forms.ModelForm):
         model = Upload
         fields = ('file', )
 
-
-
-
 class CategoryForm(ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-
     class Meta:
         model = Category
         fields = ('name','views','likes')
@@ -86,7 +82,6 @@ class PageForm(ModelForm):
 
         return cleaned_data
 
-#username, email, password
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
@@ -253,7 +248,6 @@ class ReportSearchForm(BaseSearchForm):
                     ('title', 2),  # name matches are weighted higher
                     ('title,description,user,id', 1),
         )
-
 
     category = forms.ModelChoiceField(
                 queryset=Report.objects.all(),

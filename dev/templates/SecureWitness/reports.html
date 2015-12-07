@@ -17,6 +17,18 @@
         </ul>
 
     {% endif %}
+
+{% if folders %}
+<ul>
+{%for folder in folders %}
+<li><a href="{{ folder.title }}"> {{ folder.title }} </a></li>
+{% endfor %}
+</ul>
+{% else %}
+<p> No folders.</p>
+{% endif %}
+<p><a href="/SecureWitness/addFolder"</a>Add a folder</p>
+	
     <p><a href="{% url 'add_report' %}">Make a new report</a></p>
     <p><a href="{% url 'index' %}">Index</a></p>
 </body>

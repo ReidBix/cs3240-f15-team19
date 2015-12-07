@@ -16,6 +16,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 import pdb
 from datetime import datetime
+from itertools import chain
+
 
 def index(request):
     context = RequestContext(request)
@@ -127,6 +129,8 @@ def add_folder(request):
 @login_required
 def reports(request, rep_id):
     folders = Folder.objects.all()
+    group_report_list = []
+    shared_report_list = []
     if request.method == 'POST':
         report = get_object_or_404(Report, pk=rep_id)
         report.delete()
@@ -135,16 +139,45 @@ def reports(request, rep_id):
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
     if(username.is_staff):
         report_list = Report.objects.all()
+
+    """
+    #Get all groups attributed to user
     for g in request.user.groups.all():
-        #Get reports attributed to groups
-        pass
-    return render(request, 'SecureWitness/reports.html', {'reports': report_list})
+        print(g)
+        #Get all reports
+        for r in Report.objects.all():
+            #Get all groups available in each report
+            matches = [val for val in Group.objects.all() if val in r.group.all()]
+            print(r.group)
+            for m in matches:
+                print(m)
+                #If one of the groups in a report is the same as one user is in
+                if (g == m):
+                    #add user to report viewer list
+                    group_report_list = Report.objects.filter(group = g)
+    """
+
+
+    for g in request.user.groups.all():
+        group_report_list = Report.objects.filter(group=g)
+    shared_report_list = Report.objects.filter(sharedusers=request.user)
+
+    #result_list = sorted(chain(report_list,group_report_list),key=lambda instance: instance.timestamp)
+
+    #new_list = enumerate(result_list)
+
+
+    return render(request, 'SecureWitness/reports.html', {'report_list': report_list,
+                  'group_report_list': group_report_list, 'shared_report_list':shared_report_list,})
 
 @login_required
 def disp_report(request, rep_id):
     report = get_object_or_404(Report, pk=rep_id)
     files = Upload.objects.filter(report=report)
-    return render_to_response('SecureWitness/disp_report.html',{'report': report, 'files':files}, context_instance=RequestContext(request))
+    matches = [val for val in Group.objects.all() if val in report.group.all()]
+    matchesU = [val for val in User.objects.all() if val in report.sharedusers.all()]
+    return render_to_response('SecureWitness/disp_report.html',{'report': report, 'files':files,
+                                                                'matches': matches, 'matchesU': matchesU}, context_instance=RequestContext(request))
 
 @login_required
 def edit_report(request, id):
@@ -159,7 +192,6 @@ def edit_report(request, id):
             upload = upload_form.save(commit=False)
             upload.name = request.FILES
             upload.report = nrep
-            upload.encrypted = request.POST
             upload.save()
 
             return redirect('/SecureWitness/reports/')
@@ -186,7 +218,10 @@ def add_report(request):
             nreport = report_form.save(commit=False)
             nreport.user = reporter
             nreport.timestamp = datetime.now()
+
             nreport.save()
+            report_form.save_m2m()
+
 
             upload = upload_form.save(commit=False)
             if 'file' in request.FILES:
@@ -195,7 +230,6 @@ def add_report(request):
                 upload.name = None
             upload.report = nreport
             upload.save()
-
 
             return redirect('/SecureWitness/reports/')
         else:
@@ -391,3 +425,4 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/SecureWitness/')
+

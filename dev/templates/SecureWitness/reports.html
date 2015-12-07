@@ -7,18 +7,53 @@
 </head>
 <body>
     <a href="/SecureWitness/">Index</a>
-
-    {% if reports %}
+<br/><br/>
+    Owner of:
+    {% if report_list %}
         <ul>
-            {% for old_reports in reports %}
+            {% for old_reports in report_list %}
 
-                <li>
-                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }} Created on: {{ old_reports.timestamp }}</a> {{ old_reports.user }}
+
                     <form action="{% url "reports" old_reports.id%}" method="POST">
                         {% csrf_token %}
-                        <input type="submit" value="delete">
+                                            <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
+<input type="submit" value="delete">
                     </form>
-                </li>
+
+
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+    <br/>
+    Shared through your groups:
+    {% if group_report_list %}
+        <ul>
+            {% for old_reports in group_report_list %}
+
+
+                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
+                    <form action="{% url "reports" old_reports.id%}" method="POST">
+                        {% csrf_token %}
+                    </form>
+
+
+            {% endfor %}
+        </ul>
+
+        <br/>
+    Shared to you by owner:
+    {% endif %}
+      {% if shared_report_list %}
+        <ul>
+            {% for old_reports in shared_report_list %}
+
+
+                    <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
+                    <form action="{% url "reports" old_reports.id%}" method="POST">
+                        {% csrf_token %}
+                    </form>
+
 
             {% endfor %}
         </ul>

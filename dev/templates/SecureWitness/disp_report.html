@@ -42,8 +42,14 @@
          This report is <h4> public</h4> <br/>
      {% endif %}
      <br/>
-     <h4>Shared with users: </h4> <br/>
-     <h4>Shared with groups: </h4>
+     <h4>Shared with users: {% for m in matchesU %}
+        '{{ m }}'
+     {% endfor %} </h4> <br/>
+
+
+     <h4>Shared with groups: {% for m in matches %}
+        '{{ m }}'
+     {% endfor %} </h4>
      <h3>Files:</h3>
     {% if files %}
         {% for upload in files %}

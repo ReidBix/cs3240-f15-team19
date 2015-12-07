@@ -57,47 +57,47 @@ def add_category(request):
     return render_to_response('SecureWitness/add_category.html', {'form': form}, context)
 
 
-def list(request):
-   # pdb.set_trace()
-    # Handle file upload
-    
-    if request.method == 'POST':
-        print(len(request.FILES.getlist('img')))
-        encrypted2 = False
-        private2 = False
-        timestamp2 = datetime.now()
-        if 'encrypted' in request.POST:
-                encrypted2 = True
-        if 'private' in request.POST:
-                private2 = True
-        form = ReportForm(request.POST, request.FILES)
-        if form.is_valid():
-            newdoc = Report(user = request.user, docfile = request.FILES['docfile'],
-                              title = request.POST['title'], description = request.POST['description'],
-                              detailed_description = request.POST['detailed_description'],
-                              encrypted = encrypted2, private = private2, timestamp = timestamp2)
-
-            newdoc.save()
-		#used to be newdoc.save()
-            # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('Project.SecureWitness.views.list'))
-    else:
-        form = ReportForm() # A empty, unbound form
-    
-    squad = Report.objects.filter(encrypted=True)
-    # Load documents for the list page
-    squad_again = ""
-    user2 = request.user
-    if str(user2) != 'admin':
-    	squad_again = Report.objects.filter(user=user2)
-    else:
-    	squad_again = Report.objects.all()
-# Render list page with the documents and the form
-    return render_to_response(
-        'SecureWitness/list.html',
-        {'documents': squad_again, 'form': form},
-        context_instance=RequestContext(request)
-    )
+# def list(request):
+#    # pdb.set_trace()
+#     # Handle file upload
+#
+#     if request.method == 'POST':
+#         print(len(request.FILES.getlist('img')))
+#         encrypted2 = False
+#         private2 = False
+#         timestamp2 = datetime.now()
+#         if 'encrypted' in request.POST:
+#                 encrypted2 = True
+#         if 'private' in request.POST:
+#                 private2 = True
+#         form = ReportForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             newdoc = Report(user = request.user, docfile = request.FILES['docfile'],
+#                               title = request.POST['title'], description = request.POST['description'],
+#                               detailed_description = request.POST['detailed_description'],
+#                               encrypted = encrypted2, private = private2, timestamp = timestamp2)
+#
+#             newdoc.save()
+# 		#used to be newdoc.save()
+#             # Redirect to the document list after POST
+#             return HttpResponseRedirect(reverse('Project.SecureWitness.views.list'))
+#     else:
+#         form = ReportForm() # A empty, unbound form
+#
+#     squad = Report.objects.filter(encrypted=True)
+#     # Load documents for the list page
+#     squad_again = ""
+#     user2 = request.user
+#     if str(user2) != 'admin':
+#     	squad_again = Report.objects.filter(user=user2)
+#     else:
+#     	squad_again = Report.objects.all()
+# # Render list page with the documents and the form
+#     return render_to_response(
+#         'SecureWitness/list.html',
+#         {'documents': squad_again, 'form': form},
+#         context_instance=RequestContext(request)
+#     )
 
 
 def reports(request):
@@ -225,13 +225,13 @@ def user_login(request):
 def search(request):
 
     if request.GET:
-        form = DocumentSearchForm(request.GET)
+        form = ReportSearchForm(request.GET)
         if form.is_valid():
             results = form.get_result_queryset()
         else:
             results = []
     else:
-        form = DocumentSearchForm()
+        form = ReportSearchForm()
         results = []
 
     return render_to_response(

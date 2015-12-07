@@ -27,7 +27,7 @@ Advanced Software Project Group 19
 #TODO
 1. Public/Private Key Encryption Checks
 4. Owners of Folders ->  rename, delete NOT SM user
-5. Search -> Fix the shit out of it (Big)
+5. Search -> Fix the shit out of it (Can search, but VERY basic)
 6. FDA -> Fix to new report style
 7. Security -> Hash for verifying integrity of report
 

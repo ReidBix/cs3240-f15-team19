@@ -11,7 +11,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 import pdb
 from datetime import datetime
 
@@ -56,6 +56,7 @@ def add_category(request):
 
     return render_to_response('SecureWitness/add_category.html', {'form': form}, context)
 
+@login_required
 def add_folder(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -121,7 +122,7 @@ def add_folder(request):
 #         context_instance=RequestContext(request)
 #     )
 
-
+@login_required
 def reports(request, rep_id):
     if request.method == 'POST':
         report = get_object_or_404(Report, pk=rep_id)
@@ -131,13 +132,13 @@ def reports(request, rep_id):
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
     return render(request, 'SecureWitness/reports.html', {'reports': report_list})
 
-
-
+@login_required
 def disp_report(request, rep_id):
     report = get_object_or_404(Report, pk=rep_id)
     files = Upload.objects.filter(report=report)
     return render_to_response('SecureWitness/disp_report.html',{'report': report, 'files':files}, context_instance=RequestContext(request))
 
+@login_required
 def edit_report(request, id):
     old_report = get_object_or_404(Report, pk=id)
 
@@ -163,6 +164,7 @@ def edit_report(request, id):
     return render(request, 'SecureWitness/edit_report.html', context)
 
 
+@login_required
 def add_report(request):
 
     if request.method == 'POST':
@@ -249,6 +251,7 @@ def user_login(request):
     else:
         return render_to_response('SecureWitness/user_login.html', {}, context)
 
+@login_required
 def search(request):
 
     if request.GET:
@@ -283,6 +286,63 @@ def auth(request):
             return HttpResponseRedirect('/SecureWitness/auth/')
 
     return render_to_response('SecureWitness/auth.html', {}, context)
+
+@login_required
+def groups(request):
+    if request.method == 'POST':
+        current_user = request.user
+        groupname = request.POST['groupname']
+        form = GroupForm(request.POST)
+        #Check if exists
+        group = Group.objects.get_or_create(name=groupname)
+        # Already exists
+        if(group[1] == False):
+            g = Group.objects.get(name=groupname)
+            #Check if user is a part of group
+            #Doesn't belong to group
+            if (not current_user.is_staff):
+                if (not g in current_user.groups.all()):
+                    return HttpResponse("You don't belong to this group.")
+        # Doesn't exist
+        elif (group[1] ==True):
+            g = Group.objects.get(name=groupname)
+            g.user_set.add(current_user)
+        grouplist = Group.objects.all()
+
+        if form.is_valid():
+            g = Group.objects.get(name=groupname)
+            if (group[1] == False):
+                # Check if user is a part of group
+                # Doesn't belong to group
+                if (not current_user.is_staff):
+                    # Can edit any group
+                    if (g in current_user.groups.all()):
+                        pass
+                    # Can't edit any group
+                    if (not g in current_user.groups.all()):
+                        return HttpResponse("You don't belong to this group.")
+                # Does belong to group
+                u = form.cleaned_data['user']
+                if (not form is None):
+                    if(User.objects.filter(username=u).exists()):
+                        g.user_set.add(u)
+            # Doesn't exist
+            elif (group[1] == True):
+                u = form.cleaned_data['user']
+                if (not form is None):
+                    if (User.objects.filter(username=u).exists()):
+                        g.user_set.add(u)
+            #If user add is blank
+            return HttpResponseRedirect('/SecureWitness/groups/')
+    else:
+        form = GroupForm()
+        grouplist = Group.objects.all()
+    return render_to_response('SecureWitness/groups.html',
+                                  RequestContext(request, {
+                                      'form': form,
+                                      'grouplist': grouplist,
+                                  }))
+
 
 @login_required
 def restricted(request):

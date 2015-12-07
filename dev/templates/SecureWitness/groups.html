@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<a href="/SecureWitness/">Index</a>
+
+<form id="groups_form" method="post" action="/SecureWitness/groups/">
+                {% csrf_token %}
+
+    <h2><b>Groups already created: </b> </h2>
+
+    {% for g in grouplist %}
+     &emsp; {{ g }} <br/>
+        {% for u in g.user_set.all %}
+            &emsp;&emsp; {{ u }} <br/>
+        {% endfor %}
+        <br/>
+    {% endfor %}
+    <br/>
+            Group: <input type="text" name="groupname" value="" size="50" />
+            <br />
+            Add {{ form }}
+
+            <br/>
+
+            <input type="submit" value="Create" />
+<br/>*If you are an SM you may assign any user to any group
+</form>
+
+</body>
+</html>

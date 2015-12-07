@@ -20,5 +20,6 @@ urlpatterns = patterns('',
     url(r'^addFolder/$', views.add_folder, name='addFolder'),
     url(r'^disp_report/([0-9]+)/$', views.disp_report, name="disp_report"),
     url(r'^edit_report/([0-9]+)/$', views.edit_report, name="edit_report"),
+    url(r'^groups/$', views.groups, name='groups'),
 )
 

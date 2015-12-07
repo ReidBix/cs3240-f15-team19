@@ -13,32 +13,39 @@ from django.core.exceptions import FieldError
 from django.utils.text import smart_split
 import functools
 
+<<<<<<< HEAD
 from Project.SecureWitness.models import Page, Category, Reporter, UserProfile, Document, Folder
+=======
+from Project.SecureWitness.models import *
+>>>>>>> 10c931cef977b3ba52cbebcda0fa1c63dd72fe10
 
 
 DEFAULT_STOPWORDS = 'a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your'
 
-DATABASE_ENGINE =  settings.DATABASES['default']['ENGINE']
+
+if hasattr(settings, 'DATABASES'):
+    DATABASE_ENGINE =  settings.DATABASES[list(settings.DATABASES.keys())[0]]['ENGINE'].split('.')[-1]
+else:
+    DATABASE_ENGINE =  settings.DATABASE_ENGINE
 
 
-class DocumentForm(forms.Form):
-     title = forms.CharField(label='Title', help_text='Title', max_length=50, required=True)
-     description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100, required=True)
-     detailed_description = forms.CharField(widget=forms.TextInput(), label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500, required=True)
-     encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
-     private = forms.BooleanField(label='Private', help_text='Private', initial=False, required=False)
-     docfile = forms.FileField(
-        label='Select a file'
-    )
-     privatekey = forms.CharField(label='privatekey', max_length=2000, required=False)
 
+class ReportForm(forms.ModelForm):
+     # title = forms.CharField(label='Title', help_text='Title', max_length=50, required=True)
+     # description = forms.CharField(label='Short Description (one sentence)', help_text='Short Description (one sentence)', max_length=100, required=True)
+     # detailed_description = forms.CharField(widget=forms.TextInput(), label='Long Description (paragraph)', help_text='Long Description (paragraph)', max_length=500, required=True)
+     # encrypted = forms.BooleanField(label='Encrypted', help_text='Encrypted', initial=False, required=False)
+     # private = forms.BooleanField(label='Private', help_text='Private', initial=False, required=False)
+     # privatekey = forms.CharField(label='privatekey', max_length=2000, required=False)
+     #files = forms.FileField(upload_to='reports')
      class Meta:
-         model = Document
+         model = Report
          fields = ('title', 'description', 'detailed_description', 'encrypted',
-                   'private','docfile','timestamp','user','key', 'privatekey')
+                   'private','key', 'privatekey',)
 #     created = forms.DateTimeField(label='Timestamp')
 #user = forms.CharField(max_length=25)
 
+<<<<<<< HEAD
 class folderForm(forms.ModelForm):
 	title = forms.CharField(label='Title', max_length=50)
 	choices2 = Document.objects.all()
@@ -46,6 +53,17 @@ class folderForm(forms.ModelForm):
 	class Meta:
         	model = Folder
         	fields = ('title',)
+=======
+
+class UploadForm(forms.ModelForm):
+    # files = forms.FileField()
+    class Meta:
+        model = Upload
+        fields = ('file', )
+
+
+
+>>>>>>> 10c931cef977b3ba52cbebcda0fa1c63dd72fe10
 
 class CategoryForm(ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")
@@ -86,10 +104,6 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('website', 'picture', 'uKey', 'rKey', 'publickey', 'tempprivate')
 
-class ReporterForm(ModelForm):
-    class Meta:
-        model = Reporter
-        fields = ['username','password']
 
 class BaseSearchForm(forms.Form):
     STOPWORD_LIST = DEFAULT_STOPWORDS.split(',')
@@ -232,10 +246,12 @@ class BaseSearchForm(forms.Form):
         return qs
 
 
-class DocumentSearchForm(BaseSearchForm):
+class ReportSearchForm(BaseSearchForm):
     class Meta:
-        base_qs = Document.objects
+
+        base_qs = Report.objects
         search_fields = ('^title', 'description', 'user', '=id')
+
 
                 # assumes a fulltext index has been defined on the fields
                 # 'name,description,specifications,id'
@@ -246,7 +262,7 @@ class DocumentSearchForm(BaseSearchForm):
 
 
     category = forms.ModelChoiceField(
-                queryset=Document.objects.all(),
+                queryset=Report.objects.all(),
                 required=False
                 )
 

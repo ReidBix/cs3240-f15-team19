@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports</title>
+
+
+</head>
+<body>
+
+    {% if reports %}
+        <ul>
+            {% for old_reports in reports %}
+
+            <li><a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }} Created on: {{ old_reports.timestamp }}</a></li>
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+    <p><a href="{% url 'add_report' %}">Make a new report</a></p>
+    <p><a href="{% url 'index' %}">Index</a></p>
+</body>
+</html>

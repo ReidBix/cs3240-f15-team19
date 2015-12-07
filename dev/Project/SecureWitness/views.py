@@ -4,8 +4,14 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+<<<<<<< HEAD
 from Project.SecureWitness.models import Document, Category, Page, Folder
 from Project.SecureWitness.forms import DocumentForm, CategoryForm, PageForm, UserForm, UserProfileForm, DocumentSearchForm, folderForm
+=======
+from Project.SecureWitness.models import *
+from Project.SecureWitness.forms import *
+from django.shortcuts import redirect, get_object_or_404
+>>>>>>> 10c931cef977b3ba52cbebcda0fa1c63dd72fe10
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -78,40 +84,110 @@ def add_folder(request):
 
 
 
-def list(request):
-   # pdb.set_trace()
-    # Handle file upload
-    
-    if request.method == 'POST':
-        print(len(request.FILES.getlist('img')))
-        encrypted2 = False
-        private2 = False
-        timestamp2 = datetime.now()
-        if 'encrypted' in request.POST:
-                encrypted2 = True
-        if 'private' in request.POST:
-                private2 = True
-        form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            newdoc = Document(user = request.user, docfile = request.FILES['docfile'],
-                              title = request.POST['title'], description = request.POST['description'],
-                              detailed_description = request.POST['detailed_description'],
-                              encrypted = encrypted2, private = private2, timestamp = timestamp2)
+# def list(request):
+#    # pdb.set_trace()
+#     # Handle file upload
+#
+#     if request.method == 'POST':
+#         print(len(request.FILES.getlist('img')))
+#         encrypted2 = False
+#         private2 = False
+#         timestamp2 = datetime.now()
+#         if 'encrypted' in request.POST:
+#                 encrypted2 = True
+#         if 'private' in request.POST:
+#                 private2 = True
+#         form = ReportForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             newdoc = Report(user = request.user, docfile = request.FILES['docfile'],
+#                               title = request.POST['title'], description = request.POST['description'],
+#                               detailed_description = request.POST['detailed_description'],
+#                               encrypted = encrypted2, private = private2, timestamp = timestamp2)
+#
+#             newdoc.save()
+# 		#used to be newdoc.save()
+#             # Redirect to the document list after POST
+#             return HttpResponseRedirect(reverse('Project.SecureWitness.views.list'))
+#     else:
+#         form = ReportForm() # A empty, unbound form
+#
+#     squad = Report.objects.filter(encrypted=True)
+#     # Load documents for the list page
+#     squad_again = ""
+#     user2 = request.user
+#     if str(user2) != 'admin':
+#     	squad_again = Report.objects.filter(user=user2)
+#     else:
+#     	squad_again = Report.objects.all()
+# # Render list page with the documents and the form
+#     return render_to_response(
+#         'SecureWitness/list.html',
+#         {'documents': squad_again, 'form': form},
+#         context_instance=RequestContext(request)
+#     )
 
-            newdoc.save()
-		#used to be newdoc.save()
-            # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('Project.SecureWitness.views.list'))
+
+def reports(request):
+    reporter_name = get_object_or_404(User, username = request.user)
+    report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
+    return render(request, 'SecureWitness/reports.html', {'reports': report_list})
+
+
+def disp_report(request, rep_id):
+    report = get_object_or_404(Report, pk=rep_id)
+    files = Upload.objects.filter(report=report)
+    return render_to_response('SecureWitness/disp_report.html',{'report': report, 'files':files}, context_instance=RequestContext(request))
+
+def edit_report(request, id):
+    old_report = get_object_or_404(Report, pk=id)
+
+    if request.method == 'POST':
+
+        report_form = ReportForm(request.POST, request.FILES,instance=old_report)
+        upload_form = UploadForm(request.POST, request.FILES)
+        if report_form.is_valid and upload_form.is_valid():
+            nrep = report_form.save()
+            upload = upload_form.save(commit=False)
+            upload.name = request.FILES
+            upload.report = nrep
+            upload.save()
+
+            return redirect('/SecureWitness/reports/')
+
     else:
-        form = DocumentForm() # A empty, unbound form
-    
-    squad = Document.objects.filter(encrypted=True)
-    # Load documents for the list page
-    squad_again = ""
-    user2 = request.user
-    if str(user2) != 'admin':
-    	squad_again = Document.objects.filter(user=user2)
+        report_form = ReportForm(instance=old_report)
+        upload_form = UploadForm()
+
+    context = {'report_form': report_form, 'upload_form': upload_form, 'report': old_report}
+    return render(request, 'SecureWitness/edit_report.html', context)
+
+
+def add_report(request):
+
+    if request.method == 'POST':
+
+        report_form = ReportForm(request.POST, request.FILES)
+        upload_form = UploadForm(request.POST, request.FILES)
+
+        if report_form.is_valid() and upload_form.is_valid():
+            # file is saved
+            reporter = get_object_or_404(User, username = request.user)
+            nreport = report_form.save(commit=False)
+            nreport.user = reporter
+            nreport.timestamp = datetime.now()
+            nreport.save()
+
+            upload = upload_form.save(commit=False)
+            upload.name = request.FILES['file']
+            upload.report = nreport
+            upload.save()
+
+
+            return redirect('/SecureWitness/reports/')
+        else:
+            print(report_form.errors, upload_form.errors)
     else:
+<<<<<<< HEAD
     	squad_again = Document.objects.all()
 # Render list page with the documents and the form
     the_folders = Folder.objects.all()
@@ -120,6 +196,13 @@ def list(request):
         {'folders': the_folders, 'documents': squad_again, 'form': form},
         context_instance=RequestContext(request)
     )
+=======
+        report_form = ReportForm()
+        upload_form = UploadForm()
+        print(request.user)
+    return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
+
+>>>>>>> 10c931cef977b3ba52cbebcda0fa1c63dd72fe10
 
 def register(request):
     context = RequestContext(request)
@@ -134,7 +217,7 @@ def register(request):
         profile_form = UserProfileForm(data=request.POST)
 
         if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
+            user = user_form.save(commit=False)
             user.set_password(user.password)
             user.save()
 
@@ -180,13 +263,13 @@ def user_login(request):
 def search(request):
 
     if request.GET:
-        form = DocumentSearchForm(request.GET)
+        form = ReportSearchForm(request.GET)
         if form.is_valid():
             results = form.get_result_queryset()
         else:
             results = []
     else:
-        form = DocumentSearchForm()
+        form = ReportSearchForm()
         results = []
 
     return render_to_response(

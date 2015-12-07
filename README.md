@@ -51,5 +51,8 @@ Link to already existing repository for messaging: https://bitbucket.org/psam/dj
 5. Nothing added yet to the stand alone app because I spent far too long ironing out bugs (i.e. F word docs and pdfs)
 
 #File Upload Attempts
-1. Created separate models for report and uploads (currently document) and linked with ForeignKey('report')
-2. Tried and failed a lot to update views,forms, and template list.html correctly...(help)
+1. Works, can now create reports with 1 file but can edit reports to attach additional files to the report. 
+2. Can also change other fields of hte report. 
+3. If you want to make some fields of a report unwrittable, just go to forms.py and remove it from the fields of ReportForm 
+(ignore the block of comments)
+2. Have to work on folders and search functionality 

@@ -17,11 +17,7 @@ urlpatterns = patterns('',
     url(r'^auth/$',views.auth, name='auth'),
     url(r'^messages/', include('postman.urls', namespace='postman', app_name='postman')),
     url(r'^search/', views.search, name='search'),
-<<<<<<< HEAD
-    url(r'^addFolder/$', views.add_folder, name='addFolder'),
-=======
     url(r'^disp_report/([0-9]+)/$', views.disp_report, name="disp_report"),
     url(r'^edit_report/([0-9]+)/$', views.edit_report, name="edit_report"),
->>>>>>> 10c931cef977b3ba52cbebcda0fa1c63dd72fe10
 )
 

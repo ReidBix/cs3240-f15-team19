@@ -145,6 +145,7 @@ def add_report(request):
             reporter = get_object_or_404(User, username = request.user)
             nreport = report_form.save(commit=False)
             nreport.user = reporter
+            nreport.timestamp = datetime.now()
             nreport.save()
 
             upload = upload_form.save(commit=False)
@@ -172,7 +173,7 @@ def register(request):
         profile_form = UserProfileForm(data=request.POST)
 
         if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
+            user = user_form.save(commit=False)
             user.set_password(user.password)
             user.save()
 

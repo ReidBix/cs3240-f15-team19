@@ -9,7 +9,7 @@
     <a href="/SecureWitness/">Index</a>
 <br/><br/>
     {% if report_list %}
-            Owner of:
+            Reports owned by {{ reporter }}:
 
         <ul>
             {% for old_reports in report_list %}

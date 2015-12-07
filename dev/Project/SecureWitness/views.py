@@ -199,9 +199,10 @@ def reports(request, rep_id):
     admin_report_list = Report.objects.exclude(user = reporter_name).exclude(group__in=g_list).exclude(sharedusers=request.user).exclude(private=False).order_by('timestamp')
 
     the_folders = Folder.objects.all()
-    return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'report_list': report_list,
+    context = {'folders': the_folders, 'report_list': report_list, 'reporter': reporter_name,
                   'group_report_list': group_report_list, 'shared_report_list':shared_report_list, 'public_report_list':public_report_list,
-                                                          'admin_report_list':admin_report_list})
+                                                          'admin_report_list':admin_report_list}
+    return render(request, 'SecureWitness/reports.html', context)
 
 @login_required
 def disp_report(request, rep_id):

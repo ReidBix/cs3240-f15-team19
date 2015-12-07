@@ -5,6 +5,13 @@ from django.core.validators import RegexValidator
 from Crypto.PublicKey import RSA
 from Crypto import Random
 
+class Reporter(models.Model):
+     username = models.CharField(max_length=20)
+     email = models.CharField(max_length=50)
+     password = models.CharField(max_length=50)
+
+
+
 class Report(models.Model):
     title = models.CharField(max_length=50, blank=False)
     description = models.CharField(max_length=100, blank=False)

@@ -4,6 +4,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+from Project.SecureWitness.models import Category, Page, Folder
+from Project.SecureWitness.forms import CategoryForm, PageForm, UserForm, UserProfileForm, ReportSearchForm, folderForm
 from Project.SecureWitness.models import *
 from Project.SecureWitness.forms import *
 from django.shortcuts import redirect, get_object_or_404
@@ -124,15 +126,17 @@ def add_folder(request):
 
 @login_required
 def reports(request, rep_id):
+    the_folders = Folder.objects.all()
     if request.method == 'POST':
         report = get_object_or_404(Report, pk=rep_id)
         report.delete()
-
+    
     reporter_name = get_object_or_404(User, username = request.user)
     report_list = Report.objects.filter(user = reporter_name).order_by('timestamp')
-    return render(request, 'SecureWitness/reports.html', {'reports': report_list})
+    return render(request, 'SecureWitness/reports.html', {'folders': the_folders, 'reports': report_list})
 
 @login_required
+
 def disp_report(request, rep_id):
     report = get_object_or_404(Report, pk=rep_id)
     files = Upload.objects.filter(report=report)
@@ -141,7 +145,6 @@ def disp_report(request, rep_id):
 @login_required
 def edit_report(request, id):
     old_report = get_object_or_404(Report, pk=id)
-
 
     if request.method == 'POST':
 
@@ -190,10 +193,21 @@ def add_report(request):
         else:
             print(report_form.errors, upload_form.errors)
     else:
-        report_form = ReportForm()
-        upload_form = UploadForm()
-        print(request.user)
+
+    	squad_again = Report.objects.all()
+# Render list page with the documents and the form
+    the_folders = Folder.objects.all()
+    #return render_to_response(
+    #    'SecureWitness/list.html',
+    #    {'folders': the_folders, 'documents': squad_again, 'form': form},
+    #    context_instance=RequestContext(request)
+   # )
+
+    report_form = ReportForm()
+    upload_form = UploadForm()
+    print(request.user)
     return render_to_response('SecureWitness/add_report.html', {'report_form': report_form, 'upload_form': upload_form},context_instance=RequestContext(request))
+
 
 def register(request):
     context = RequestContext(request)

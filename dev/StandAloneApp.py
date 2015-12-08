@@ -4,10 +4,11 @@ import os
 import sys
 from tkinter import *
 from media.documents import *
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Project.settings')
 
 import os
 
-from Project.SecureWitness.models import Report, UserProfile
+from Project.SecureWitness.models import Report, UserProfile, Upload
 from django.contrib.auth.models import User
 
 
@@ -29,7 +30,6 @@ from base64 import *
 
 import unittest
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Project.settings')
 django.setup()
 
 block = AES.block_size #16
@@ -54,10 +54,10 @@ class App(tk.Tk):
         self.frames[c].tkraise()
         print(self.frames)
 
-    def create_frame(self, c, u):
+    def create_frame(self, c, u, k):
         t = tk.Toplevel(self)
         container = tk.Frame(self)
-        frame = c(t, container, self, u)
+        frame = c(t, container, self, u, k)
         self.frames[c] = frame
         frame.grid(row=0,column=0,sticky="nsew")
         self.show_frame(c)
@@ -82,6 +82,7 @@ class StartPage(BaseFrame):
 
         e1 = Entry(self)
         e3 = Entry(self)
+        e2 = Entry(self)
 
         N+=1
         tk.Label(self, text="Username").grid(row=N)
@@ -91,20 +92,38 @@ class StartPage(BaseFrame):
         tk.Label(self, text="Password").grid(row=N)
         e3.grid(row=N, column=1)
 
+        N += 1
+        tk.Label(self, text="PrivateKey").grid(row=N)
+        e2.grid(row=N, column=1)
+
         def login():
             uTry = e1.get()
             pTry = e3.get()
+            kTry = e2.get()
             userList = User.objects.all()
             for u in userList:
                 if (uTry == u.username):
                     print("Username is valid")
                     if(u.check_password(pTry)):
                         print("Password is valid")
+                        #try:
+                            #try to make private key object
+                        private = (kTry).encode('utf-8')
+                        private = private[:31] + b'\n' + private[31:]
+                        for i in range(1, 13):
+                            private = private[:(31 + (65 * i))] + b'\n' + private[(31 + (65 * i)):]
+                        private = private[:860] + b'\n' + private[860:]
+                        priKey = RSA.importKey(private)
+                        print(priKey)
                         userIn = uTry
-                        self.controller.create_frame(PageOne, userIn)
+                        self.controller.create_frame(PageOne, userIn, priKey)
                         break
+                        #except:
+                            #print("That is not a correct private key!")
+                            #break
             e1.delete(0, END)
             e3.delete(0, END)
+            e2.delete(0, END)
 
 
         N+=1
@@ -115,23 +134,69 @@ class StartPage(BaseFrame):
 
 
 class PageOne(BaseFrame):
-    def __init__(self, window, parent, controller, userIn):
+    def __init__(self, window, parent, controller, userIn, priKey):
         tk.Frame.__init__(self,parent)
-
-
+        global rKey
+        rKey = priKey
         print(userIn)
+        #get user from private key
+        print(priKey)
 
-        if(userIn == "NotAUser"):
-            d = Report.objects.all()
+        if(userIn == None):
+            report_list = []
+            group_report_list = []
+            shared_report_list = []
+            public_report_list = []
+            admin_report_list = []
         else:
-            print("hi")
-            d = Report.objects.filter(user=userIn)
+            group_report_list = []
+            report_list = Report.objects.filter(user__username=userIn)
+            u = User.objects.get(username=userIn)
+            g_list = []
+            print(u)
+            for g in u.groups.all():
+                g_list.append(g)
+            g_report_list = Report.objects.filter(group__in=g_list).exclude(user=u).exclude(
+                sharedusers=u).exclude(private=False).order_by('timestamp')
+
+            for i in g_report_list:
+                if i not in group_report_list:
+                    group_report_list.append(i)
+
+            # INTENTIONALLY DOESN'T EXCLUDE GROUPS, JUST LEAVE IT
+            shared_report_list = Report.objects.filter(sharedusers=u).exclude(user=u).exclude(
+                private=False).order_by('timestamp')
+
+            public_report_list = Report.objects.filter(private=False).exclude(user=u)
+            admin_report_list = Report.objects.exclude(user=u).exclude(group__in=g_list).exclude(
+                sharedusers=u).exclude(private=False).order_by('timestamp')
+
+            #List all available reports
+            #d = Report.objects.all()
+            #print(d)
         dList = []
         num = 1
-        for name in d:
+        for name in report_list:
             dObject = (name, num)
             dList.append(dObject)
             num += 1
+        for name in group_report_list:
+            dObject = (name, num)
+            dList.append(dObject)
+            num += 1
+        for name in shared_report_list:
+            dObject = (name, num)
+            dList.append(dObject)
+            num += 1
+        for name in public_report_list:
+            dObject = (name, num)
+            dList.append(dObject)
+            num += 1
+        for name in admin_report_list:
+            dObject = (name, num)
+            dList.append(dObject)
+            num += 1
+
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
         v = IntVar()
@@ -148,33 +213,42 @@ class PageOne(BaseFrame):
         downloadTrue = False
 
         def getDocfile():
-            dLink = var.get().replace('/', '\\')
-            address = BASE_DIR + '\\media\\' + dLink
+            #get timestamp
+            #turn into report
+            report = Report.objects.get(timestamp=var.get())
+            #find file(s) from report
+            upload = Upload.objects.filter(report=report)
+            fileList = []
+            for u in upload:
+                fileList.append(u.file)
+            print(fileList)
+            #get address from file
+            addressList = []
+            address = BASE_DIR + '\\media\\'
+            for f in fileList:
+                addressList.append(address + str(f).replace('/', '\\'))
+            print(addressList)
             if var1.get() == 1:
                 print("DECRYPT!!")
+                timestamp = var.get()
+                print(timestamp)
+                #report = Report.objects.get(timestamp=var.get())
+                print(report)
                 print(userIn)
-                i = UserProfile.objects.all().filter(user__username=userIn)
-                print(i)
-                for u2 in i:
-                    u2rKey = RSA.importKey(u2.rKey)
-                    u2uKey = RSA.importKey(u2.uKey)
-                    print(dLink)
-                    d = Report.objects.filter(docfile=var.get())
-                    print(d)
+                #i = UserProfile.objects.all().filter(user__username=userIn)
+                u = UserProfile.objects.get(user__username=userIn)
+                aesKeyLocked = report.key
+                print(aesKeyLocked)
+                print(rKey)
+                #DECRYPTION STUFF!!]
+                for a in addressList:
+                    decryptFile(a, rKey, aesKeyLocked)
 
-                    # Unencrypt both and make new file
-                    uncipher = PKCS1_OAEP.new(u2rKey)
-                    aesKeyLocked = d.key.encode("latin1")
-                    # print(aesKeyLocked)
-                    aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
-                    # print(aesKeyUnlocked)
-                    print("Hi")
-                    encrypt.Decrypt(in_file=address + ".enc", out_file="nothere.docx", key=aesKeyUnlocked)
             if var2.get() == 1:
                 print("Opening file at " + address)
                 #os.system("start " + address)
 
-        def decryptFile():
+        def decryptLink():
             print("decrypt: %d, \ndownload: %d"%(var1.get(), var2.get()))
 
         label2 = tk.Label(window,
@@ -197,20 +271,28 @@ class PageOne(BaseFrame):
                     padx = 50,
                     variable=var2).grid()
 
-        for name, val in dList:
+        for report, val in dList:
             #print(name.docfile)
             tk.Radiobutton(window,
                         justify = CENTER,
-                        text=name,
+                        text=report,
                         indicatoron=0,
                         width=20,
                         padx=50,
                         variable=var,
                         command=getDocfile,
-                        value=name.docfile).grid()
+                        value=report.timestamp).grid()
 
         Button(window, text="Quit", command=window.quit).grid()
-        Button(window, text="Show", command=decryptFile).grid()
+        Button(window, text="Show", command=decryptLink).grid()
+
+class PageTwo(BaseFrame):
+    def __init__(self, window, parent, controller, userIn):
+        tk.Frame.__init__(self,parent)
+
+
+
+
 
 def populateKeys():
     u = UserProfile.objects.all()
@@ -224,6 +306,7 @@ def populateKeys():
 
 def encryptFile(fileIn, publickey):
     aesKey = Random.new().read(16)
+    print("aesKey is " + str(aesKey))
     encrypt.Encrypt(fileIn, aesKey)
 
     pKey = (publickey).encode('utf-8')
@@ -235,21 +318,26 @@ def encryptFile(fileIn, publickey):
 
     cipher = PKCS1_OAEP.new(pubKey)
     aesKeyLocked = cipher.encrypt(aesKey)
-    return aesKeyLocked
+    return str(aesKeyLocked)
 
 def decryptFile(fileIn, privkey, aesKeyLocked):
+    """
     private = (privkey).encode('utf-8')
     private = private[:31] + b'\n' + private[31:]
     for i in range(1, 13):
         private = private[:(31 + (65 * i))] + b'\n' + private[(31 + (65 * i)):]
     private = private[:860] + b'\n' + private[860:]
     priKey = RSA.importKey(private)
+    """
+    uncipher = PKCS1_OAEP.new(privkey)
+    #aesKeyLEncode = aesKeyLocked.encode("latin1")
+    try:
+        aesKeyUnlocked = uncipher.decrypt((aesKeyLocked).encode('utf-8'))
+        print("aesKeyUnlocked is " + str(aesKeyUnlocked))
+        encrypt.Decrypt(in_file=fileIn, key=aesKeyUnlocked)
+    except ValueError:
+        print("The wrong key has been used to decrypt!")
 
-    uncipher = PKCS1_OAEP.new(priKey)
-    aesKeyLEncode = aesKeyLocked.encode("latin1")
-    aesKeyUnlocked = uncipher.decrypt(aesKeyLEncode)
-
-    encrypt.Decrypt(in_file=fileIn, key=aesKeyUnlocked)
 
 def startApp():
     root = Tk()
@@ -382,23 +470,76 @@ def startApp():
     root.title("StandAloneApp Test")
 
 
-
+    """
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     dLink = var.get().replace('/', '\\')
-    address = BASE_DIR + "\media\\files\\2015\\12\\06"
+    address = BASE_DIR + "\media\\files\\2015\\12\\06\\Llamas DB Poster 1-v1.pdf"
 
+    user = UserProfile.objects.get(user__username='User1')
+    pubKey = user.publickey
+    aesKeyLocked = encryptFile(address,pubKey)
+    print("aesKeyLocked is " + str(aesKeyLocked))
+    #need .enc after
+    priKey = user.tempprivate # to be given in App
+    decryptFile(address+".enc",priKey,aesKeyLocked)
 
-    user = UserProfile.objects.get(user__username='Reid')
+    #Encrypt with whatever public key you want the owner of to see
 
+    #Decrypt with private key of public key
+    """
+
+    r = Report.objects.filter(user__username="admin")
+    #r = Report.objects.all()
+    for r2 in r:
+        print(r2.key)
+        u = Upload.objects.all()
+        for u2 in u:
+            #Get
+            pass
+    print(r)
+    """
+    up = UserProfile.objects.get(user__username=uTry)
+    print(up.publickey)
+    """
 
     root.mainloop()
 
 
     return 0
 
+def encryptEasy(fileName, userName):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    #Change dates if necessary
+    address = BASE_DIR + "\media\\files\\2015\\12\\07\\"
+    address = address + fileName
+    user = UserProfile.objects.get(user__username=userName)
+    pubKey = user.publickey
+    aesKeyLocked = encryptFile(address, pubKey)
+    return(aesKeyLocked)
 
 if __name__ == '__main__':
     #populateKeys()
-    startApp()
+    #startApp()
+    #EncryptEasy File
+    fileName = "ACM_Code_of_Ethics_Essay.docx"
+    userName = "admin"
+    aesKeyLocked = encryptEasy(fileName, userName) #string
+    print("aesKey is " + str(aesKeyLocked) + "!!!")
+    t = datetime.now()
+    path = "C:\\Users\\Reid\\git\\cs3240-f15-team19\\dev\\media\\"
+    filepath = "files\\2015\\12\\07\\"
+    user = User.objects.get(username=userName)
+    #Store into report
+    #Store key in report
+    r2 = Report.objects.filter(title="EncryptionTest")
+    r2.delete()
+
+    r = Report(title="EncryptionTest", description="Test document for StandAloneApp",
+                detailed_description="This is long", private=True,
+                   timestamp=t, user=user, key=str(aesKeyLocked))
+    u = Upload(name=fileName+'enc',file=filepath+fileName+'.enc',report=r,encrypted=True)
+    r.save()
+    u.save()
+    #ez
     app = App()
     app.mainloop()

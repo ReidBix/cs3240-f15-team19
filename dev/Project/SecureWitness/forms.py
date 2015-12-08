@@ -113,14 +113,9 @@ class UserProfileForm(forms.ModelForm):
         fields = ('picture', 'publickey', 'tempprivate')
 
 
-SEARCH_FIELDS = (
-    ('USERS', 'users'),
-    ('REPORTS', 'reports'),
-    ('FILES', 'files'))
+
 class SearchForm(BaseSearchForm):
-    # search = forms.CharField(max_length=128, required=False, label='Search')
-    # fields = forms.MultipleChoiceField(label='By', required=False,
-    #                                    widget=forms.CheckboxSelectMultiple, choices=SEARCH_FIELDS)
+
 
     class Meta:
         base_qs = Report.objects
@@ -148,11 +143,11 @@ class SearchForm(BaseSearchForm):
     """
     start_date = forms.DateField(
         required = False,
-        input_formats = ('%Y-%m-%d',),
+        input_formats = ('%Y-%m-%d', '%m-%d-%Y', '%Y',),
     )
     def prepare_start_date(self):
         if self.cleaned_data['start_date']:
-            return Q(creation_date__gte=self.cleaned_data['start_date'])
+            return Q(timestamp__gte=self.cleaned_data['start_date'])
         else:
             return ""
 

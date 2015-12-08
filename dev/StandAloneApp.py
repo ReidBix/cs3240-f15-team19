@@ -238,7 +238,7 @@ class PageOne(BaseFrame):
                 #print(userIn)
                 #i = UserProfile.objects.all().filter(user__username=userIn)
                 u = UserProfile.objects.get(user__username=userIn)
-                aesKeyLocked = report.key
+                aesKeyLocked = report.aesKey
                 print("aesKeyLocked is " + str(aesKeyLocked))
                 #print(rKey)
                 #DECRYPTION STUFF!!]
@@ -329,6 +329,7 @@ def decryptFile(fileIn, privkey, aesKeyLocked):
 
     private = (privkey).encode('utf-8')
     private = private[:31] + b'\n' + private[31:]
+    print(len(private))
     for i in range(1, 13):
         private = private[:(31 + (65 * i))] + b'\n' + private[(31 + (65 * i)):]
     private = private[:860] + b'\n' + private[860:]
@@ -340,7 +341,9 @@ def decryptFile(fileIn, privkey, aesKeyLocked):
     #try:
     print("B")
     print(type(aesKeyLocked))
-    aesKeyUnlocked = uncipher.decrypt(aesKeyLocked)
+
+
+    aesKeyUnlocked = uncipher.decrypt(pad(aesKeyLocked.encode('utf-8')).decode('utf-8'))
     print("C")
     print("aesKeyUnlocked is " + str(aesKeyUnlocked))
     print("D")
@@ -348,6 +351,8 @@ def decryptFile(fileIn, privkey, aesKeyLocked):
     #except ValueError:
         #print("The wrong key has been used to decrypt!")
 
+def pad(s):
+    return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
 
 def startApp():
     root = Tk()
@@ -544,7 +549,7 @@ def encryptEasy(fileName, userName):
 
 if __name__ == '__main__':
     #populateKeys()
-    startApp()
+    #startApp()
     #EncryptEasy File
     fileName = "ACM_Code_of_Ethics_Essay.docx"
     userName = "admin"
@@ -564,7 +569,7 @@ if __name__ == '__main__':
 
     r = Report(title="EncryptionTest", description="Test document for StandAloneApp",
                 detailed_description="This is long", private=True,
-                   timestamp=t, user=user, key=aesKeyLocked)
+                   timestamp=t, user=user, aesKey=str(aesKeyLocked))
     r.save()
 
     #print(r)

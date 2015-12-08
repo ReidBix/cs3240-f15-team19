@@ -21,7 +21,7 @@ class Report(models.Model):
     private = models.BooleanField()
     timestamp = models.DateTimeField(blank=True)
     user = models.ForeignKey(User, null=True)
-    aesKey = models.BinaryField(max_length=2000, blank=True, default=b"")
+    aesKey = models.CharField(max_length=2000, blank=True, default="")
     folder = models.CharField(max_length=2000, blank=True)
     group = models.ManyToManyField(Group, blank=True)
     sharedusers = models.ManyToManyField(User, blank=True, related_name="shared")

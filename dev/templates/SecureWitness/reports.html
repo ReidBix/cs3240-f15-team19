@@ -8,6 +8,7 @@
 <body>
     <a href="/SecureWitness/">Index</a>
 <br/><br/>
+    <h1>Reports</h1>
     <form action="{% url 'reports' 0%}" methods="GET">
         <p>{{ search }}</p>
         <input type="submit" value="Search">
@@ -114,15 +115,7 @@
 
         {% endif %}
         {% endif %}
-
-
-<p><a href="/SecureWitness/addFolder"</a>Add a folder</p>
-	
-    <p><a href="{% url 'add_report' %}">Make a new report</a></p>
-</body>
-</html>
-
-
+    <h2>Folders</h2>
 {% if folders %}
     <ul>
     {%for folder in folders %}
@@ -131,4 +124,13 @@
     </ul>
     {% else %}
     <p> No folders.</p>
-    {% endif %} 
+    {% endif %}
+
+<p><a href="/SecureWitness/addFolder"</a>Add a folder</p>
+	
+    <p><a href="{% url 'add_report' %}">Make a new report</a></p>
+</body>
+</html>
+
+
+

@@ -167,6 +167,7 @@ def reports(request, rep_id):
     group_report_list = []
     shared_report_list = []
     public_report_list = []
+    searched = False
     if request.method == 'POST':
         report = get_object_or_404(Report, pk=rep_id)
         report.delete()
@@ -174,6 +175,7 @@ def reports(request, rep_id):
 
     if request.GET:
         search_form = SearchForm(request.GET)
+        searched = True
         if search_form.is_valid():
             results = search_form.get_result_queryset()
         else:
@@ -211,7 +213,7 @@ def reports(request, rep_id):
 
     context = {'folders': the_folders, 'report_list': report_list, 'reporter': reporter_name, 'search': search_form,
                'results': results, 'group_report_list': group_report_list, 'shared_report_list': shared_report_list,
-               'public_report_list': public_report_list, 'admin_report_list': admin_report_list}
+               'public_report_list': public_report_list, 'admin_report_list': admin_report_list, 'searched': searched, }
     return render(request, 'SecureWitness/reports.html', context)
 
 @login_required

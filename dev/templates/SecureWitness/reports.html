@@ -8,6 +8,7 @@
 <body>
     <a href="/SecureWitness/">Index</a>
 <br/><br/>
+    <h1>Reports</h1>
     <form action="{% url 'reports' 0%}" methods="GET">
         <p>{{ search }}</p>
         <input type="submit" value="Search">
@@ -17,7 +18,14 @@
 
         <ul>
             {% for old_reports in report_list %}
-                {% if old_reports in results %}
+                {% if not searched %}
+                    <form action="{% url "reports" old_reports.id%}" method="POST">
+                        {% csrf_token %}
+                                            <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
+                        <input type="submit" value="delete">
+                    </form>
+                {% endif %}
+                {% if old_reports in results and searched %}
 
                     <form action="{% url "reports" old_reports.id%}" method="POST">
                         {% csrf_token %}
@@ -107,15 +115,7 @@
 
         {% endif %}
         {% endif %}
-
-
-<p><a href="/SecureWitness/addFolder"</a>Add a folder</p>
-	
-    <p><a href="{% url 'add_report' %}">Make a new report</a></p>
-</body>
-</html>
-
-
+    <h2>Folders</h2>
 {% if folders %}
     <ul>
     {%for folder in folders %}
@@ -124,4 +124,13 @@
     </ul>
     {% else %}
     <p> No folders.</p>
-    {% endif %} 
+    {% endif %}
+
+<p><a href="/SecureWitness/addFolder"</a>Add a folder</p>
+	
+    <p><a href="{% url 'add_report' %}">Make a new report</a></p>
+</body>
+</html>
+
+
+

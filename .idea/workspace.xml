@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8f78b6a1-a679-4def-9000-d7342df95fcd" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/SecureWitness.db" afterPath="$PROJECT_DIR$/dev/SecureWitness.db" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" afterPath="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/templates/SecureWitness/reports.html" afterPath="$PROJECT_DIR$/dev/templates/SecureWitness/reports.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/Project/SecureWitness/views.py" afterPath="$PROJECT_DIR$/dev/Project/SecureWitness/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cs3240-f15-team19.iws" />
@@ -46,7 +49,7 @@
       <file leaf-file-name="simple_search.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/simple_search.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-59.5">
+            <state vertical-scroll-proportion="-15.038462">
               <caret line="93" column="126" selection-start-line="93" selection-start-column="126" selection-end-line="93" selection-end-column="126" />
               <folding>
                 <element signature="e#118#127#0" expanded="true" />
@@ -75,21 +78,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reports.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="reports.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/reports.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.615942">
-              <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
+            <state vertical-scroll-proportion="-13.92">
+              <caret line="128" column="35" selection-start-line="128" selection-start-column="35" selection-end-line="128" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="view_folder.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/view_folder.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-6.12">
+              <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.16">
+              <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="184" column="4" selection-start-line="184" selection-start-column="4" selection-end-line="184" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.52859616">
+              <caret line="367" column="31" selection-start-line="367" selection-start-column="31" selection-end-line="367" selection-end-column="31" />
               <folding>
                 <element signature="e#24#79#0" expanded="true" />
               </folding>
@@ -115,26 +138,6 @@
               <folding>
                 <element signature="e#24#75#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.04">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="search.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/search.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.4">
-              <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -174,13 +177,13 @@
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/models.py" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/urls.py" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/base.html" />
-        <option value="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/lookups.py" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/search.html" />
-        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/views.py" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/simple_search.py" />
         <option value="$PROJECT_DIR$/dev/Project/SecureWitness/forms.py" />
+        <option value="$PROJECT_DIR$/dev/Project/SecureWitness/views.py" />
         <option value="$PROJECT_DIR$/dev/templates/SecureWitness/reports.html" />
+        <option value="$PROJECT_DIR$/dev/templates/SecureWitness/index.html" />
       </list>
     </option>
   </component>
@@ -1030,14 +1033,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.04">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/search.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.4">
@@ -1064,6 +1059,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="29" column="58" selection-start-line="29" selection-start-column="58" selection-end-line="29" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/add_report.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.12">
@@ -1072,21 +1075,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/views.py">
+    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/reports.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="184" column="4" selection-start-line="184" selection-start-column="4" selection-end-line="184" selection-end-column="4" />
-          <folding>
-            <element signature="e#24#79#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="-13.92">
+          <caret line="128" column="35" selection-start-line="128" selection-start-column="35" selection-end-line="128" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/models.py">
+    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/view_folder.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="58" selection-start-line="29" selection-start-column="58" selection-end-line="29" selection-end-column="58" />
+        <state vertical-scroll-proportion="-6.12">
+          <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.16">
+          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/simple_search.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.038462">
+          <caret line="93" column="126" selection-start-line="93" selection-start-column="126" selection-end-line="93" selection-end-column="126" />
+          <folding>
+            <element signature="e#118#127#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1100,21 +1119,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/simple_search.py">
+    <entry file="file://$PROJECT_DIR$/dev/Project/SecureWitness/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-59.5">
-          <caret line="93" column="126" selection-start-line="93" selection-start-column="126" selection-end-line="93" selection-end-column="126" />
+        <state vertical-scroll-proportion="0.52859616">
+          <caret line="367" column="31" selection-start-line="367" selection-start-column="31" selection-end-line="367" selection-end-column="31" />
           <folding>
-            <element signature="e#118#127#0" expanded="true" />
+            <element signature="e#24#79#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dev/templates/SecureWitness/reports.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.615942">
-          <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>

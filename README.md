@@ -1,7 +1,7 @@
 # cs3240-f15-team19
 Advanced Software Project Group 19
 
-#how to see file upload thing
+#How to show Final Project
 1. Pull
 2. cd into dev/
 

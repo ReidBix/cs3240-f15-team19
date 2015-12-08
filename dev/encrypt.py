@@ -42,7 +42,16 @@ def Encrypt(in_file, key, out_file=None, chunksize=8192):
 def Decrypt(in_file, key, out_file=None, chunksize=8192):
 
     if not out_file:
+        #remove .enc
         out_file = os.path.splitext(in_file)[0]
+        #find last/only period, and remove everything after _
+        o = out_file.rplit('.',1)
+        #get string after period but before _
+        if (o[-1].contains('_')):
+            out_file = o[0] + o[1].rsplit('_',1)[0]
+        else:
+            out_file = o[0] + o[1]
+        print(out_file)
 
     with open(in_file, 'rb') as infile:
         origsize = struct.unpack('<Q', infile.read(struct.calcsize('Q')))[0]

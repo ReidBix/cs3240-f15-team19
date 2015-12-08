@@ -19,13 +19,10 @@ class Report(models.Model):
     description = models.CharField(max_length=100, blank=False)
     detailed_description = models.CharField(max_length=500, blank=True)
     private = models.BooleanField()
-    #files = models.FileField(upload_to='documents/%Y/%m/%d')
     timestamp = models.DateTimeField(blank=True)
     user = models.ForeignKey(User, null=True)
-    key = models.CharField(max_length=2000, blank=True)
-    #privatekey = models.CharField(max_length=2000, blank=True)
-    #group = models.ForeignKey(Group, null=True,blank=True)
-    folder = models.CharField(max_length=2000, blank=True) 
+    aesKey = models.BinaryField(max_length=2000, blank=True, default=b"")
+    folder = models.CharField(max_length=2000, blank=True)
     group = models.ManyToManyField(Group, blank=True)
     sharedusers = models.ManyToManyField(User, blank=True, related_name="shared")
 
@@ -36,7 +33,7 @@ class Report(models.Model):
 class Upload(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
     file = models.FileField(upload_to='files/%Y/%m/%d', blank=True, null=True)
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(Report, default=None, blank=True, null=True)
     encrypted = models.BooleanField(default=False, blank=True)
 
 

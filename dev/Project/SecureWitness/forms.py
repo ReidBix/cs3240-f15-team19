@@ -12,6 +12,8 @@ from django.conf import settings
 from django.core.exceptions import FieldError
 from django.utils.text import smart_split
 from Project.SecureWitness.simple_search import BaseSearchForm
+from Project.SecureWitness.models import *
+from Project.SecureWitness.forms import *
 import functools
 
 
@@ -32,31 +34,32 @@ else:
 
 
 class ReportForm(forms.ModelForm):
-      the_folders = (('hi', 'hi'), ('hey', 'hey'), ('test', 'test'))
-      the_foldersObjects = (Folder.objects.all())
-      the_folders = ( (x.title, x.title) for x in the_foldersObjects )
-      print('hello there: ' + str(len(the_foldersObjects)))
+    class Meta:
+        model = Report
+        fields = ('title', 'description', 'detailed_description',
+                      'private', 'group', 'sharedusers', 'folderOptions',)
+        exclude = ('aesKey',)
+    the_folders = (('hi', 'hi'), ('hey', 'hey'), ('test', 'test'))
+    the_foldersObjects = (Folder.objects.all())
+    the_folders = ( (x.title, x.title) for x in the_foldersObjects )
+    print('hello there: ' + str(len(the_foldersObjects)))
      
-      folderOptions = forms.ChoiceField(widget=forms.RadioSelect(), choices=the_folders, required=False)
-      def updateFolders(self):
-           the_foldersObjects = (Folder.objects.all())
-           the_folders = ( (x.title, x.title) for x in the_foldersObjects )
-           print('hello: ' + str(len(the_foldersObjects)))
+    folderOptions = forms.ChoiceField(widget=forms.RadioSelect(), choices=the_folders, required=False)
+    def updateFolders(self):
+        the_foldersObjects = (Folder.objects.all())
+        the_folders = ( (x.title, x.title) for x in the_foldersObjects )
+        print('hello: ' + str(len(the_foldersObjects)))
            #folderOptions2 = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=the_folders, required=False)
            #self.folderOptions = folderOptions2
            #print(self.folderOptions.choices)
            #return self
-      class Meta:
-         model = Report
-         fields = ('title', 'description', 'detailed_description',
- #                  'private','key', 'folderOptions',)
-                    'private','key','group','sharedusers', 'folderOptions')
+
 
 
 class UploadForm(forms.ModelForm):
     class Meta:
         model = Upload
-        fields = ('file', 'encrypted' )
+        fields = ('file', 'encrypted' ,'report')
 
 class folderForm(forms.ModelForm):
 	title = forms.CharField(label='Title', max_length=50)

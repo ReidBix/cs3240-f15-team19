@@ -8,15 +8,15 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0006_require_contenttypes_0002'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('auth', '0006_require_contenttypes_0002'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('name', models.CharField(unique=True, max_length=128)),
                 ('views', models.IntegerField(default=0)),
                 ('likes', models.IntegerField(default=0)),
@@ -25,14 +25,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Folder',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('title', models.CharField(max_length=50)),
             ],
         ),
         migrations.CreateModel(
             name='Page',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('title', models.CharField(max_length=128)),
                 ('url', models.URLField()),
                 ('views', models.IntegerField(default=0)),
@@ -42,23 +42,23 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Report',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('title', models.CharField(max_length=50)),
                 ('description', models.CharField(max_length=100)),
                 ('detailed_description', models.CharField(blank=True, max_length=500)),
                 ('private', models.BooleanField()),
                 ('timestamp', models.DateTimeField(blank=True)),
-                ('key', models.CharField(blank=True, max_length=2000)),
+                ('aesKey', models.BinaryField(blank=True, default=None, max_length=2000, null=True)),
                 ('folder', models.CharField(blank=True, max_length=2000)),
-                ('group', models.ManyToManyField(to='auth.Group', blank=True)),
-                ('sharedusers', models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name='shared', blank=True)),
-                ('user', models.ForeignKey(null=True, to=settings.AUTH_USER_MODEL)),
+                ('group', models.ManyToManyField(blank=True, to='auth.Group')),
+                ('sharedusers', models.ManyToManyField(related_name='shared', blank=True, to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
             ],
         ),
         migrations.CreateModel(
             name='Reporter',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('username', models.CharField(max_length=20)),
                 ('email', models.CharField(max_length=50)),
                 ('password', models.CharField(max_length=50)),
@@ -67,20 +67,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Upload',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
-                ('name', models.CharField(null=True, blank=True, max_length=50)),
-                ('file', models.FileField(upload_to='files/%Y/%m/%d', null=True, blank=True)),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('name', models.CharField(blank=True, max_length=50, null=True)),
+                ('file', models.FileField(blank=True, upload_to='files/%Y/%m/%d', null=True)),
                 ('encrypted', models.BooleanField(default=False)),
-                ('report', models.ForeignKey(to='SecureWitness.Report')),
+                ('report', models.ForeignKey(default=None, blank=True, to='SecureWitness.Report', null=True)),
             ],
         ),
         migrations.CreateModel(
             name='UserProfile',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
-                ('picture', models.ImageField(upload_to='profile_images', blank=True)),
-                ('publickey', models.CharField(default=b'-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDWY3kxrZDJkbPk+Ay5cpNnuroR\n+e4kZavFbyaX7+QSfMhPi0hY4jXB6VzOn2XYxyLgrTOAknKPvK+wbYKgC7X51iiF\nQeb6aoXqNVKH2Nowy1hWSOEEG1RXq/9vch7tFcr5SGfxZeFNBLFZGWRQHtwNAvA0\no6CeOo4H1xG2zs7s+QIDAQAB\n-----END PUBLIC KEY-----', max_length=2000)),
-                ('tempprivate', models.CharField(default=b'-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQDWY3kxrZDJkbPk+Ay5cpNnuroR+e4kZavFbyaX7+QSfMhPi0hY\n4jXB6VzOn2XYxyLgrTOAknKPvK+wbYKgC7X51iiFQeb6aoXqNVKH2Nowy1hWSOEE\nG1RXq/9vch7tFcr5SGfxZeFNBLFZGWRQHtwNAvA0o6CeOo4H1xG2zs7s+QIDAQAB\nAoGADhbdeSFR+Z1EuFCA7ZMVEuUXo2TMfMHdxwzl+Wg/keN3eprJt2WuaL8AZWfe\nVp/HsAJR9yoosz+QQEUCJ6h9Xf4jM9hYVu0f/1DOTHQeaPUgsHtg7ZeyHxWOG+pH\nTobKrPyz+tVTshSRgUrxSh8a5K+fpPayNEKg4o3hlBHwRp0CQQDlHFNOtHbwgzpH\nIN8bNbL/tBinDAlJMB2itj5Ef/VvL9OqkDURBzMaMIzCLMsdUTNGq2uq8Q7xHr7f\nUhLxcnnXAkEA74zR+/uyDGlAUT2mdROi2lgBPS3IM7JMAXzvTDfpy74rTNSc7g1Q\nDGhRZWNSV17ChhnV99f68HJ73Fb48wkVrwJBAMS3uHP4kbNbCZvvBoGnbuUM7qnn\ntMVpkdiWoApS0BrCtvxZS6cuRltzWjiTG2c1xFAmeZDR3+F6Y6r+HpO/lgsCQCzo\nW10/3CsTeClCw3fjTH5eTS0o7gUzAaitwTaqrLuzVO68VQcTm9QXolq9eexDKXh2\nU3R5GuQEsk+mRllZdKUCQQDAkI77Of2VIg7ZSsAWM/Wc4e4LFjmHMx2rtkv+HDfw\nDsnUKn/R+Srj/trIQWrREO6t2FSP1s8gi3YkhG31vUVN\n-----END RSA PRIVATE KEY-----', blank=True, max_length=2000)),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('picture', models.ImageField(blank=True, upload_to='profile_images')),
+                ('publickey', models.CharField(default=b'-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKJ95B6vFQlbBTfnZN6d9RGfvh\n/GGg9QHlRd+BdHQ342mrdp5XurfxfxlvdDEmTUJK1ESckRmw7OzLcOEuc+Fix2Dj\ncCq62isJ322iAYMQ+a951d5Zz+LNd3eJWfdYyem0vDfFyTDMLQAUkBzrihZiFol8\nbRP7ZctHkRphqQUKIQIDAQAB\n-----END PUBLIC KEY-----', max_length=2000)),
+                ('tempprivate', models.CharField(blank=True, default=b'-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQDKJ95B6vFQlbBTfnZN6d9RGfvh/GGg9QHlRd+BdHQ342mrdp5X\nurfxfxlvdDEmTUJK1ESckRmw7OzLcOEuc+Fix2DjcCq62isJ322iAYMQ+a951d5Z\nz+LNd3eJWfdYyem0vDfFyTDMLQAUkBzrihZiFol8bRP7ZctHkRphqQUKIQIDAQAB\nAoGBAJPatv9lU9wJr25R1ztDK5dItuZhThKIQDutcDxhrULXLIlA96zYnwKdYEAZ\nLn2CElNij1An/C9gCgz94WS1Uok69snJ+JNgZp1weLam8yz9PNta25Ja6Pew4X+3\n2wMJEI7kF4tltfK4tql6IvZjJhZPeZx+YFHiiAKazgARueFxAkEAzGvVCWj0dDHz\nOs8+QyPHxdvfaCUCXTwuQD3+ZK8BCkSk3iJdQVKn27C9x880zAEHZpn8T3gzkt7L\nE71k1bUQPQJBAP0ps6Qt7JGum07JPPSOMGcoX9jW18zp7xwAc7EXxNV0ENoia9R5\nYrXkFDSLAH4sSlzgQ2rsOjrQN344SU/0u7UCQQC82npMYTxGBMeS81ewK2QqdQEm\nc9qFTE3mZ9+YIN2zIMu3tMO2z6foHJaX++Po/KJbtbMVsBTlgRLYP8bicI55AkBu\ng4LRG98WpXNUzFJYq62DisN0hC0GXeSsg6H9X9PkHluw7a/GvAqUPnF3kmpvqeP4\ncUnc5ixxOi3PYsDWL461AkAnaZMfynX9z0EBJ+tKPhfv5AR7OT/tRCWDwxWTwna5\n4ZV3+6Iu0EUPSUWBFzWcBQbzNeXOXmSbmzLM1NWkXcJu\n-----END RSA PRIVATE KEY-----', max_length=2000)),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         ),

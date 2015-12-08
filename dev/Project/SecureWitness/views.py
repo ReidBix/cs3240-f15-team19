@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
 from Project.SecureWitness.models import Category, Page, Folder
-from Project.SecureWitness.forms import CategoryForm, PageForm, UserForm, UserProfileForm, ReportSearchForm, folderForm
 from Project.SecureWitness.models import *
 from Project.SecureWitness.forms import *
 from django.shortcuts import redirect, get_object_or_404

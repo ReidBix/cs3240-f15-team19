@@ -8,7 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name','views','likes')
 
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ('title','description','detailed_description','private','timestamp','user', 'key')
+    list_display = ('title','description','detailed_description','private','timestamp','user', 'aesKey')
 
 class FolderAdmin(admin.ModelAdmin):
     list_display = ('title',)

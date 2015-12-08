@@ -17,7 +17,14 @@
 
         <ul>
             {% for old_reports in report_list %}
-                {% if old_reports in results %}
+                {% if not searched %}
+                    <form action="{% url "reports" old_reports.id%}" method="POST">
+                        {% csrf_token %}
+                                            <a href="{% url 'disp_report' old_reports.id %} ">{{ old_reports.title }}</a>  Created on: {{ old_reports.timestamp }} by {{ old_reports.user }}
+                        <input type="submit" value="delete">
+                    </form>
+                {% endif %}
+                {% if old_reports in results and searched %}
 
                     <form action="{% url "reports" old_reports.id%}" method="POST">
                         {% csrf_token %}
